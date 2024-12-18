@@ -1,0 +1,41 @@
+{
+  "name": "nuxt-app",
+  "packageManager": "pnpm@9.15.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "format": "prettier --write .",
+    "lint:ts": "eslint --ext .js,.mjs,.ts,.vue --ignore-path .gitignore .",
+    "lint:css": "stylelint --ignore-path .gitignore --fix \"**/*.{css,scss,vue}\"",
+    "lint": "pnpm lint:ts && pnpm lint:css",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "devDependencies": {
+    "@nuxt/eslint": "0.7.3",
+    "@nuxtjs/color-mode": "^3.5.2",
+    "@radix-ui/colors": "^3.0.0",
+    "@vue/language-server": "^2.1.10",
+    "eslint": "^8.57.0 || ^9.0.0",
+    "nuxt": "^3.14.1592",
+    "postcss-html": "^1.7.0",
+    "prettier": "^3.4.2",
+    "radix-vue": "^1.9.11",
+    "sanitize.css": "^13.0.0",
+    "stylelint": "^16.11.0",
+    "stylelint-config-standard-vue": "^1.0.0",
+    "stylelint-plugin-logical-css": "^1.2.1",
+    "typescript": "^5.7.2",
+    "vue": "latest",
+    "vue-router": "latest"
+  },
+  "pnpm": {
+    "allowedDeprecatedVersions": {
+      "glob": "7.2.3",
+      "inflight": "1.0.6"
+    }
+  }
+}
