@@ -21,8 +21,12 @@ export interface PrimitiveProps {
    */
   as?: PrimitiveTag;
 }
+export interface PrimitiveSlots {
+  default?: () => unknown;
+}
 </script>
 
 <script lang="ts" setup>
 const { as = "div" } = defineProps<PrimitiveProps>();
+defineSlots<PrimitiveSlots>();
 </script>

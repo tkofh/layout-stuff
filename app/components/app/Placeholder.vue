@@ -1,5 +1,5 @@
 <template>
-  <div class="app-placeholder" :style="{ width, height }">
+  <div class="app-placeholder" :style="{ width, height, aspectRatio }">
     <svg>
       <line x1="0%" y1="0%" x2="100%" y2="100%" />
       <line x1="0%" y1="100%" x2="100%" y2="0%" />
@@ -10,9 +10,10 @@
 
 <script setup lang="ts">
 const { width = "auto", height = "auto" } = defineProps<{
-  label: string;
+  label: string | number;
   width?: string;
   height?: string;
+  aspectRatio?: string;
 }>();
 </script>
 

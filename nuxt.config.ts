@@ -1,8 +1,19 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: ["@nuxt/eslint", "radix-vue/nuxt", "@nuxtjs/color-mode"],
+  modules: [
+    "@nuxt/eslint",
+    "radix-vue/nuxt",
+    "@nuxtjs/color-mode",
+    "@vueuse/nuxt",
+  ],
 
-  devtools: { enabled: true },
+  devtools: {
+    enabled: true,
+
+    timeline: {
+      enabled: true,
+    },
+  },
 
   css: [
     "sanitize.css",
