@@ -271,9 +271,9 @@ const style = computed(() => ({
     &
       > .layout-sticky:is(
         [data-layout-area~="left"],
-        [data-layout-area~="main"],
         [data-layout-area~="right"]
-      ) {
+      )
+      > .layout-sticky-body {
       --layout-sticky-clip-start: max(
         var(--layout-sticky-start-offset),
         var(--layout-areas-size-top) - var(--layout-scroll-start)
@@ -284,8 +284,6 @@ const style = computed(() => ({
       );
     }
 
-    &:has(> .layout-sticky[data-layout-area~="top"])
-      > .layout-sticky[data-layout-area~="main"],
     &:has(> .layout-sticky[data-layout-area~="top"][data-layout-area~="start"])
       > .layout-sticky[data-layout-area~="left"],
     &:has(> .layout-sticky[data-layout-area~="top"][data-layout-area~="end"])
@@ -293,8 +291,6 @@ const style = computed(() => ({
       --layout-sticky-start-offset: var(--layout-areas-size-top);
     }
 
-    &:has(> .layout-sticky[data-layout-area~="bottom"])
-      > .layout-sticky[data-layout-area~="main"],
     &:has(
         > .layout-sticky[data-layout-area~="bottom"][data-layout-area~="start"]
       )
@@ -309,9 +305,9 @@ const style = computed(() => ({
     &
       > .layout-sticky:is(
         [data-layout-area~="top"],
-        [data-layout-area~="main"],
         [data-layout-area~="bottom"]
-      ) {
+      )
+      > .layout-sticky-body {
       --layout-sticky-clip-start: max(
         var(--layout-sticky-start-offset),
         var(--layout-areas-size-top) - var(--layout-scroll-start)
@@ -322,8 +318,6 @@ const style = computed(() => ({
       );
     }
 
-    &:has(> .layout-sticky[data-layout-area~="left"])
-      > .layout-sticky[data-layout-area~="main"],
     &:has(> .layout-sticky[data-layout-area~="left"][data-layout-area~="start"])
       > .layout-sticky[data-layout-area~="top"],
     &:has(> .layout-sticky[data-layout-area~="left"][data-layout-area~="end"])
@@ -331,8 +325,6 @@ const style = computed(() => ({
       --layout-sticky-start-offset: var(--layout-areas-size-left);
     }
 
-    &:has(> .layout-sticky[data-layout-area~="right"])
-      > .layout-sticky[data-layout-area~="main"],
     &:has(
         > .layout-sticky[data-layout-area~="right"][data-layout-area~="start"]
       )
@@ -413,10 +405,14 @@ const style = computed(() => ({
         [data-layout-area~="main"],
         [data-layout-area~="right"]
       ) {
-      block-size: calc(
-        var(--layout-scroll-viewport) - var(--layout-sticky-clip-start) -
-          var(--layout-sticky-clip-end)
-      );
+      block-size: 0;
+
+      & > .layout-sticky-body {
+        block-size: calc(
+          var(--layout-scroll-viewport) - var(--layout-sticky-clip-start) -
+            var(--layout-sticky-clip-end)
+        );
+      }
 
       [data-layout-mounted="false"] & {
         z-index: -1;
@@ -433,10 +429,14 @@ const style = computed(() => ({
         [data-layout-area~="main"],
         [data-layout-area~="bottom"]
       ) {
-      inline-size: calc(
-        var(--layout-scroll-viewport) - var(--layout-sticky-clip-start) -
-          var(--layout-sticky-clip-end)
-      );
+      inline-size: 0;
+
+      & > .layout-sticky-body {
+        inline-size: calc(
+          var(--layout-scroll-viewport) - var(--layout-sticky-clip-start) -
+            var(--layout-sticky-clip-end)
+        );
+      }
 
       [data-layout-mounted="false"] & {
         z-index: -1;

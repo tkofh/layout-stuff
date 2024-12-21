@@ -1,6 +1,8 @@
 <template>
   <LayoutPrimitive :id :as class="layout-sticky" :style>
-    <slot />
+    <RadixSlot class="layout-sticky-body">
+      <slot />
+    </RadixSlot>
   </LayoutPrimitive>
 </template>
 
@@ -23,6 +25,9 @@ const endLookup = {
 } as const;
 
 export interface StickyProps extends PrimitiveProps {
+  /**
+   * @default "auto"
+   */
   edge?: "start" | "end" | "both" | "none" | "auto";
 }
 export interface StickySlots {
@@ -77,5 +82,12 @@ const style = computed(() => ({
     inset-inline: var(--layout-sticky-start, var(--layout-sticky-start-offset))
       var(--layout-sticky-end, var(--layout-sticky-end-offset));
   }
+}
+
+.layout-sticky-body {
+  --layout-sticky-start: inherit;
+  --layout-sticky-end: inherit;
+  --layout-sticky-start-offset: inherit;
+  --layout-sticky-end-offset: inherit;
 }
 </style>
