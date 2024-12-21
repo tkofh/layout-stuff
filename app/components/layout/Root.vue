@@ -1,5 +1,5 @@
 <template>
-  <LayoutViewport direction="vertical">
+  <LayoutTraitViewport direction="vertical">
     <LayoutPrimitive
       ref="root"
       :as
@@ -10,7 +10,7 @@
     >
       <slot />
     </LayoutPrimitive>
-  </LayoutViewport>
+  </LayoutTraitViewport>
 </template>
 
 <script setup lang="ts">

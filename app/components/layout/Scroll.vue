@@ -1,6 +1,6 @@
 <template>
   <RadixScrollAreaRoot class="layout-scroll">
-    <LayoutViewport :direction>
+    <LayoutTraitViewport :direction>
       <RadixScrollAreaViewport
         ref="viewport"
         as-child
@@ -11,7 +11,7 @@
           <slot />
         </div>
       </RadixScrollAreaViewport>
-    </LayoutViewport>
+    </LayoutTraitViewport>
     <RadixScrollAreaScrollbar
       :orientation="direction"
       class="layout-scroll-bar"
@@ -27,7 +27,7 @@ import type {
   PrimitiveProps,
   PrimitiveSlots,
 } from "~/components/layout/Primitive.vue";
-import type { ViewportProps } from "~/components/layout/Viewport.vue";
+import type { ViewportProps } from "~/components/layout/trait/Viewport.vue";
 import { RadixScrollAreaViewport } from "#components";
 
 export interface ScrollProps extends PrimitiveProps, ViewportProps {}
