@@ -10,6 +10,7 @@
     </RadixSlot>
     <RadixSlot
       v-if="slots.left"
+      ref="left"
       class="layout-area"
       :data-layout-area="areas.left"
     >
@@ -17,12 +18,13 @@
     </RadixSlot>
     <RadixSlot
       v-if="slots.right"
+      ref="right"
       class="layout-area"
       :data-layout-area="areas.right"
     >
       <slot name="right" />
     </RadixSlot>
-    <RadixSlot ref="main" class="layout-area" data-layout-area="main">
+    <RadixSlot class="layout-area" data-layout-area="main">
       <slot name="main">
         <AppPlaceholder label="Main" />
       </slot>
@@ -53,7 +55,9 @@ const defaultSmall = {
 export type AreaAxis = "x" | "y";
 export type AreaEdge = "top" | "right" | "bottom" | "left";
 export type AreaLarge = AreaEdge | AreaAxis;
-export type AreaSmall<L extends AreaLarge> = Exclude<AreaEdge, L>;
+export type AreaSmall<L extends AreaLarge> = L extends AreaAxis
+  ? Exclude<AreaAxis, L>
+  : Exclude<AreaEdge, L>;
 
 export interface AreaProps<L extends AreaLarge> extends PrimitiveProps {
   large?: L;
@@ -190,24 +194,27 @@ const areas = computed(() => {
 });
 
 const top = templateRef<HTMLElement>("top");
-const main = templateRef<HTMLElement>("main");
+const right = templateRef<HTMLElement>("right");
 const bottom = templateRef<HTMLElement>("bottom");
+const left = templateRef<HTMLElement>("left");
 
 const defaultSize = { height: 0, width: 0 } as const;
 const sizeOptions = { box: "border-box" } as const;
 
-const { height: topHeight } = useElementSize(top, defaultSize, sizeOptions);
-const { height: mainHeight } = useElementSize(main, defaultSize, sizeOptions);
-const { height: bottomHeight } = useElementSize(
-  bottom,
-  defaultSize,
-  sizeOptions,
-);
+const { height: topSize } = useElementSize(top, defaultSize, sizeOptions);
+const { width: rightSize } = useElementSize(right, defaultSize, sizeOptions);
+const { height: bottomSize } = useElementSize(bottom, defaultSize, sizeOptions);
+const { width: leftSize } = useElementSize(left, defaultSize, sizeOptions);
 
 const style = computed(() => ({
-  "--layout-areas-size-top": `${topHeight.value}px`,
-  "--layout-areas-size-main": `${mainHeight.value}px`,
-  "--layout-areas-size-bottom": `${bottomHeight.value}px`,
+  "--layout-areas-size-top":
+    topSize.value !== 0 ? `${topSize.value}px` : undefined,
+  "--layout-areas-size-right":
+    rightSize.value !== 0 ? `${rightSize.value}px` : undefined,
+  "--layout-areas-size-bottom":
+    bottomSize.value !== 0 ? `${bottomSize.value}px` : undefined,
+  "--layout-areas-size-left":
+    leftSize.value !== 0 ? `${leftSize.value}px` : undefined,
 }));
 </script>
 
@@ -218,7 +225,7 @@ const style = computed(() => ({
   initial-value: 0;
 }
 
-@property --layout-areas-size-main {
+@property --layout-areas-size-right {
   syntax: "<length>";
   inherits: true;
   initial-value: 0;
@@ -230,13 +237,19 @@ const style = computed(() => ({
   initial-value: 0;
 }
 
-@property --layout-sticky-clip-top {
+@property --layout-areas-size-right {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0;
+}
+
+@property --layout-sticky-clip-start {
   syntax: "<length>";
   inherits: false;
   initial-value: 0;
 }
 
-@property --layout-sticky-clip-bottom {
+@property --layout-sticky-clip-end {
   syntax: "<length>";
   inherits: false;
   initial-value: 0;
@@ -244,8 +257,9 @@ const style = computed(() => ({
 
 .layout-areas {
   --layout-areas-size-top: initial;
-  --layout-areas-size-main: initial;
+  --layout-areas-size-right: initial;
   --layout-areas-size-bottom: initial;
+  --layout-areas-size-left: initial;
 
   display: block grid;
   block-size: 100%;
@@ -253,61 +267,85 @@ const style = computed(() => ({
   grid-template: auto minmax(auto, 1fr) auto / auto 1fr auto;
   place-items: stretch;
 
-  &:has(> [data-layout-area~="top"][data-layout-area~="start"])
-    > .layout-sticky[data-layout-area~="left"],
-  &:has(> [data-layout-area~="top"][data-layout-area~="end"])
-    > .layout-sticky[data-layout-area~="right"] {
-    --layout-sticky-clip-top: max(
-      var(--layout-sticky-start-offset),
-      var(--layout-areas-size-top) - var(--layout-scroll-top)
-    );
+  [data-viewport~="vertical"] & {
+    &
+      > .layout-sticky:is(
+        [data-layout-area~="left"],
+        [data-layout-area~="main"],
+        [data-layout-area~="right"]
+      ) {
+      --layout-sticky-clip-start: max(
+        var(--layout-sticky-start-offset),
+        var(--layout-areas-size-top) - var(--layout-scroll-start)
+      );
+      --layout-sticky-clip-end: max(
+        var(--layout-sticky-end-offset),
+        var(--layout-areas-size-bottom) - var(--layout-scroll-end)
+      );
+    }
+
+    &:has(> .layout-sticky[data-layout-area~="top"])
+      > .layout-sticky[data-layout-area~="main"],
+    &:has(> .layout-sticky[data-layout-area~="top"][data-layout-area~="start"])
+      > .layout-sticky[data-layout-area~="left"],
+    &:has(> .layout-sticky[data-layout-area~="top"][data-layout-area~="end"])
+      > .layout-sticky[data-layout-area~="right"] {
+      --layout-sticky-start-offset: var(--layout-areas-size-top);
+    }
+
+    &:has(> .layout-sticky[data-layout-area~="bottom"])
+      > .layout-sticky[data-layout-area~="main"],
+    &:has(
+        > .layout-sticky[data-layout-area~="bottom"][data-layout-area~="start"]
+      )
+      > .layout-sticky[data-layout-area~="left"],
+    &:has(> .layout-sticky[data-layout-area~="bottom"][data-layout-area~="end"])
+      > .layout-sticky[data-layout-area~="right"] {
+      --layout-sticky-end-offset: var(--layout-areas-size-bottom);
+    }
   }
 
-  &:has(> [data-layout-area~="bottom"][data-layout-area~="start"])
-    > .layout-sticky[data-layout-area~="left"],
-  &:has(> [data-layout-area~="bottom"][data-layout-area~="end"])
-    > .layout-sticky[data-layout-area~="right"] {
-    --layout-sticky-clip-bottom: max(
-      var(--layout-sticky-end-offset),
-      var(--layout-areas-size-bottom) - var(--layout-scroll-bottom)
-    );
-  }
+  [data-viewport~="horizontal"] & {
+    &
+      > .layout-sticky:is(
+        [data-layout-area~="top"],
+        [data-layout-area~="main"],
+        [data-layout-area~="bottom"]
+      ) {
+      --layout-sticky-clip-start: max(
+        var(--layout-sticky-start-offset),
+        var(--layout-areas-size-top) - var(--layout-scroll-start)
+      );
+      --layout-sticky-clip-end: max(
+        var(--layout-sticky-end-offset),
+        var(--layout-areas-size-bottom) - var(--layout-scroll-end)
+      );
+    }
 
-  &:has(> .layout-sticky[data-layout-area~="top"][data-layout-area~="start"])
-    > .layout-sticky[data-layout-area~="left"],
-  &:has(> .layout-sticky[data-layout-area~="top"][data-layout-area~="end"])
-    > .layout-sticky[data-layout-area~="right"] {
-    --layout-sticky-start-offset: var(--layout-areas-size-top);
-  }
+    &:has(> .layout-sticky[data-layout-area~="left"])
+      > .layout-sticky[data-layout-area~="main"],
+    &:has(> .layout-sticky[data-layout-area~="left"][data-layout-area~="start"])
+      > .layout-sticky[data-layout-area~="top"],
+    &:has(> .layout-sticky[data-layout-area~="left"][data-layout-area~="end"])
+      > .layout-sticky[data-layout-area~="bottom"] {
+      --layout-sticky-start-offset: var(--layout-areas-size-left);
+    }
 
-  &:has(> .layout-sticky[data-layout-area~="bottom"][data-layout-area~="start"])
-    > .layout-sticky[data-layout-area~="left"],
-  &:has(> .layout-sticky[data-layout-area~="bottom"][data-layout-area~="end"])
-    > .layout-sticky[data-layout-area~="right"] {
-    --layout-sticky-end-offset: var(--layout-areas-size-bottom);
+    &:has(> .layout-sticky[data-layout-area~="right"])
+      > .layout-sticky[data-layout-area~="main"],
+    &:has(
+        > .layout-sticky[data-layout-area~="right"][data-layout-area~="start"]
+      )
+      > .layout-sticky[data-layout-area~="top"],
+    &:has(> .layout-sticky[data-layout-area~="right"][data-layout-area~="end"])
+      > .layout-sticky[data-layout-area~="bottom"] {
+      --layout-sticky-end-offset: var(--layout-areas-size-right);
+    }
   }
-}
-
-.layout-root[data-layout-mounted="false"]
-  .layout-areas
-  > .layout-sticky:is([data-layout-area~="left"], [data-layout-area~="right"]) {
-  --layout-sticky-start: unset !important;
-  --layout-sticky-end: unset !important;
 }
 
 .layout-area {
   z-index: 0;
-
-  &.layout-sticky {
-    z-index: 1;
-
-    &:is([data-layout-area~="left"], [data-layout-area~="right"]) {
-      block-size: calc(
-        100dvb - var(--layout-sticky-clip-top) -
-          var(--layout-sticky-clip-bottom)
-      );
-    }
-  }
 
   &[data-layout-area~="top"] {
     grid-row: 1 / 2;
@@ -364,6 +402,49 @@ const style = computed(() => ({
   &[data-layout-area="main"] {
     grid-row: 2 / 3;
     grid-column: 2 / 3;
+  }
+
+  &.layout-sticky {
+    z-index: 1;
+
+    [data-viewport~="vertical"]
+      &:is(
+        [data-layout-area~="left"],
+        [data-layout-area~="main"],
+        [data-layout-area~="right"]
+      ) {
+      block-size: calc(
+        var(--layout-scroll-viewport) - var(--layout-sticky-clip-start) -
+          var(--layout-sticky-clip-end)
+      );
+
+      [data-layout-mounted="false"] & {
+        z-index: -1;
+
+        --layout-sticky-start: unset !important;
+        --layout-sticky-end: unset !important;
+      }
+    }
+
+    /* stylelint-disable-next-line no-descending-specificity */
+    [data-viewport~="horizontal"]
+      &:is(
+        [data-layout-area~="top"],
+        [data-layout-area~="main"],
+        [data-layout-area~="bottom"]
+      ) {
+      inline-size: calc(
+        var(--layout-scroll-viewport) - var(--layout-sticky-clip-start) -
+          var(--layout-sticky-clip-end)
+      );
+
+      [data-layout-mounted="false"] & {
+        z-index: -1;
+
+        --layout-sticky-start: unset !important;
+        --layout-sticky-end: unset !important;
+      }
+    }
   }
 }
 

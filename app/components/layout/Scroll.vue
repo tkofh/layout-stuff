@@ -1,16 +1,25 @@
 <template>
-  <LayoutPrimitive
-    :as
-    class="layout-scroll"
-    :class="{
-      'layout-scroll-vertical': direction === 'vertical',
-      'layout-scroll-horizontal': direction === 'horizontal',
-    }"
-  >
-    <div class="layout-scroll-area">
-      <slot />
-    </div>
-  </LayoutPrimitive>
+  <RadixScrollAreaRoot class="layout-scroll">
+    <LayoutViewport :direction>
+      <RadixScrollAreaViewport
+        ref="viewport"
+        as-child
+        class="layout-scroll-viewport"
+        :style
+      >
+        <div ref="area" class="layout-scroll-area">
+          <slot />
+        </div>
+      </RadixScrollAreaViewport>
+    </LayoutViewport>
+    <RadixScrollAreaScrollbar
+      :orientation="direction"
+      class="layout-scroll-bar"
+    >
+      <RadixScrollAreaThumb class="layout-scroll-thumb" />
+    </RadixScrollAreaScrollbar>
+    <slot name="indicators" />
+  </RadixScrollAreaRoot>
 </template>
 
 <script lang="ts">
@@ -18,24 +27,72 @@ import type {
   PrimitiveProps,
   PrimitiveSlots,
 } from "~/components/layout/Primitive.vue";
+import type { ViewportProps } from "~/components/layout/Viewport.vue";
+import { RadixScrollAreaViewport } from "#components";
 
-export interface ScrollProps extends PrimitiveProps {
-  direction?: "vertical" | "horizontal";
+export interface ScrollProps extends PrimitiveProps, ViewportProps {}
+
+export interface ScrollSlots extends PrimitiveSlots {
+  indicators?: () => unknown;
 }
 </script>
 
 <script setup lang="ts">
-defineProps<ScrollProps>();
-defineSlots<PrimitiveSlots>();
+const { direction = "vertical" } = defineProps<ScrollProps>();
+defineSlots<ScrollSlots>();
+
+const area = useTemplateRef<HTMLElement>("area");
+const viewport =
+  useTemplateRef<InstanceType<typeof RadixScrollAreaViewport>>("viewport");
+
+const viewportElement = computed(() => viewport.value?.viewportElement);
+
+const defaultSize = { width: 0, height: 0 } as const;
+const options = { box: "border-box" } as const;
+
+const { width: scrollInlineLength, height: scrollBlockLength } = useElementSize(
+  area,
+  defaultSize,
+  options,
+);
+const { width: viewportInlineSize, height: viewportBlockSize } = useElementSize(
+  viewportElement,
+  defaultSize,
+  options,
+);
+
+const { x, y } = useScroll(viewportElement);
+
+const style = computed(() => ({
+  "--layout-scroll-length":
+    direction === "vertical"
+      ? `${scrollBlockLength.value}px`
+      : `${scrollInlineLength.value}px`,
+  "--layout-scroll-viewport":
+    direction === "vertical"
+      ? `${viewportBlockSize.value}px`
+      : `${viewportInlineSize.value}px`,
+  "--layout-scroll": direction === "vertical" ? `${y.value}px` : `${x.value}px`,
+}));
 </script>
 
 <style>
 .layout-scroll {
+  --layout-viewport-block-size: 100%;
+  --layout-viewport-inline-size: 100%;
+
+  block-size: 100%;
+  inline-size: 100%;
   display: block;
+  isolation: isolate;
+}
+
+.layout-scroll-viewport {
+  block-size: 100%;
+  inline-size: 100%;
 }
 
 .layout-scroll-area {
-  min-inline-size: fit-content;
   overflow: clip;
 }
 </style>

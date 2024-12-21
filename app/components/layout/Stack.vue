@@ -46,6 +46,7 @@ const style = computed(() => ({
 }
 
 .layout-stack {
+  inline-size: 100%;
   display: block flex;
   flex-direction: column;
   gap: var(--layout-stack-space);

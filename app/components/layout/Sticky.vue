@@ -67,15 +67,15 @@ const style = computed(() => ({
 
 .layout-sticky {
   position: sticky;
-}
 
-.layout-scroll-vertical .layout-sticky {
-  inset-block: var(--layout-sticky-start, var(--layout-sticky-start-offset))
-    var(--layout-sticky-end, var(--layout-sticky-end-offset));
-}
+  [data-viewport~="vertical"] & {
+    inset-block: var(--layout-sticky-start, var(--layout-sticky-start-offset))
+      var(--layout-sticky-end, var(--layout-sticky-end-offset));
+  }
 
-.layout-scroll-horizontal .layout-sticky {
-  inset-inline: var(--layout-sticky-start, var(--layout-sticky-start-offset))
-    var(--layout-sticky-end, var(--layout-sticky-end-offset));
+  [data-viewport~="horizontal"] & {
+    inset-inline: var(--layout-sticky-start, var(--layout-sticky-start-offset))
+      var(--layout-sticky-end, var(--layout-sticky-end-offset));
+  }
 }
 </style>

@@ -1,76 +1,110 @@
 <template>
   <LayoutRoot>
     <LayoutAreas large="y">
-      <!--        <LayoutSticky>-->
       <template #top>
-        <AppPlaceholder label="Header" height="20rem" />
+        <LayoutBox height="20rem">
+          <AppPlaceholder label="Header" />
+        </LayoutBox>
       </template>
-      <!--        </LayoutSticky>-->
+
+      <template #bottom>
+        <LayoutBox height="20rem">
+          <AppPlaceholder label="Footer" />
+        </LayoutBox>
+      </template>
 
       <template #main>
-        <LayoutFrame frame="1">
+        <LayoutBox width="100%" min-height="0" max-height="100%">
           <LayoutStack space="1">
-            <AppPlaceholder
-              v-for="i in 5"
-              :key="`${i}-placeholder`"
-              :label="i"
-              width="100%"
-              aspect-ratio="16 / 9"
-            />
+            <LayoutBox width="100%" aspect-ratio="1">
+              <AppPlaceholder label="1" />
+            </LayoutBox>
+            <LayoutBox width="100%" aspect-ratio="1">
+              <AppPlaceholder label="2" />
+            </LayoutBox>
+            <LayoutBox width="100%" aspect-ratio="1">
+              <AppPlaceholder label="3" />
+            </LayoutBox>
           </LayoutStack>
-        </LayoutFrame>
+        </LayoutBox>
       </template>
-
-      <!--        <LayoutSticky>-->
-      <template #bottom>
-        <AppPlaceholder label="Footer" height="20rem" />
-      </template>
-      <!--        </LayoutSticky>-->
 
       <template #left>
         <LayoutSticky>
-          <AppPlaceholder label="Left Sidebar" height="100%" />
+          <LayoutScroll direction="vertical">
+            <LayoutAreas large="y">
+              <template #top>
+                <LayoutSticky>
+                  <LayoutBox height="5rem" width="100%">
+                    <AppPlaceholder label="Top Sidebar" />
+                  </LayoutBox>
+                </LayoutSticky>
+              </template>
+
+              <template #bottom>
+                <LayoutBox height="5rem" width="100%">
+                  <AppPlaceholder label="Top Sidebar" />
+                </LayoutBox>
+              </template>
+
+              <template #right>
+                <LayoutSticky>
+                  <AppPlaceholder label="Right Sidebar" />
+                </LayoutSticky>
+              </template>
+
+              <template #main>
+                <LayoutStack>
+                  <LayoutBox height="10rem" width="100%">
+                    <AppPlaceholder label="Left Sidebar" />
+                  </LayoutBox>
+                  <LayoutBox height="10rem" width="100%">
+                    <AppPlaceholder label="Left Sidebar" />
+                  </LayoutBox>
+                  <LayoutBox height="10rem" width="100%">
+                    <AppPlaceholder label="Left Sidebar" />
+                  </LayoutBox>
+                  <LayoutBox height="10rem" width="100%">
+                    <AppPlaceholder label="Left Sidebar" />
+                  </LayoutBox>
+                  <LayoutBox height="10rem" width="100%">
+                    <AppPlaceholder label="Left Sidebar" />
+                  </LayoutBox>
+                  <LayoutBox height="10rem" width="100%">
+                    <AppPlaceholder label="Left Sidebar" />
+                  </LayoutBox>
+                  <LayoutBox height="10rem" width="100%">
+                    <AppPlaceholder label="Left Sidebar" />
+                  </LayoutBox>
+                  <LayoutBox height="10rem" width="100%">
+                    <AppPlaceholder label="Left Sidebar" />
+                  </LayoutBox>
+                  <LayoutBox height="10rem" width="100%">
+                    <AppPlaceholder label="Left Sidebar" />
+                  </LayoutBox>
+                  <LayoutBox height="10rem" width="100%">
+                    <AppPlaceholder label="Left Sidebar" />
+                  </LayoutBox>
+                  <LayoutBox height="10rem" width="100%">
+                    <AppPlaceholder label="Left Sidebar" />
+                  </LayoutBox>
+                  <LayoutBox height="10rem" width="100%">
+                    <AppPlaceholder label="Left Sidebar" />
+                  </LayoutBox>
+                </LayoutStack>
+              </template>
+            </LayoutAreas>
+          </LayoutScroll>
         </LayoutSticky>
       </template>
     </LayoutAreas>
   </LayoutRoot>
 </template>
 
+<script setup lang="ts"></script>
 <style>
-@property --testing {
-  syntax: "*";
-  inherits: false;
-}
-
-@property --other {
-  syntax: "*";
-  inherits: false;
-}
-
-@property --computed {
-  syntax: "hello | foo | bar | third";
-  inherits: false;
-  initial-value: third;
-}
-
 body {
   background-color: var(--gray-1);
   color: var(--gray-12);
-
-  --other: unset;
-  --testing: foo;
-  --computed: var(--testing, hello);
-}
-
-@media (width >= 768px) {
-  body {
-    --testing: var(--other);
-  }
-}
-
-@media (width >= 1200px) {
-  body {
-    --testing: bar;
-  }
 }
 </style>

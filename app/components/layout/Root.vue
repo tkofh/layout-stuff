@@ -1,14 +1,16 @@
 <template>
-  <LayoutPrimitive
-    ref="root"
-    :as
-    class="layout-root layout-scroll-vertical"
-    :data-layout-mounted="isMounted"
-    data-allow-mismatch="style"
-    :style
-  >
-    <slot />
-  </LayoutPrimitive>
+  <LayoutViewport direction="vertical">
+    <LayoutPrimitive
+      ref="root"
+      :as
+      class="layout-root"
+      :data-layout-mounted="isMounted"
+      data-allow-mismatch="style"
+      :style
+    >
+      <slot />
+    </LayoutPrimitive>
+  </LayoutViewport>
 </template>
 
 <script setup lang="ts">
@@ -49,30 +51,6 @@ onPrehydrate(() => {
 </script>
 
 <style>
-@property --layout-scroll {
-  syntax: "<length>";
-  inherits: true;
-  initial-value: 0;
-}
-
-@property --layout-scroll-length {
-  syntax: "<length>";
-  inherits: true;
-  initial-value: 0;
-}
-
-@property --layout-scroll-top {
-  syntax: "<length>";
-  inherits: true;
-  initial-value: 0;
-}
-
-@property --layout-scroll-bottom {
-  syntax: "<length>";
-  inherits: true;
-  initial-value: 0;
-}
-
 .layout-root {
   min-block-size: 100dvb;
   display: block grid;
@@ -80,10 +58,6 @@ onPrehydrate(() => {
   place-items: stretch;
   contain: content;
 
-  --layout-scroll-top: max(0px, var(--layout-scroll));
-  --layout-scroll-bottom: max(
-    0px,
-    var(--layout-scroll-length) - var(--layout-scroll) - 100dvb
-  );
+  --layout-scroll-viewport: 100dvb;
 }
 </style>

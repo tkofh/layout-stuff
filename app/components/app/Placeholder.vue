@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-const { width = "auto", height = "auto" } = defineProps<{
+const { width = "100%", height = "100%" } = defineProps<{
   label: string | number;
   width?: string;
   height?: string;
