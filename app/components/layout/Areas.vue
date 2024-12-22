@@ -1,42 +1,42 @@
 <template>
   <LayoutPrimitive :as class="layout-areas" :style>
-    <RadixSlot
+    <LayoutSlot
       v-if="slots.top"
       ref="top"
       class="layout-area"
       :data-layout-area="areas.top"
     >
       <slot name="top" />
-    </RadixSlot>
-    <RadixSlot
+    </LayoutSlot>
+    <LayoutSlot
       v-if="slots.left"
       ref="left"
       class="layout-area"
       :data-layout-area="areas.left"
     >
       <slot name="left" />
-    </RadixSlot>
-    <RadixSlot
+    </LayoutSlot>
+    <LayoutSlot
       v-if="slots.right"
       ref="right"
       class="layout-area"
       :data-layout-area="areas.right"
     >
       <slot name="right" />
-    </RadixSlot>
-    <RadixSlot class="layout-area" data-layout-area="main">
+    </LayoutSlot>
+    <LayoutSlot class="layout-area" data-layout-area="main">
       <slot name="main">
         <AppPlaceholder label="Main" />
       </slot>
-    </RadixSlot>
-    <RadixSlot
+    </LayoutSlot>
+    <LayoutSlot
       v-if="slots.bottom"
       ref="bottom"
       class="layout-area"
       :data-layout-area="areas.bottom"
     >
       <slot name="bottom" />
-    </RadixSlot>
+    </LayoutSlot>
   </LayoutPrimitive>
 </template>
 
@@ -255,6 +255,12 @@ const style = computed(() => ({
   initial-value: 0;
 }
 
+@property --layout-sticky-area-size {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0;
+}
+
 .layout-areas {
   --layout-areas-size-top: initial;
   --layout-areas-size-right: initial;
@@ -272,8 +278,7 @@ const style = computed(() => ({
       > .layout-sticky:is(
         [data-layout-area~="left"],
         [data-layout-area~="right"]
-      )
-      > .layout-sticky-body {
+      ) {
       --layout-sticky-clip-start: max(
         var(--layout-sticky-start-offset),
         var(--layout-areas-size-top) - var(--layout-scroll-start)
@@ -306,8 +311,7 @@ const style = computed(() => ({
       > .layout-sticky:is(
         [data-layout-area~="top"],
         [data-layout-area~="bottom"]
-      )
-      > .layout-sticky-body {
+      ) {
       --layout-sticky-clip-start: max(
         var(--layout-sticky-start-offset),
         var(--layout-areas-size-top) - var(--layout-scroll-start)
@@ -400,19 +404,14 @@ const style = computed(() => ({
     z-index: 1;
 
     [data-viewport~="vertical"]
-      &:is(
-        [data-layout-area~="left"],
-        [data-layout-area~="main"],
-        [data-layout-area~="right"]
-      ) {
-      block-size: 0;
+      &:is([data-layout-area~="left"], [data-layout-area~="right"]) {
+      --layout-sticky-area-size: calc(
+        var(--layout-scroll-viewport) - var(--layout-sticky-clip-start) -
+          var(--layout-sticky-clip-end)
+      );
 
-      & > .layout-sticky-body {
-        block-size: calc(
-          var(--layout-scroll-viewport) - var(--layout-sticky-clip-start) -
-            var(--layout-sticky-clip-end)
-        );
-      }
+      block-size: var(--layout-sticky-area-size);
+      margin-block-end: calc(-1 * var(--layout-sticky-area-size));
 
       [data-layout-mounted="false"] & {
         z-index: -1;
@@ -424,19 +423,14 @@ const style = computed(() => ({
 
     /* stylelint-disable-next-line no-descending-specificity */
     [data-viewport~="horizontal"]
-      &:is(
-        [data-layout-area~="top"],
-        [data-layout-area~="main"],
-        [data-layout-area~="bottom"]
-      ) {
-      inline-size: 0;
+      &:is([data-layout-area~="top"], [data-layout-area~="bottom"]) {
+      --layout-sticky-area-size: calc(
+        var(--layout-scroll-viewport) - var(--layout-sticky-clip-start) -
+          var(--layout-sticky-clip-end)
+      );
 
-      & > .layout-sticky-body {
-        inline-size: calc(
-          var(--layout-scroll-viewport) - var(--layout-sticky-clip-start) -
-            var(--layout-sticky-clip-end)
-        );
-      }
+      inline-size: var(--layout-sticky-area-size);
+      margin-inline-end: calc(-1 * var(--layout-sticky-area-size));
 
       [data-layout-mounted="false"] & {
         z-index: -1;

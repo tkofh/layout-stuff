@@ -1,7 +1,7 @@
 <template>
-  <RadixSlot :style data-layout-container>
+  <LayoutSlot :style data-layout-container>
     <slot />
-  </RadixSlot>
+  </LayoutSlot>
 </template>
 
 <script lang="ts">

@@ -1,7 +1,7 @@
 <template>
-  <RadixSlot :data-viewport="direction">
+  <LayoutSlot :data-viewport="direction">
     <slot />
-  </RadixSlot>
+  </LayoutSlot>
 </template>
 
 <script lang="ts">
@@ -15,9 +15,6 @@ export interface ViewportSlots {
 </script>
 
 <script setup lang="ts">
-defineOptions({
-  inheritAttrs: false,
-});
 const { direction = "vertical" } = defineProps<ViewportProps>();
 defineSlots<ViewportSlots>();
 </script>

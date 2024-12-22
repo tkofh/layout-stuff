@@ -49,9 +49,7 @@
 
               <template #right>
                 <LayoutSticky>
-                  <LayoutBox>
-                    <AppPlaceholder label="Right Sidebar" />
-                  </LayoutBox>
+                  <AppPlaceholder label="Right Sidebar" />
                 </LayoutSticky>
               </template>
 

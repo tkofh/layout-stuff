@@ -1,8 +1,6 @@
 <template>
   <LayoutPrimitive :id :as class="layout-sticky" :style>
-    <RadixSlot class="layout-sticky-body">
-      <slot />
-    </RadixSlot>
+    <slot />
   </LayoutPrimitive>
 </template>
 

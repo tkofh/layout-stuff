@@ -1,24 +1,19 @@
 <template>
-  <RadixScrollAreaRoot class="layout-scroll">
+  <RadixScrollAreaRoot class="layout-scroll" as-child>
     <LayoutTraitViewport :direction>
-      <RadixScrollAreaViewport
-        ref="viewport"
-        as-child
-        class="layout-scroll-viewport"
-        :style
-      >
-        <div ref="area" class="layout-scroll-area">
+      <RadixScrollAreaViewport ref="viewport" as-child :style>
+        <LayoutPrimitive ref="area" :as class="layout-scroll-area">
           <slot />
-        </div>
+        </LayoutPrimitive>
+        <RadixScrollAreaScrollbar
+          :orientation="direction"
+          class="layout-scroll-bar"
+        >
+          <RadixScrollAreaThumb class="layout-scroll-thumb" />
+        </RadixScrollAreaScrollbar>
+        <slot name="indicators" />
       </RadixScrollAreaViewport>
     </LayoutTraitViewport>
-    <RadixScrollAreaScrollbar
-      :orientation="direction"
-      class="layout-scroll-bar"
-    >
-      <RadixScrollAreaThumb class="layout-scroll-thumb" />
-    </RadixScrollAreaScrollbar>
-    <slot name="indicators" />
   </RadixScrollAreaRoot>
 </template>
 
@@ -85,11 +80,6 @@ const style = computed(() => ({
   inline-size: 100%;
   display: block;
   isolation: isolate;
-}
-
-.layout-scroll-viewport {
-  block-size: 100%;
-  inline-size: 100%;
 }
 
 .layout-scroll-area {

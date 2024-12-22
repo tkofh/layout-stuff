@@ -1,25 +1,32 @@
 <template>
-  <component :is="as">
+  <component :is>
     <slot />
   </component>
 </template>
 
 <script lang="ts">
-export type PrimitiveTag =
-  | "div"
-  | "section"
-  | "article"
-  | "main"
-  | "header"
-  | "footer"
-  | "aside"
-  | "nav";
+import Slot from "./Slot";
 
-export interface PrimitiveProps {
+export type ContentSectioningTag =
+  | "div"
+  | "address"
+  | "article"
+  | "aside"
+  | "footer"
+  | "header"
+  | "hgroup"
+  | "main"
+  | "nav"
+  | "section"
+  | "search";
+
+export type PrimitiveTag = ContentSectioningTag | "slot";
+
+export interface PrimitiveProps<T extends PrimitiveTag = PrimitiveTag> {
   /**
    * @default 'div'
    */
-  as?: PrimitiveTag;
+  as?: T;
 }
 export interface PrimitiveSlots {
   default?: () => unknown;
@@ -29,4 +36,5 @@ export interface PrimitiveSlots {
 <script lang="ts" setup>
 const { as = "div" } = defineProps<PrimitiveProps>();
 defineSlots<PrimitiveSlots>();
+const is = computed(() => (as === "slot" ? Slot : as));
 </script>
