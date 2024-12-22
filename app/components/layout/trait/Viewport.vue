@@ -1,7 +1,7 @@
 <template>
-  <LayoutSlot :data-viewport="direction">
+  <RadixSlot :data-viewport="direction">
     <slot />
-  </LayoutSlot>
+  </RadixSlot>
 </template>
 
 <script lang="ts">

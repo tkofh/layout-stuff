@@ -1,7 +1,7 @@
 <template>
-  <LayoutSlot :style data-layout-container>
+  <RadixSlot :style data-layout-container>
     <slot />
-  </LayoutSlot>
+  </RadixSlot>
 </template>
 
 <script lang="ts">
@@ -91,7 +91,6 @@ export interface ContainerSlots {
 <script setup lang="ts">
 const { align, alignY, space, spaceY } = defineProps<ContainerProps>();
 defineSlots<ContainerSlots>();
-defineOptions({ inheritAttrs: false });
 const style = computed(() => ({
   "--layout-align":
     align && align in alignLookup ? alignLookup[align] : undefined,

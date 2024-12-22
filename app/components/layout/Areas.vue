@@ -1,42 +1,42 @@
 <template>
   <LayoutPrimitive :as class="layout-areas" :style>
-    <LayoutSlot
+    <RadixSlot
       v-if="slots.top"
       ref="top"
       class="layout-area"
       :data-layout-area="areas.top"
     >
       <slot name="top" />
-    </LayoutSlot>
-    <LayoutSlot
+    </RadixSlot>
+    <RadixSlot
       v-if="slots.left"
       ref="left"
       class="layout-area"
       :data-layout-area="areas.left"
     >
       <slot name="left" />
-    </LayoutSlot>
-    <LayoutSlot
+    </RadixSlot>
+    <RadixSlot
       v-if="slots.right"
       ref="right"
       class="layout-area"
       :data-layout-area="areas.right"
     >
       <slot name="right" />
-    </LayoutSlot>
-    <LayoutSlot class="layout-area" data-layout-area="main">
+    </RadixSlot>
+    <RadixSlot class="layout-area" data-layout-area="main">
       <slot name="main">
         <AppPlaceholder label="Main" />
       </slot>
-    </LayoutSlot>
-    <LayoutSlot
+    </RadixSlot>
+    <RadixSlot
       v-if="slots.bottom"
       ref="bottom"
       class="layout-area"
       :data-layout-area="areas.bottom"
     >
       <slot name="bottom" />
-    </LayoutSlot>
+    </RadixSlot>
   </LayoutPrimitive>
 </template>
 
