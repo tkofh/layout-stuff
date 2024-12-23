@@ -28,19 +28,19 @@ import type {
 } from "~/components/layout/container/Trait.vue";
 import type { FrameProps } from "~/components/layout/frame/Trait.vue";
 
-export interface InlineProps
+export interface LayoutInlineProps
   extends PrimitiveProps,
     CollapseBelowProps,
     SpaceProps,
     Align2dProps,
     FrameProps {}
 
-export type InlineSlots = PrimitiveSlots;
+export type LayoutInlineSlots = PrimitiveSlots;
 </script>
 
 <script setup lang="ts">
-defineProps<InlineProps>();
-defineSlots<InlineSlots>();
+defineProps<LayoutInlineProps>();
+defineSlots<LayoutInlineSlots>();
 </script>
 
 <style>

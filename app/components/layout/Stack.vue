@@ -27,18 +27,18 @@ import type {
 } from "~/components/layout/container/Trait.vue";
 import type { FrameProps } from "~/components/layout/frame/Trait.vue";
 
-export interface StackProps
+export interface LayoutStackProps
   extends PrimitiveProps,
     AlignProps,
     SpaceProps,
     FrameProps {}
 
-export type StackSlots = PrimitiveSlots;
+export type LayoutStackSlots = PrimitiveSlots;
 </script>
 
 <script setup lang="ts">
-defineProps<StackProps>();
-defineSlots<StackSlots>();
+defineProps<LayoutStackProps>();
+defineSlots<LayoutStackSlots>();
 </script>
 
 <style>

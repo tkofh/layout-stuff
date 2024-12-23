@@ -23,12 +23,12 @@ import type { BoxProps } from "~/components/layout/box/Trait.vue";
 
 export interface LayoutBoxProps extends PrimitiveProps, BoxProps {}
 
-export type BoxSlots = PrimitiveSlots;
+export type LayoutBoxSlots = PrimitiveSlots;
 </script>
 
 <script setup lang="ts">
 defineProps<LayoutBoxProps>();
-defineSlots<BoxSlots>();
+defineSlots<LayoutBoxSlots>();
 </script>
 
 <style>

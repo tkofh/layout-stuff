@@ -59,12 +59,12 @@ export type AreaSmall<L extends AreaLarge> = L extends AreaAxis
   ? Exclude<AreaAxis, L>
   : Exclude<AreaEdge, L>;
 
-export interface AreaProps<L extends AreaLarge> extends PrimitiveProps {
+export interface LayoutAreasProps<L extends AreaLarge> extends PrimitiveProps {
   large?: L;
   small?: AreaSmall<L>;
 }
 
-export interface AreasSlots {
+export interface LayoutAreasSlots {
   top?: () => unknown;
   left?: () => unknown;
   right?: () => unknown;
@@ -74,8 +74,8 @@ export interface AreasSlots {
 </script>
 
 <script setup lang="ts" generic="L extends AreaLarge">
-const props = defineProps<AreaProps<L>>();
-const slots = defineSlots<AreasSlots>();
+const props = defineProps<LayoutAreasProps<L>>();
+const slots = defineSlots<LayoutAreasSlots>();
 
 const areas = computed(() => {
   const large = props.large ?? "top";

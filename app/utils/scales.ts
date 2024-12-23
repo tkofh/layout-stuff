@@ -65,10 +65,9 @@ export const SPACE_SCALE = {
   xs: SIZE_SCALE["1"],
   sm: SIZE_SCALE["2"],
   md: SIZE_SCALE["3"],
-  lg: SIZE_SCALE["4"],
-  xl: SIZE_SCALE["6"],
-  "2xl": SIZE_SCALE["8"],
+  lg: SIZE_SCALE["5"],
+  xl: SIZE_SCALE["8"],
 } as const;
 
-export type SpaceKey = "none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
+export type SpaceKey = "none" | "xs" | "sm" | "md" | "lg" | "xl";
 export type Space = ResponsiveValue<SpaceKey>;

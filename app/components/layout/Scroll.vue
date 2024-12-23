@@ -44,16 +44,19 @@ export function useScrollPosition() {
   return inject(Symbol.for("layout.scroll")) as ComputedRef<number>;
 }
 
-export interface ScrollProps extends PrimitiveProps, BoxProps, ViewportProps {}
+export interface LayoutScrollProps
+  extends PrimitiveProps,
+    BoxProps,
+    ViewportProps {}
 
-export interface ScrollSlots extends PrimitiveSlots {
+export interface LayoutScrollSlots extends PrimitiveSlots {
   indicators?: () => unknown;
 }
 </script>
 
 <script setup lang="ts">
-const { direction = "vertical" } = defineProps<ScrollProps>();
-defineSlots<ScrollSlots>();
+const { direction = "vertical" } = defineProps<LayoutScrollProps>();
+defineSlots<LayoutScrollSlots>();
 
 const area = useTemplateRef<HTMLElement>("area");
 const viewport =
