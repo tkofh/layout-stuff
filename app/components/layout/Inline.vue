@@ -42,8 +42,10 @@ const style = computed(() => ({
   initial-value: flex-start;
 }
 
-.layout-inline {
-  display: block flex;
-  flex-flow: row wrap;
+@layer components.layout {
+  .layout-inline {
+    display: block flex;
+    flex-flow: row wrap;
+  }
 }
 </style>

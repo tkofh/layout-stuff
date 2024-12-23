@@ -1,0 +1,116 @@
+@property --media-eq-mobile {
+  syntax: "<custom-ident>";
+  inherits: true;
+  initial-value: true;
+}
+
+@property --media-gt-mobile {
+  syntax: "<custom-ident>";
+  inherits: true;
+  initial-value: false;
+}
+
+@property --media-lt-tablet {
+  syntax: "<custom-ident>";
+  inherits: true;
+  initial-value: true;
+}
+
+@property --media-lte-tablet {
+  syntax: "<custom-ident>";
+  inherits: true;
+  initial-value: true;
+}
+
+@property --media-eq-tablet {
+  syntax: "<custom-ident>";
+  inherits: true;
+  initial-value: false;
+}
+
+@property --media-gte-tablet {
+  syntax: "<custom-ident>";
+  inherits: true;
+  initial-value: false;
+}
+
+@property --media-gt-tablet {
+  syntax: "<custom-ident>";
+  inherits: true;
+  initial-value: false;
+}
+
+@property --media-lt-laptop {
+  syntax: "<custom-ident>";
+  inherits: true;
+  initial-value: true;
+}
+
+@property --media-lte-laptop {
+  syntax: "<custom-ident>";
+  inherits: true;
+  initial-value: true;
+}
+
+@property --media-eq-laptop {
+  syntax: "<custom-ident>";
+  inherits: true;
+  initial-value: false;
+}
+
+@property --media-gte-laptop {
+  syntax: "<custom-ident>";
+  inherits: true;
+  initial-value: false;
+}
+
+@property --media-gt-laptop {
+  syntax: "<custom-ident>";
+  inherits: true;
+  initial-value: false;
+}
+
+@property --media-lt-desktop {
+  syntax: "<custom-ident>";
+  inherits: true;
+  initial-value: true;
+}
+
+@property --media-eq-desktop {
+  syntax: "<custom-ident>";
+  inherits: true;
+  initial-value: false;
+}
+
+@layer media {
+  :root {
+    --media-gte-tablet: var(--media-gt-mobile);
+    --media-gte-laptop: var(--media-gt-tablet);
+    --media-lte-tablet: var(--media-lt-laptop);
+    --media-lte-laptop: var(--media-lt-desktop);
+
+
+    @media (width >= 768px) {
+      --media-eq-mobile: false;
+      --media-gt-mobile: true;
+      --media-lt-tablet: false;
+      --media-eq-tablet: true;
+    }
+
+    @media (width >= 1024px) {
+      --media-eq-tablet: false;
+      --media-gt-tablet: true;
+      --media-lt-laptop: false;
+      --media-eq-laptop: true;
+    }
+
+    @media (width >= 1440px) {
+      --media-eq-laptop: false;
+      --media-gt-laptop: true;
+      --media-lt-desktop: false;
+      --media-eq-desktop: true;
+    }
+  }
+}
+
+

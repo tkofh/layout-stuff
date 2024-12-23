@@ -6,9 +6,11 @@
 
 <script lang="ts">
 export type ScrollDirection = "vertical" | "horizontal";
+
 export interface ViewportProps {
   direction?: ScrollDirection;
 }
+
 export interface ViewportSlots {
   default?: () => unknown;
 }
@@ -50,12 +52,14 @@ defineSlots<ViewportSlots>();
   initial-value: 0;
 }
 
-[data-viewport] {
-  --layout-scroll-start: max(0px, var(--layout-scroll));
-  --layout-scroll-end: max(
-    0px,
-    var(--layout-scroll-length) - var(--layout-scroll-viewport) -
-      var(--layout-scroll)
-  );
+@layer trait {
+  [data-viewport] {
+    --layout-scroll-start: max(0px, var(--layout-scroll));
+    --layout-scroll-end: max(
+      0px,
+      var(--layout-scroll-length) - var(--layout-scroll-viewport) -
+        var(--layout-scroll)
+    );
+  }
 }
 </style>

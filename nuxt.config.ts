@@ -16,12 +16,7 @@ export default defineNuxtConfig({
   },
 
   css: [
-    "sanitize.css",
-    "sanitize.css/assets.css",
-    "sanitize.css/typography.css",
-    "sanitize.css/forms.css",
-    "sanitize.css/system-ui.css",
-    "sanitize.css/ui-monospace.css",
+    "~/assets/styles/index.css",
     "@radix-ui/colors/gray.css",
     "@radix-ui/colors/gray-dark.css",
   ],

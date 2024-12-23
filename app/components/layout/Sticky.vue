@@ -28,6 +28,7 @@ export interface StickyProps extends PrimitiveProps {
    */
   edge?: "start" | "end" | "both" | "none" | "auto";
 }
+
 export interface StickySlots {
   default: () => unknown;
 }
@@ -68,24 +69,29 @@ const style = computed(() => ({
   initial-value: 0;
 }
 
-.layout-sticky {
-  position: sticky;
+@layer components.layout {
+  .layout-sticky {
+    position: sticky;
 
-  [data-viewport~="vertical"] & {
-    inset-block: var(--layout-sticky-start, var(--layout-sticky-start-offset))
-      var(--layout-sticky-end, var(--layout-sticky-end-offset));
+    [data-viewport~="vertical"] & {
+      inset-block: var(--layout-sticky-start, var(--layout-sticky-start-offset))
+        var(--layout-sticky-end, var(--layout-sticky-end-offset));
+    }
+
+    [data-viewport~="horizontal"] & {
+      inset-inline: var(
+          --layout-sticky-start,
+          var(--layout-sticky-start-offset)
+        )
+        var(--layout-sticky-end, var(--layout-sticky-end-offset));
+    }
   }
 
-  [data-viewport~="horizontal"] & {
-    inset-inline: var(--layout-sticky-start, var(--layout-sticky-start-offset))
-      var(--layout-sticky-end, var(--layout-sticky-end-offset));
+  .layout-sticky-body {
+    --layout-sticky-start: inherit;
+    --layout-sticky-end: inherit;
+    --layout-sticky-start-offset: inherit;
+    --layout-sticky-end-offset: inherit;
   }
-}
-
-.layout-sticky-body {
-  --layout-sticky-start: inherit;
-  --layout-sticky-end: inherit;
-  --layout-sticky-start-offset: inherit;
-  --layout-sticky-end-offset: inherit;
 }
 </style>

@@ -134,7 +134,9 @@ const style = computed(() => ({
   initial-value: 0;
 }
 
-[data-layout-container] {
-  --layout-space-y: var(--layout-space);
+@layer trait {
+  [data-layout-container] {
+    --layout-space-y: var(--layout-space);
+  }
 }
 </style>

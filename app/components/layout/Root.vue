@@ -54,13 +54,15 @@ onPrehydrate(() => {
 </script>
 
 <style>
-.layout-root {
-  min-block-size: 100dvb;
-  display: block grid;
-  grid-template: minmax(auto, 1fr) / 1fr;
-  place-items: stretch;
-  contain: content;
+@layer components.layout {
+  .layout-root {
+    min-block-size: 100dvb;
+    display: block grid;
+    grid-template: minmax(auto, 1fr) / 1fr;
+    place-items: stretch;
+    contain: content;
 
-  --layout-scroll-viewport: 100dvb;
+    --layout-scroll-viewport: 100dvb;
+  }
 }
 </style>

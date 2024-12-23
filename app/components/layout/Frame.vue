@@ -31,7 +31,9 @@ const style = computed(() => ({
   initial-value: 0;
 }
 
-.layout-frame {
-  padding: var(--layout-frame);
+@layer components.layout {
+  .layout-frame {
+    padding: var(--layout-frame);
+  }
 }
 </style>

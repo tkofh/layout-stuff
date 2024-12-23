@@ -92,28 +92,30 @@ const style = computed(() => ({
 </script>
 
 <style>
-.layout-scroll {
-  --layout-viewport-block-size: 100%;
-  --layout-viewport-inline-size: 100%;
+@layer components.layout {
+  .layout-scroll {
+    --layout-viewport-block-size: 100%;
+    --layout-viewport-inline-size: 100%;
 
-  display: block;
-  isolation: isolate;
-  contain: content;
+    display: block;
+    isolation: isolate;
+    contain: content;
 
-  &[data-viewport~="horizontal"] {
-    container-type: inline-size;
+    &[data-viewport~="horizontal"] {
+      container-type: inline-size;
+    }
+
+    &[data-viewport~="vertical"] {
+      container-type: size;
+    }
   }
 
-  &[data-viewport~="vertical"] {
-    container-type: size;
-  }
-}
+  .layout-scroll-area {
+    overflow: clip;
 
-.layout-scroll-area {
-  overflow: clip;
-
-  [data-viewport~="horizontal"] & {
-    min-block-size: 100%;
+    [data-viewport~="horizontal"] & {
+      min-block-size: 100%;
+    }
   }
 }
 </style>

@@ -3,7 +3,7 @@
     <LayoutAreas large="y">
       <template #top>
         <LayoutBox height="10rem">
-          <AppPlaceholder label="Section A Header" />
+          <AppPlaceholder label="Global Header" />
         </LayoutBox>
       </template>
 
@@ -92,17 +92,18 @@
 
       <template #bottom>
         <LayoutBox height="10rem">
-          <AppPlaceholder label="Section A Footer" />
+          <AppPlaceholder label="Global Footer" />
         </LayoutBox>
       </template>
     </LayoutAreas>
   </LayoutRoot>
 </template>
 
-<script setup lang="ts"></script>
 <style>
-body {
-  background-color: var(--gray-1);
-  color: var(--gray-12);
+@layer app {
+  body {
+    background-color: var(--gray-1);
+    color: var(--gray-12);
+  }
 }
 </style>

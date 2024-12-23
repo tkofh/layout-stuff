@@ -34,6 +34,7 @@ export interface BoxProps extends PrimitiveProps {
   maxWidth?: Length;
   maxHeight?: Length;
 }
+
 export type BoxSlots = PrimitiveSlots;
 </script>
 
@@ -110,14 +111,16 @@ const style = computed(() => ({
   initial-value: none;
 }
 
-.layout-box {
-  display: block flow-root;
-  block-size: var(--layout-box-block-size);
-  inline-size: var(--layout-box-inline-size);
-  min-block-size: var(--layout-box-min-block-size);
-  min-inline-size: var(--layout-box-min-inline-size);
-  max-block-size: var(--layout-box-max-block-size);
-  max-inline-size: var(--layout-box-max-inline-size);
-  aspect-ratio: var(--layout-box-aspect-ratio);
+@layer components.layout {
+  .layout-box {
+    display: block flow-root;
+    block-size: var(--layout-box-block-size);
+    inline-size: var(--layout-box-inline-size);
+    min-block-size: var(--layout-box-min-block-size);
+    min-inline-size: var(--layout-box-min-inline-size);
+    max-block-size: var(--layout-box-max-block-size);
+    max-inline-size: var(--layout-box-max-inline-size);
+    aspect-ratio: var(--layout-box-aspect-ratio);
+  }
 }
 </style>

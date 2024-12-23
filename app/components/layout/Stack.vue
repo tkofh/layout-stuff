@@ -17,6 +17,7 @@ export interface StackProps extends PrimitiveProps {
   align?: "left" | "center" | "right";
   space?: number | `${number}`;
 }
+
 export interface StackSlots {
   default: () => unknown;
 }
@@ -45,12 +46,14 @@ const style = computed(() => ({
   initial-value: 0;
 }
 
-.layout-stack {
-  /* inline-size: 100%; */
-  display: block flex;
-  flex-direction: column;
-  gap: var(--layout-stack-space);
-  justify-content: flex-start;
-  align-items: var(--layout-stack-align);
+@layer components.layout {
+  .layout-stack {
+    /* inline-size: 100%; */
+    display: block flex;
+    flex-direction: column;
+    gap: var(--layout-stack-space);
+    justify-content: flex-start;
+    align-items: var(--layout-stack-align);
+  }
 }
 </style>
