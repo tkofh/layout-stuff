@@ -42,7 +42,6 @@
 
 <script lang="ts">
 import type { PrimitiveProps } from "~/components/layout/Primitive.vue";
-import { useScrollPosition } from "~/components/layout/Scroll.vue";
 
 const defaultSmall = {
   top: "bottom",

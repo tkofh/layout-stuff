@@ -1,7 +1,17 @@
 <template>
-  <LayoutPrimitive :as class="layout-box" :style>
-    <slot />
-  </LayoutPrimitive>
+  <LayoutBoxTrait
+    :width
+    :height
+    :aspect-ratio
+    :min-width
+    :min-height
+    :max-width
+    :max-height
+  >
+    <LayoutPrimitive :as>
+      <slot />
+    </LayoutPrimitive>
+  </LayoutBoxTrait>
 </template>
 
 <script lang="ts">
@@ -9,63 +19,16 @@ import type {
   PrimitiveProps,
   PrimitiveSlots,
 } from "~/components/layout/Primitive.vue";
+import type { BoxProps } from "~/components/layout/box/Trait.vue";
 
-function parseLength(length?: Length): string | undefined {
-  if (length === undefined) return undefined;
-  if (typeof length === "number") return `${length}px`;
-
-  const parsed = Number(length);
-  if (Number.isFinite(parsed)) {
-    return `${parsed}px`;
-  }
-
-  return length;
-}
-
-export type LengthUnit = "px" | "rem" | "%" | "dvb" | "dvi";
-export type Length = number | `${number}` | `${number}${LengthUnit}`;
-
-export interface BoxProps extends PrimitiveProps {
-  width?: Length;
-  height?: Length;
-  aspectRatio?: number | `${number}` | `${number} / ${number}`;
-  minWidth?: Length;
-  minHeight?: Length;
-  maxWidth?: Length;
-  maxHeight?: Length;
-}
+export interface LayoutBoxProps extends PrimitiveProps, BoxProps {}
 
 export type BoxSlots = PrimitiveSlots;
 </script>
 
 <script setup lang="ts">
-const props = defineProps<BoxProps>();
-
-const width = computed(() =>
-  props.width !== undefined
-    ? props.width
-    : props.height === undefined || props.aspectRatio === undefined
-      ? "100%"
-      : undefined,
-);
-const height = computed(() =>
-  props.height !== undefined
-    ? props.height
-    : props.width === undefined || props.aspectRatio === undefined
-      ? "100%"
-      : undefined,
-);
+defineProps<LayoutBoxProps>();
 defineSlots<BoxSlots>();
-
-const style = computed(() => ({
-  "--layout-box-min-block-size": parseLength(props.minHeight),
-  "--layout-box-min-inline-size": parseLength(props.minWidth),
-  "--layout-box-max-block-size": parseLength(props.maxHeight),
-  "--layout-box-max-inline-size": parseLength(props.maxWidth),
-  "--layout-box-block-size": parseLength(height.value),
-  "--layout-box-inline-size": parseLength(width.value),
-  "--layout-box-aspect-ratio": props.aspectRatio,
-}));
 </script>
 
 <style>

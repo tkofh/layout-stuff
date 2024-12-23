@@ -29,7 +29,36 @@ export const SIZE_SCALE = {
   full: "100%",
 } as const;
 
-export type Size = ResponsiveValue<keyof typeof SIZE_SCALE>;
+export type SizeKey =
+  | "0"
+  | "1"
+  | "2"
+  | "3"
+  | "4"
+  | "5"
+  | "6"
+  | "8"
+  | "10"
+  | "12"
+  | "14"
+  | "16"
+  | "20"
+  | "24"
+  | "28"
+  | "32"
+  | "40"
+  | "48"
+  | "56"
+  | "64"
+  | "80"
+  | "96"
+  | "xs"
+  | "sm"
+  | "md"
+  | "lg"
+  | "xl"
+  | "full";
+export type Size = ResponsiveValue<SizeKey>;
 
 export const SPACE_SCALE = {
   none: SIZE_SCALE["0"],
@@ -41,4 +70,5 @@ export const SPACE_SCALE = {
   "2xl": SIZE_SCALE["8"],
 } as const;
 
-export type Space = ResponsiveValue<keyof typeof SPACE_SCALE>;
+export type SpaceKey = "none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
+export type Space = ResponsiveValue<SpaceKey>;

@@ -1,8 +1,7 @@
 <template>
   <RadixScrollAreaRoot class="layout-scroll" as-child>
     <LayoutViewportTrait :direction>
-      <LayoutBox
-        as="slot"
+      <LayoutBoxTrait
         :width
         :min-width
         :max-width
@@ -23,7 +22,7 @@
           </RadixScrollAreaScrollbar>
           <slot name="indicators" />
         </RadixScrollAreaViewport>
-      </LayoutBox>
+      </LayoutBoxTrait>
     </LayoutViewportTrait>
   </RadixScrollAreaRoot>
 </template>
@@ -31,7 +30,11 @@
 <script lang="ts">
 import type { ViewportProps } from "~/components/layout/viewport/Trait.vue";
 import { RadixScrollAreaViewport } from "#components";
-import type { BoxProps, BoxSlots } from "~/components/layout/Box.vue";
+import type { BoxProps } from "~/components/layout/box/Trait.vue";
+import type {
+  PrimitiveProps,
+  PrimitiveSlots,
+} from "~/components/layout/Primitive.vue";
 
 export function provideScrollPosition(scroll: ComputedRef<number>) {
   provide(Symbol.for("layout.scroll"), scroll);
@@ -41,9 +44,9 @@ export function useScrollPosition() {
   return inject(Symbol.for("layout.scroll")) as ComputedRef<number>;
 }
 
-export interface ScrollProps extends BoxProps, ViewportProps {}
+export interface ScrollProps extends PrimitiveProps, BoxProps, ViewportProps {}
 
-export interface ScrollSlots extends BoxSlots {
+export interface ScrollSlots extends PrimitiveSlots {
   indicators?: () => unknown;
 }
 </script>

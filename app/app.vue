@@ -2,32 +2,32 @@
   <LayoutRoot>
     <LayoutAreas large="y">
       <template #top>
-        <LayoutBox height="10rem">
+        <LayoutBox height="40">
           <AppPlaceholder label="Global Header" />
         </LayoutBox>
       </template>
 
       <template #left>
         <LayoutSticky>
-          <LayoutScroll width="30rem" direction="vertical">
+          <LayoutScroll width="xs" direction="vertical">
             <LayoutAreas large="y">
               <template #top>
                 <LayoutSticky>
-                  <LayoutBox height="5rem">
+                  <LayoutBox height="20">
                     <AppPlaceholder label="Left Sidebar Header" />
                   </LayoutBox>
                 </LayoutSticky>
               </template>
 
               <template #bottom>
-                <LayoutBox height="5rem">
+                <LayoutBox height="20">
                   <AppPlaceholder label="Left Sidebar Footer" />
                 </LayoutBox>
               </template>
 
               <template #right>
                 <LayoutSticky>
-                  <LayoutBox width="10rem">
+                  <LayoutBox width="40">
                     <AppPlaceholder label="Left-Right Sidebar" />
                   </LayoutBox>
                 </LayoutSticky>
@@ -38,7 +38,7 @@
                   <LayoutBox
                     v-for="i in 10"
                     :key="`left-sidebar-item-${i}`"
-                    height="10rem"
+                    height="40"
                   >
                     <AppPlaceholder :label="`Left-Left Sidebar Item ${i}`" />
                   </LayoutBox>
@@ -55,27 +55,27 @@
             <LayoutAreas large="x">
               <template #top>
                 <LayoutSticky>
-                  <LayoutBox height="10rem">
+                  <LayoutBox height="40">
                     <AppPlaceholder label="Horizontal Section Top" />
                   </LayoutBox>
                 </LayoutSticky>
               </template>
 
               <template #left>
-                <LayoutBox width="10rem">
+                <LayoutBox width="40">
                   <AppPlaceholder label="Horizontal Section Left" />
                 </LayoutBox>
               </template>
 
               <template #right>
-                <LayoutBox width="10rem">
+                <LayoutBox width="40">
                   <AppPlaceholder label="Horizontal Section Right" />
                 </LayoutBox>
               </template>
 
               <template #main>
                 <LayoutInline space="sm">
-                  <LayoutBox v-for="i in 10" :key="`item-${i}`" width="10rem">
+                  <LayoutBox v-for="i in 10" :key="`item-${i}`" width="40">
                     <AppPlaceholder
                       :label="`Horizontal Section Main Item ${i}`"
                     />
@@ -91,7 +91,7 @@
       </template>
 
       <template #bottom>
-        <LayoutBox height="10rem">
+        <LayoutBox height="40">
           <AppPlaceholder label="Global Footer" />
         </LayoutBox>
       </template>
