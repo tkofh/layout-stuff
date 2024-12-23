@@ -46,10 +46,11 @@ const style = computed(() => ({
 }
 
 .layout-stack {
-  inline-size: 100%;
+  /* inline-size: 100%; */
   display: block flex;
   flex-direction: column;
   gap: var(--layout-stack-space);
+  justify-content: flex-start;
   align-items: var(--layout-stack-align);
 }
 </style>

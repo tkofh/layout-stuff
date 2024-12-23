@@ -1,29 +1,37 @@
 <template>
   <RadixScrollAreaRoot class="layout-scroll" as-child>
     <LayoutTraitViewport :direction>
-      <RadixScrollAreaViewport ref="viewport" as-child :style>
-        <LayoutPrimitive ref="area" :as class="layout-scroll-area">
-          <slot />
-        </LayoutPrimitive>
-        <RadixScrollAreaScrollbar
-          :orientation="direction"
-          class="layout-scroll-bar"
-        >
-          <RadixScrollAreaThumb class="layout-scroll-thumb" />
-        </RadixScrollAreaScrollbar>
-        <slot name="indicators" />
-      </RadixScrollAreaViewport>
+      <LayoutBox
+        as="slot"
+        :width
+        :min-width
+        :max-width
+        :height
+        :min-height
+        :max-height
+        :aspect-ratio
+      >
+        <RadixScrollAreaViewport ref="viewport" as-child :style>
+          <LayoutPrimitive ref="area" :as class="layout-scroll-area">
+            <slot />
+          </LayoutPrimitive>
+          <RadixScrollAreaScrollbar
+            :orientation="direction"
+            class="layout-scroll-bar"
+          >
+            <RadixScrollAreaThumb class="layout-scroll-thumb" />
+          </RadixScrollAreaScrollbar>
+          <slot name="indicators" />
+        </RadixScrollAreaViewport>
+      </LayoutBox>
     </LayoutTraitViewport>
   </RadixScrollAreaRoot>
 </template>
 
 <script lang="ts">
-import type {
-  PrimitiveProps,
-  PrimitiveSlots,
-} from "~/components/layout/Primitive.vue";
 import type { ViewportProps } from "~/components/layout/trait/Viewport.vue";
 import { RadixScrollAreaViewport } from "#components";
+import type { BoxProps, BoxSlots } from "~/components/layout/Box.vue";
 
 export function provideScrollPosition(scroll: ComputedRef<number>) {
   provide(Symbol.for("layout.scroll"), scroll);
@@ -33,9 +41,9 @@ export function useScrollPosition() {
   return inject(Symbol.for("layout.scroll")) as ComputedRef<number>;
 }
 
-export interface ScrollProps extends PrimitiveProps, ViewportProps {}
+export interface ScrollProps extends BoxProps, ViewportProps {}
 
-export interface ScrollSlots extends PrimitiveSlots {
+export interface ScrollSlots extends BoxSlots {
   indicators?: () => unknown;
 }
 </script>
@@ -88,8 +96,6 @@ const style = computed(() => ({
   --layout-viewport-block-size: 100%;
   --layout-viewport-inline-size: 100%;
 
-  block-size: 100%;
-  inline-size: 100%;
   display: block;
   isolation: isolate;
   contain: content;

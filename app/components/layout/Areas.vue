@@ -271,7 +271,7 @@ const style = computed(() => ({
   display: block grid;
   block-size: 100%;
   inline-size: 100%;
-  place-items: stretch;
+  place-items: start stretch;
   contain: paint;
 
   [data-viewport~="vertical"] & {
