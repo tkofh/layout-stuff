@@ -5,6 +5,7 @@ export default defineNuxtConfig({
     "radix-vue/nuxt",
     "@nuxtjs/color-mode",
     "@vueuse/nuxt",
+    "nuxt-security",
   ],
 
   devtools: {
@@ -31,6 +32,17 @@ export default defineNuxtConfig({
 
   compatibilityDate: "2024-11-01",
 
+  nitro: {
+    compressPublicAssets: true,
+    // preset: "static",
+  },
+
+  vite: {
+    build: {
+      target: ["esnext"],
+    },
+  },
+
   eslint: {
     config: {
       tooling: true,
@@ -45,5 +57,10 @@ export default defineNuxtConfig({
 
   radix: {
     prefix: "Radix",
+  },
+
+  security: {
+    nonce: true,
+    sri: true,
   },
 });
