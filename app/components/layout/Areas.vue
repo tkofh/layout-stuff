@@ -42,6 +42,7 @@
 
 <script lang="ts">
 import type { PrimitiveProps } from "~/components/layout/Primitive.vue";
+import { useScrollPosition } from "~/components/layout/Scroll.vue";
 
 const defaultSmall = {
   top: "bottom",
@@ -193,10 +194,10 @@ const areas = computed(() => {
   }
 });
 
-const top = templateRef<HTMLElement>("top");
-const right = templateRef<HTMLElement>("right");
-const bottom = templateRef<HTMLElement>("bottom");
-const left = templateRef<HTMLElement>("left");
+const top = useTemplateRef("top");
+const right = useTemplateRef("right");
+const bottom = useTemplateRef("bottom");
+const left = useTemplateRef("left");
 
 const defaultSize = { height: 0, width: 0 } as const;
 const sizeOptions = { box: "border-box" } as const;
@@ -237,7 +238,7 @@ const style = computed(() => ({
   initial-value: 0;
 }
 
-@property --layout-areas-size-right {
+@property --layout-areas-size-left {
   syntax: "<length>";
   inherits: true;
   initial-value: 0;
@@ -270,10 +271,12 @@ const style = computed(() => ({
   display: block grid;
   block-size: 100%;
   inline-size: 100%;
-  grid-template: auto minmax(auto, 1fr) auto / auto 1fr auto;
   place-items: stretch;
+  contain: paint;
 
   [data-viewport~="vertical"] & {
+    grid-template: auto minmax(max-content, 1fr) auto / auto 1fr auto;
+
     &
       > .layout-sticky:is(
         [data-layout-area~="left"],
@@ -307,6 +310,8 @@ const style = computed(() => ({
   }
 
   [data-viewport~="horizontal"] & {
+    grid-template: auto 1fr auto / auto minmax(max-content, 1fr) auto;
+
     &
       > .layout-sticky:is(
         [data-layout-area~="top"],
@@ -314,11 +319,11 @@ const style = computed(() => ({
       ) {
       --layout-sticky-clip-start: max(
         var(--layout-sticky-start-offset),
-        var(--layout-areas-size-top) - var(--layout-scroll-start)
+        var(--layout-areas-size-left) - var(--layout-scroll-start)
       );
       --layout-sticky-clip-end: max(
         var(--layout-sticky-end-offset),
-        var(--layout-areas-size-bottom) - var(--layout-scroll-end)
+        var(--layout-areas-size-right) - var(--layout-scroll-end)
       );
     }
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="app-placeholder" :style="{ width, height, aspectRatio }">
+  <div class="app-placeholder">
     <svg>
       <line x1="0%" y1="0%" x2="100%" y2="100%" />
       <line x1="0%" y1="100%" x2="100%" y2="0%" />
@@ -9,11 +9,8 @@
 </template>
 
 <script setup lang="ts">
-const { width = "100%", height = "100%" } = defineProps<{
+defineProps<{
   label: string | number;
-  width?: string;
-  height?: string;
-  aspectRatio?: string;
 }>();
 </script>
 
@@ -23,6 +20,9 @@ const { width = "100%", height = "100%" } = defineProps<{
   grid: "main" 1fr / 1fr;
   block-size: 100%;
   inline-size: 100%;
+  min-block-size: 0;
+  min-inline-size: 0;
+  overflow: clip;
   border: 1px solid var(--gray-6);
   background-color: var(--gray-3);
   color: var(--gray-11);
@@ -38,6 +38,8 @@ const { width = "100%", height = "100%" } = defineProps<{
   }
 
   & code {
+    text-align: center;
+    text-wrap: pretty;
     place-self: center;
     grid-area: main;
     font-size: 1rem;

@@ -18,6 +18,7 @@ import type {
   PrimitiveProps,
   PrimitiveSlots,
 } from "~/components/layout/Primitive.vue";
+import { provideScrollPosition } from "~/components/layout/Scroll.vue";
 
 defineProps<PrimitiveProps>();
 defineSlots<PrimitiveSlots>();
@@ -26,6 +27,8 @@ const root = templateRef<HTMLElement>("root");
 
 const { height } = useElementSize(root);
 const { y } = useWindowScroll();
+
+provideScrollPosition(y as ComputedRef<number>);
 
 const style = computed(() => ({
   "--layout-scroll": `${y.value}px`,

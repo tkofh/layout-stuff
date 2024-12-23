@@ -25,6 +25,14 @@ import type {
 import type { ViewportProps } from "~/components/layout/trait/Viewport.vue";
 import { RadixScrollAreaViewport } from "#components";
 
+export function provideScrollPosition(scroll: ComputedRef<number>) {
+  provide(Symbol.for("layout.scroll"), scroll);
+}
+
+export function useScrollPosition() {
+  return inject(Symbol.for("layout.scroll")) as ComputedRef<number>;
+}
+
 export interface ScrollProps extends PrimitiveProps, ViewportProps {}
 
 export interface ScrollSlots extends PrimitiveSlots {
@@ -58,6 +66,10 @@ const { width: viewportInlineSize, height: viewportBlockSize } = useElementSize(
 
 const { x, y } = useScroll(viewportElement);
 
+const scroll = computed(() => (direction === "vertical" ? y.value : x.value));
+
+provideScrollPosition(scroll);
+
 const style = computed(() => ({
   "--layout-scroll-length":
     direction === "vertical"
@@ -67,7 +79,7 @@ const style = computed(() => ({
     direction === "vertical"
       ? `${viewportBlockSize.value}px`
       : `${viewportInlineSize.value}px`,
-  "--layout-scroll": direction === "vertical" ? `${y.value}px` : `${x.value}px`,
+  "--layout-scroll": `${scroll.value}px`,
 }));
 </script>
 
@@ -80,9 +92,22 @@ const style = computed(() => ({
   inline-size: 100%;
   display: block;
   isolation: isolate;
+  contain: content;
+
+  &[data-viewport~="horizontal"] {
+    container-type: inline-size;
+  }
+
+  &[data-viewport~="vertical"] {
+    container-type: size;
+  }
 }
 
 .layout-scroll-area {
   overflow: clip;
+
+  [data-viewport~="horizontal"] & {
+    min-block-size: 100%;
+  }
 }
 </style>

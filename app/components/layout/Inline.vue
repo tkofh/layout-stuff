@@ -33,13 +33,13 @@ const style = computed(() => ({
 @property --layout-inline-align {
   syntax: "flex-start | center | flex-end";
   inherits: true;
-  initial-value: "flex-start";
+  initial-value: flex-start;
 }
 
 @property --layout-inline-align-y {
   syntax: "flex-start | center | flex-end";
   inherits: true;
-  initial-value: "flex-start";
+  initial-value: flex-start;
 }
 
 .layout-inline {

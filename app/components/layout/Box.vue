@@ -39,6 +39,21 @@ export type BoxSlots = PrimitiveSlots;
 
 <script setup lang="ts">
 const props = defineProps<BoxProps>();
+
+const width = computed(() =>
+  props.width !== undefined
+    ? props.width
+    : props.height === undefined || props.aspectRatio === undefined
+      ? "100%"
+      : undefined,
+);
+const height = computed(() =>
+  props.height !== undefined
+    ? props.height
+    : props.width === undefined || props.aspectRatio === undefined
+      ? "100%"
+      : undefined,
+);
 defineSlots<BoxSlots>();
 
 const style = computed(() => ({
@@ -46,8 +61,8 @@ const style = computed(() => ({
   "--layout-box-min-inline-size": parseLength(props.minWidth),
   "--layout-box-max-block-size": parseLength(props.maxHeight),
   "--layout-box-max-inline-size": parseLength(props.maxWidth),
-  "--layout-box-block-size": parseLength(props.height),
-  "--layout-box-inline-size": parseLength(props.width),
+  "--layout-box-block-size": parseLength(height.value),
+  "--layout-box-inline-size": parseLength(width.value),
   "--layout-box-aspect-ratio": props.aspectRatio,
 }));
 </script>
