@@ -1,7 +1,19 @@
 <template>
-  <LayoutPrimitive :as class="layout-inline" :style>
-    <slot />
-  </LayoutPrimitive>
+  <LayoutContainerTrait :align :align-y :collapse-below :space>
+    <LayoutFrameTrait
+      :frame
+      :frame-y
+      :frame-x
+      :frame-top
+      :frame-right
+      :frame-bottom
+      :frame-left
+    >
+      <LayoutPrimitive :as class="layout-inline">
+        <slot />
+      </LayoutPrimitive>
+    </LayoutFrameTrait>
+  </LayoutContainerTrait>
 </template>
 
 <script lang="ts">
@@ -9,24 +21,26 @@ import type {
   PrimitiveProps,
   PrimitiveSlots,
 } from "~/components/layout/Primitive.vue";
+import type {
+  Align2dProps,
+  CollapseBelowProps,
+  SpaceProps,
+} from "~/components/layout/container/Trait.vue";
+import type { FrameProps } from "~/components/layout/frame/Trait.vue";
 
-export interface InlineProps extends PrimitiveProps {
-  align?: "left" | "center" | "right";
-  alignY?: "top" | "center" | "bottom";
-  space?: number | `${number}`;
-}
+export interface InlineProps
+  extends PrimitiveProps,
+    CollapseBelowProps,
+    SpaceProps,
+    Align2dProps,
+    FrameProps {}
 
 export type InlineSlots = PrimitiveSlots;
 </script>
 
 <script setup lang="ts">
-const props = defineProps<InlineProps>();
+defineProps<InlineProps>();
 defineSlots<InlineSlots>();
-
-const style = computed(() => ({
-  "--layout-inline-align": props.align,
-  "--layout-inline-align-y": props.alignY,
-}));
 </script>
 
 <style>
@@ -46,6 +60,9 @@ const style = computed(() => ({
   .layout-inline {
     display: block flex;
     flex-flow: row wrap;
+    gap: var(--layout-space-current);
+    justify-content: var(--layout-align-current);
+    align-items: var(--layout-align-y-current);
   }
 }
 </style>

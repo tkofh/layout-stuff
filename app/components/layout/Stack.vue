@@ -1,59 +1,54 @@
 <template>
-  <LayoutPrimitive :as class="layout-stack" :style>
-    <slot />
-  </LayoutPrimitive>
+  <LayoutContainerTrait :space :align>
+    <LayoutFrameTrait
+      :frame
+      :frame-y
+      :frame-x
+      :frame-top
+      :frame-right
+      :frame-bottom
+      :frame-left
+    >
+      <LayoutPrimitive :as class="layout-stack">
+        <slot />
+      </LayoutPrimitive>
+    </LayoutFrameTrait>
+  </LayoutContainerTrait>
 </template>
 
 <script lang="ts">
-import type { PrimitiveProps } from "~/components/layout/Primitive.vue";
+import type {
+  PrimitiveProps,
+  PrimitiveSlots,
+} from "~/components/layout/Primitive.vue";
+import type {
+  AlignProps,
+  SpaceProps,
+} from "~/components/layout/container/Trait.vue";
+import type { FrameProps } from "~/components/layout/frame/Trait.vue";
 
-const alignLookup = {
-  left: "flex-start",
-  center: "center",
-  right: "flex-end",
-} as const;
+export interface StackProps
+  extends PrimitiveProps,
+    AlignProps,
+    SpaceProps,
+    FrameProps {}
 
-export interface StackProps extends PrimitiveProps {
-  align?: "left" | "center" | "right";
-  space?: number | `${number}`;
-}
-
-export interface StackSlots {
-  default: () => unknown;
-}
+export type StackSlots = PrimitiveSlots;
 </script>
 
 <script setup lang="ts">
-const { align = "left", space = "0" } = defineProps<StackProps>();
+defineProps<StackProps>();
 defineSlots<StackSlots>();
-
-const style = computed(() => ({
-  "--layout-stack-align": alignLookup[align],
-  "--layout-stack-space": `${space}rem`,
-}));
 </script>
 
 <style>
-@property --layout-stack-align {
-  syntax: "flex-start | center | flex-end";
-  inherits: false;
-  initial-value: flex-start;
-}
-
-@property --layout-stack-space {
-  syntax: "<length>";
-  inherits: false;
-  initial-value: 0;
-}
-
 @layer components.layout {
   .layout-stack {
-    /* inline-size: 100%; */
     display: block flex;
     flex-direction: column;
-    gap: var(--layout-stack-space);
+    gap: var(--layout-space-current);
     justify-content: flex-start;
-    align-items: var(--layout-stack-align);
+    align-items: var(--layout-align-current);
   }
 }
 </style>

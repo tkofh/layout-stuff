@@ -1,6 +1,6 @@
 <template>
   <RadixScrollAreaRoot class="layout-scroll" as-child>
-    <LayoutTraitViewport :direction>
+    <LayoutViewportTrait :direction>
       <LayoutBox
         as="slot"
         :width
@@ -24,12 +24,12 @@
           <slot name="indicators" />
         </RadixScrollAreaViewport>
       </LayoutBox>
-    </LayoutTraitViewport>
+    </LayoutViewportTrait>
   </RadixScrollAreaRoot>
 </template>
 
 <script lang="ts">
-import type { ViewportProps } from "~/components/layout/trait/Viewport.vue";
+import type { ViewportProps } from "~/components/layout/viewport/Trait.vue";
 import { RadixScrollAreaViewport } from "#components";
 import type { BoxProps, BoxSlots } from "~/components/layout/Box.vue";
 

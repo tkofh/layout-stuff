@@ -50,7 +50,7 @@
       </template>
 
       <template #main>
-        <LayoutStack>
+        <LayoutStack space="md" frame="md">
           <LayoutScroll direction="horizontal">
             <LayoutAreas large="x">
               <template #top>
@@ -74,7 +74,7 @@
               </template>
 
               <template #main>
-                <LayoutInline space="1">
+                <LayoutInline space="sm">
                   <LayoutBox v-for="i in 10" :key="`item-${i}`" width="10rem">
                     <AppPlaceholder
                       :label="`Horizontal Section Main Item ${i}`"
