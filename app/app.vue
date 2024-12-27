@@ -8,14 +8,21 @@
       </template>
 
       <template #left>
-        <LayoutSticky>
+        <LayoutSticky v-slot="{ isStuckStart, isStuckEnd }">
           <LayoutScroll width="xs" direction="vertical">
             <LayoutAreas large="y">
               <template #top>
                 <LayoutSticky>
-                  <LayoutBox height="20">
-                    <AppPlaceholder label="Left Sidebar Header" />
-                  </LayoutBox>
+                  <LayoutStack space="none">
+                    <LayoutBox height="20">
+                      <AppPlaceholder
+                        :label="`Left Sidebar (${isStuckStart && isStuckEnd ? 'Stuck' : isStuckStart ? 'Stuck Start' : isStuckEnd ? 'Stuck End' : 'Not Stuck'})`"
+                      />
+                    </LayoutBox>
+                    <LayoutBox height="20">
+                      <AppPlaceholder label="Left Sidebar Header" />
+                    </LayoutBox>
+                  </LayoutStack>
                 </LayoutSticky>
               </template>
 

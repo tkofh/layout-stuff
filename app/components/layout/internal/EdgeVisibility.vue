@@ -1,20 +1,12 @@
-<template>
-  <LayoutPrimitive :as data-layout-viewport-edges>
-    <span ref="probeStart" data-edge-probe="start" />
-    <slot :start-visible :end-visible />
-    <span ref="probeEnd" data-edge-probe="end" />
-  </LayoutPrimitive>
-</template>
-
 <script lang="ts">
-import type {
-  PrimitiveProps,
-  ContentSectioningTag,
-} from "~/components/layout/Primitive.vue";
+import InternalLayoutPrimitive, {
+  type PrimitiveProps,
+  type ContentSectioningTag,
+} from "~/components/layout/internal/Primitive.vue";
 import {
   useViewport,
   type Viewport,
-} from "~/components/layout/viewport/Trait.vue";
+} from "~/components/layout/internal/Viewport.vue";
 import type { ShallowRef } from "vue";
 
 function useEdgeObserver(
@@ -55,24 +47,29 @@ function useEdgeObserver(
   });
 }
 
-export interface LayoutViewportEdgesProps
+export interface EdgeVisibilityProps
   extends PrimitiveProps<ContentSectioningTag> {
   viewport?: "root" | "nearest" | "both";
 }
 
-export interface LayoutViewportEdgesSlots {
+export interface EdgeVisibilitySlots {
   default?: (args: { startVisible: boolean; endVisible: boolean }) => unknown;
 }
 
-export interface LayoutViewportEdgesEvents {
+export interface EdgeVisibilityEvents {
   (event: "onUpdateStart" | "onUpdateEnd", value: boolean): void;
 }
 </script>
 
 <script setup lang="ts">
-const props = defineProps<LayoutViewportEdgesProps>();
-defineSlots<LayoutViewportEdgesSlots>();
-const emit = defineEmits<LayoutViewportEdgesEvents>();
+const props = defineProps<EdgeVisibilityProps>();
+defineSlots<EdgeVisibilitySlots>();
+const emit = defineEmits<EdgeVisibilityEvents>();
+defineOptions({
+  name: "LayoutEdgeVisibility",
+});
+
+const LayoutPrimitive = InternalLayoutPrimitive;
 
 const startViewports = ref(new Set<Viewport>());
 const endViewports = ref(new Set<Viewport>());
@@ -80,10 +77,12 @@ const endViewports = ref(new Set<Viewport>());
 const startVisible = computed(() => startViewports.value.size > 0);
 const endVisible = computed(() => endViewports.value.size > 0);
 
-if (import.meta.client) {
-  watch(startVisible, (value) => emit("onUpdateStart", value));
-  watch(endVisible, (value) => emit("onUpdateEnd", value));
+watch(startVisible, (value) => emit("onUpdateStart", value), {
+  immediate: true,
+});
+watch(endVisible, (value) => emit("onUpdateEnd", value), { immediate: true });
 
+if (import.meta.client) {
   const probeStart = useTemplateRef<HTMLElement>("probeStart");
   const probeEnd = useTemplateRef<HTMLElement>("probeEnd");
 
@@ -118,6 +117,14 @@ if (import.meta.client) {
 }
 </script>
 
+<template>
+  <LayoutPrimitive :as data-layout-edge-visibility>
+    <span ref="probeStart" data-edge-probe="start" />
+    <slot :start-visible :end-visible />
+    <span ref="probeEnd" data-edge-probe="end" />
+  </LayoutPrimitive>
+</template>
+
 <style>
 @property --layout-viewport-edges-start-offset {
   syntax: "<length>";
@@ -132,39 +139,46 @@ if (import.meta.client) {
 }
 
 @layer trait {
-  [data-layout-viewport-edges] [data-edge-probe] {
-    --layout-viewport-edges-start-offset: inherit;
-    --layout-viewport-edges-end-offset: inherit;
+  [data-layout-edge-visibility] {
+    --layout-viewport-edges-start-offset: initial;
+    --layout-viewport-edges-end-offset: initial;
 
-    position: absolute;
-    pointer-events: none;
-    z-index: -1;
+    [data-edge-probe] {
+      --layout-viewport-edges-start-offset: inherit;
+      --layout-viewport-edges-end-offset: inherit;
 
-    [data-viewport~="vertical"] & {
-      block-size: 1px;
-      inset-inline: 0;
+      position: absolute;
+      pointer-events: none;
+      z-index: -1;
 
-      &[data-edge-probe="start"] {
-        inset-block-start: calc(-1 * var(--layout-viewport-edges-start-offset));
+      [data-viewport~="vertical"] & {
+        block-size: 1px;
+        inset-inline: 0;
+
+        &[data-edge-probe="start"] {
+          inset-block-start: calc(
+            -1 * var(--layout-viewport-edges-start-offset)
+          );
+        }
+
+        &[data-edge-probe="end"] {
+          inset-block-end: calc(-1 * var(--layout-viewport-edges-end-offset));
+        }
       }
 
-      &[data-edge-probe="end"] {
-        inset-block-end: calc(-1 * var(--layout-viewport-edges-end-offset));
-      }
-    }
+      [data-viewport~="horizontal"] & {
+        inline-size: 1px;
+        inset-block: 0;
 
-    [data-viewport~="horizontal"] & {
-      inline-size: 1px;
-      inset-block: 0;
+        &[data-edge-probe="start"] {
+          inset-inline-start: calc(
+            -1 * var(--layout-viewport-edges-start-offset)
+          );
+        }
 
-      &[data-edge-probe="start"] {
-        inset-inline-start: calc(
-          -1 * var(--layout-viewport-edges-start-offset)
-        );
-      }
-
-      &[data-edge-probe="end"] {
-        inset-inline-end: calc(-1 * var(--layout-viewport-edges-end-offset));
+        &[data-edge-probe="end"] {
+          inset-inline-end: calc(-1 * var(--layout-viewport-edges-end-offset));
+        }
       }
     }
   }

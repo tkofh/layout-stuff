@@ -1,5 +1,5 @@
 <template>
-  <LayoutBoxTrait
+  <LayoutSized
     :width
     :height
     :aspect-ratio
@@ -8,82 +8,52 @@
     :max-width
     :max-height
   >
-    <LayoutPrimitive :as>
-      <slot />
-    </LayoutPrimitive>
-  </LayoutBoxTrait>
+    <LayoutFrame
+      :frame
+      :frame-y
+      :frame-x
+      :frame-top
+      :frame-right
+      :frame-bottom
+      :frame-left
+    >
+      <LayoutPrimitive :as class="layout-box">
+        <slot />
+      </LayoutPrimitive>
+    </LayoutFrame>
+  </LayoutSized>
 </template>
 
 <script lang="ts">
-import type {
-  PrimitiveProps,
-  PrimitiveSlots,
-} from "~/components/layout/Primitive.vue";
-import type { BoxProps } from "~/components/layout/box/Trait.vue";
+import InternalLayoutPrimitive, {
+  type PrimitiveProps,
+  type PrimitiveSlots,
+} from "~/components/layout/internal/Primitive.vue";
+import InternalLayoutSized, {
+  type SizedProps,
+} from "~/components/layout/internal/Sized.vue";
+import InternalLayoutFrame, {
+  type FrameProps,
+} from "~/components/layout/internal/Frame.vue";
 
-export interface LayoutBoxProps extends PrimitiveProps, BoxProps {}
+export interface BoxProps extends PrimitiveProps, SizedProps, FrameProps {}
 
-export type LayoutBoxSlots = PrimitiveSlots;
+export type BoxSlots = PrimitiveSlots;
 </script>
 
 <script setup lang="ts">
-defineProps<LayoutBoxProps>();
-defineSlots<LayoutBoxSlots>();
+defineProps<BoxProps>();
+defineSlots<BoxSlots>();
+
+const LayoutFrame = InternalLayoutFrame;
+const LayoutSized = InternalLayoutSized;
+const LayoutPrimitive = InternalLayoutPrimitive;
 </script>
 
 <style>
-@property --layout-box-min-block-size {
-  syntax: "<length-percentage>";
-  inherits: false;
-  initial-value: 0;
-}
-
-@property --layout-box-min-inline-size {
-  syntax: "<length-percentage>";
-  inherits: false;
-  initial-value: 0;
-}
-
-@property --layout-box-max-block-size {
-  syntax: "<length-percentage> | none";
-  inherits: false;
-  initial-value: none;
-}
-
-@property --layout-box-max-inline-size {
-  syntax: "<length-percentage> | none";
-  inherits: false;
-  initial-value: none;
-}
-
-@property --layout-box-block-size {
-  syntax: "<length-percentage> | auto";
-  inherits: false;
-  initial-value: auto;
-}
-
-@property --layout-box-inline-size {
-  syntax: "<length-percentage> | auto";
-  inherits: false;
-  initial-value: auto;
-}
-
-@property --layout-box-aspect-ratio {
-  syntax: "*";
-  inherits: false;
-  initial-value: none;
-}
-
 @layer components.layout {
   .layout-box {
     display: block flow-root;
-    block-size: var(--layout-box-block-size);
-    inline-size: var(--layout-box-inline-size);
-    min-block-size: var(--layout-box-min-block-size);
-    min-inline-size: var(--layout-box-min-inline-size);
-    max-block-size: var(--layout-box-max-block-size);
-    max-inline-size: var(--layout-box-max-inline-size);
-    aspect-ratio: var(--layout-box-aspect-ratio);
   }
 }
 </style>

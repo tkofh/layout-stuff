@@ -1,65 +1,60 @@
 <template>
-  <LayoutContainerTrait :align :align-y :collapse-below :space>
-    <LayoutFrameTrait
-      :frame
-      :frame-y
-      :frame-x
-      :frame-top
-      :frame-right
-      :frame-bottom
-      :frame-left
-    >
+  <LayoutFrame
+    as="slot"
+    :frame
+    :frame-y
+    :frame-x
+    :frame-top
+    :frame-right
+    :frame-bottom
+    :frame-left
+  >
+    <LayoutContainer :align :align-y :space :collapse-below>
       <LayoutPrimitive :as class="layout-inline">
         <slot />
       </LayoutPrimitive>
-    </LayoutFrameTrait>
-  </LayoutContainerTrait>
+    </LayoutContainer>
+  </LayoutFrame>
 </template>
 
 <script lang="ts">
-import type {
-  PrimitiveProps,
-  PrimitiveSlots,
-} from "~/components/layout/Primitive.vue";
-import type {
-  Align2dProps,
-  CollapseBelowProps,
-  SpaceProps,
-} from "~/components/layout/container/Trait.vue";
-import type { FrameProps } from "~/components/layout/frame/Trait.vue";
+import InternalLayoutPrimitive, {
+  type PrimitiveSlots,
+  type PrimitiveProps,
+} from "~/components/layout/internal/Primitive.vue";
+import InternalLayoutContainer, {
+  type Align2dProps,
+  type SpaceProps,
+  type CollapseBelowProps,
+} from "~/components/layout/internal/Container.vue";
+import InternalLayoutFrame, {
+  type FrameProps,
+} from "~/components/layout/internal/Frame.vue";
 
-export interface LayoutInlineProps
+export interface InlineProps
   extends PrimitiveProps,
+    FrameProps,
     CollapseBelowProps,
     SpaceProps,
-    Align2dProps,
-    FrameProps {}
+    Align2dProps {}
 
-export type LayoutInlineSlots = PrimitiveSlots;
+export type InlineSlots = PrimitiveSlots;
 </script>
 
 <script setup lang="ts">
-defineProps<LayoutInlineProps>();
-defineSlots<LayoutInlineSlots>();
+defineProps<InlineProps>();
+defineSlots<InlineSlots>();
+
+const LayoutFrame = InternalLayoutFrame;
+const LayoutContainer = InternalLayoutContainer;
+const LayoutPrimitive = InternalLayoutPrimitive;
 </script>
 
 <style>
-@property --layout-inline-align {
-  syntax: "flex-start | center | flex-end";
-  inherits: true;
-  initial-value: flex-start;
-}
-
-@property --layout-inline-align-y {
-  syntax: "flex-start | center | flex-end";
-  inherits: true;
-  initial-value: flex-start;
-}
-
 @layer components.layout {
   .layout-inline {
     display: block flex;
-    flex-flow: row wrap;
+    flex-flow: var(--layout-collapse-below-direction-current) wrap;
     gap: var(--layout-space-current);
     justify-content: var(--layout-align-current);
     align-items: var(--layout-align-y-current);

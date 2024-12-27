@@ -1,7 +1,7 @@
 <template>
   <RadixScrollAreaRoot class="layout-scroll" as-child>
-    <LayoutViewportTrait :direction>
-      <LayoutBoxTrait
+    <LayoutViewport :direction>
+      <LayoutSized
         :width
         :min-width
         :max-width
@@ -22,23 +22,25 @@
           </RadixScrollAreaScrollbar>
           <slot name="indicators" />
         </RadixScrollAreaViewport>
-      </LayoutBoxTrait>
-    </LayoutViewportTrait>
+      </LayoutSized>
+    </LayoutViewport>
   </RadixScrollAreaRoot>
 </template>
 
 <script lang="ts">
-import type {
-  ScrollDirection,
-  ViewportProps,
-} from "~/components/layout/viewport/Trait.vue";
 import { RadixScrollAreaViewport } from "#components";
-import type { BoxProps } from "~/components/layout/box/Trait.vue";
-import { provideViewport } from "~/components/layout/viewport/Trait.vue";
-import type {
-  PrimitiveProps,
-  PrimitiveSlots,
-} from "~/components/layout/Primitive.vue";
+import InternalLayoutViewport, {
+  provideViewport,
+  type ViewportProps,
+  type ScrollDirection,
+} from "~/components/layout/internal/Viewport.vue";
+import InternalLayoutSized, {
+  type SizedProps,
+} from "~/components/layout/internal/Sized.vue";
+import InternalLayoutPrimitive, {
+  type PrimitiveProps,
+  type PrimitiveSlots,
+} from "~/components/layout/internal/Primitive.vue";
 import type { MaybeElementRef } from "@vueuse/core";
 
 export function provideScrollArea(area: MaybeElementRef) {
@@ -72,7 +74,7 @@ export function useScrollPosition() {
 
 export interface LayoutScrollProps
   extends PrimitiveProps,
-    BoxProps,
+    SizedProps,
     ViewportProps {}
 
 export interface LayoutScrollSlots extends PrimitiveSlots {
@@ -83,6 +85,10 @@ export interface LayoutScrollSlots extends PrimitiveSlots {
 <script setup lang="ts">
 const { direction = "vertical" } = defineProps<LayoutScrollProps>();
 defineSlots<LayoutScrollSlots>();
+
+const LayoutViewport = InternalLayoutViewport;
+const LayoutSized = InternalLayoutSized;
+const LayoutPrimitive = InternalLayoutPrimitive;
 
 const area = useTemplateRef<HTMLElement>("area");
 const viewport =

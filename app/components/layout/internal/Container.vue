@@ -1,14 +1,5 @@
-<template>
-  <RadixSlot :style data-layout-container :data-collapse-below="collapseBelow">
-    <slot />
-  </RadixSlot>
-</template>
-
 <script lang="ts">
-import {
-  normalizeResponsive,
-  responsiveToAttributes,
-} from "~/utils/responsive";
+import type { PrimitiveSlots } from "~/components/layout/internal/Primitive.vue";
 
 export type Align = ResponsiveValue<"left" | "center" | "right">;
 export type AlignY = ResponsiveValue<"top" | "center" | "bottom">;
@@ -73,20 +64,29 @@ export interface ContainerProps
     SpaceProps,
     CollapseBelowProps {}
 
-export interface ContainerSlots {
-  default?: () => unknown;
-}
+export type ContainerSlots = PrimitiveSlots;
 </script>
 
 <script setup lang="ts">
-const { align, alignY, space } = defineProps<ContainerProps>();
+const { align, alignY, space, collapseBelow } = defineProps<ContainerProps>();
 defineSlots<ContainerSlots>();
 const style = computed(() => ({
   ...alignStyles(align),
   ...alignYStyles(alignY),
   ...spaceStyles(space),
 }));
+const data = computed(() => {
+  if (collapseBelow === undefined) return "";
+
+  return `collapse-below-${collapseBelow}`;
+});
 </script>
+
+<template>
+  <RadixSlot :style :data-layout-container="data">
+    <slot />
+  </RadixSlot>
+</template>
 
 <style>
 @property --layout-align {
@@ -167,49 +167,100 @@ const style = computed(() => ({
   initial-value: 0;
 }
 
+@property --layout-collapse-below-direction-initial {
+  syntax: "row | column | row-reverse | column-reverse";
+  inherits: false;
+  initial-value: row;
+}
+
+@property --layout-collapse-below-direction-collapsed {
+  syntax: "row | column | row-reverse | column-reverse";
+  inherits: false;
+  initial-value: column;
+}
+
+@property --layout-collapse-below-direction-current {
+  syntax: "row | column | row-reverse | column-reverse";
+  inherits: false;
+  initial-value: column;
+}
+
 @layer trait {
   [data-layout-container] {
     --layout-align: unset;
     --layout-align-tablet: unset;
     --layout-align-laptop: unset;
     --layout-align-desktop: unset;
+    --layout-align-current: var(--layout-align);
     --layout-align-y: unset;
     --layout-align-y-tablet: unset;
     --layout-align-y-laptop: unset;
     --layout-align-y-desktop: unset;
+    --layout-align-y-current: var(--layout-align-y);
     --layout-space: unset;
     --layout-space-tablet: unset;
     --layout-space-laptop: unset;
     --layout-space-desktop: unset;
-    --layout-align-current: var(--layout-align);
-    --layout-align-y-current: var(--layout-align-y);
     --layout-space-current: var(--layout-space);
+    --layout-collapse-below-direction-initial: initial;
+    --layout-collapse-below-direction-collapsed: initial;
+    --layout-collapse-below-direction-current: initial;
+
+    &:not([data-layout-container*="collapse-below"]) {
+      --layout-collapse-below-direction-current: var(
+        --layout-collapse-below-direction-initial
+      );
+    }
+
+    [data-layout-container*="collapse-below"] {
+      --layout-collapse-below-direction-current: var(
+        --layout-collapse-below-direction-collapsed
+      );
+    }
 
     @container style(--media-gte-tablet: true) {
       --layout-align-tablet: var(--layout-align);
-      --layout-align-y-tablet: var(--layout-align-y);
-      --layout-space-tablet: var(--layout-space);
       --layout-align-current: var(--layout-align-tablet);
+      --layout-align-y-tablet: var(--layout-align-y);
       --layout-align-y-current: var(--layout-align-y-tablet);
+      --layout-space-tablet: var(--layout-space);
       --layout-space-current: var(--layout-space-tablet);
+
+      &[data-layout-container~="collapse-below-tablet"] {
+        --layout-collapse-below-direction-current: var(
+          --layout-collapse-below-direction-initial
+        );
+      }
     }
 
     @container style(--media-gte-laptop: true) {
       --layout-align-laptop: var(--layout-align-tablet);
-      --layout-align-y-laptop: var(--layout-align-y-tablet);
-      --layout-space-laptop: var(--layout-space-tablet);
       --layout-align-current: var(--layout-align-laptop);
+      --layout-align-y-laptop: var(--layout-align-y-tablet);
       --layout-align-y-current: var(--layout-align-y-laptop);
+      --layout-space-laptop: var(--layout-space-tablet);
       --layout-space-current: var(--layout-space-laptop);
+
+      &[data-layout-container~="collapse-below-laptop"] {
+        --layout-collapse-below-direction-current: var(
+          --layout-collapse-below-direction-initial
+        );
+      }
     }
 
     @container style(--media-eq-desktop: true) {
       --layout-align-desktop: var(--layout-align-laptop);
-      --layout-align-y-desktop: var(--layout-align-y-laptop);
-      --layout-space-desktop: var(--layout-space-laptop);
       --layout-align-current: var(--layout-align-desktop);
+      --layout-align-y-desktop: var(--layout-align-y-laptop);
       --layout-align-y-current: var(--layout-align-y-desktop);
+      --layout-space-desktop: var(--layout-space-laptop);
       --layout-space-current: var(--layout-space-desktop);
+
+      &[data-layout-container~="collapse-below-desktop"] {
+        --layout-collapse-below-direction-current: var(
+          --layout-collapse-below-direction-initial
+        );
+      }
     }
   }
 }

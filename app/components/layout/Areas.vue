@@ -41,7 +41,9 @@
 </template>
 
 <script lang="ts">
-import type { PrimitiveProps } from "~/components/layout/Primitive.vue";
+import InternalLayoutPrimitive, {
+  type PrimitiveProps,
+} from "~/components/layout/internal/Primitive.vue";
 
 const defaultSmall = {
   top: "bottom",
@@ -76,6 +78,8 @@ export interface LayoutAreasSlots {
 <script setup lang="ts" generic="L extends AreaLarge">
 const props = defineProps<LayoutAreasProps<L>>();
 const slots = defineSlots<LayoutAreasSlots>();
+
+const LayoutPrimitive = InternalLayoutPrimitive;
 
 const areas = computed(() => {
   const large = props.large ?? "top";

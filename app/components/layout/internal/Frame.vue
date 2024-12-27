@@ -1,4 +1,6 @@
 <script lang="ts">
+import type { PrimitiveSlots } from "~/components/layout/internal/Primitive.vue";
+
 function frameEdgeStyles(key: string, value: Space) {
   return responsiveToAttributes(
     key,
@@ -14,7 +16,7 @@ function frameStyles(
   right: Space | undefined,
   bottom: Space | undefined,
   left: Space | undefined,
-) {
+): Record<string, string> {
   const hasAll = all !== undefined;
   const hasX = x !== undefined;
   const hasY = y !== undefined;
@@ -69,9 +71,7 @@ export interface FrameProps {
   frameLeft?: Space;
 }
 
-export interface FrameSlots {
-  default?: () => unknown;
-}
+export type FrameSlots = PrimitiveSlots;
 </script>
 
 <script setup lang="ts">

@@ -1,5 +1,5 @@
 <template>
-  <LayoutViewportTrait direction="vertical">
+  <LayoutViewport direction="vertical">
     <LayoutPrimitive
       ref="root"
       :as
@@ -10,20 +10,22 @@
     >
       <slot />
     </LayoutPrimitive>
-  </LayoutViewportTrait>
+  </LayoutViewport>
 </template>
 
 <script lang="ts">
-import type {
-  PrimitiveProps,
-  PrimitiveSlots,
-} from "~/components/layout/Primitive.vue";
+import LayoutPrimitive, {
+  type PrimitiveProps,
+  type PrimitiveSlots,
+} from "~/components/layout/internal/Primitive.vue";
 import {
   provideScrollPosition,
   provideScrollArea,
   provideScrollDirection,
 } from "~/components/layout/Scroll.vue";
-import { provideViewport } from "~/components/layout/viewport/Trait.vue";
+import LayoutViewport, {
+  provideViewport,
+} from "~/components/layout/internal/Viewport.vue";
 import type { MaybeRefOrGetter } from "vue";
 
 function provideBreakpoint(breakpoint: MaybeRefOrGetter) {

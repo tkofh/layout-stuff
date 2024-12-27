@@ -1,12 +1,4 @@
-<template>
-  <component :is>
-    <slot />
-  </component>
-</template>
-
-<script lang="ts"></script>
-
-<script lang="ts" setup>
+<script lang="ts">
 import { RadixSlot } from "#components";
 
 export type ContentSectioningTag =
@@ -34,8 +26,19 @@ export interface PrimitiveProps<T extends PrimitiveTag = PrimitiveTag> {
 export interface PrimitiveSlots {
   default?: () => unknown;
 }
+</script>
 
+<script lang="ts" setup>
 const { as = "div" } = defineProps<PrimitiveProps>();
 defineSlots<PrimitiveSlots>();
+defineOptions({
+  name: "LayoutPrimitive",
+});
 const is = computed(() => (as === "slot" ? RadixSlot : as));
 </script>
+
+<template>
+  <component :is>
+    <slot />
+  </component>
+</template>

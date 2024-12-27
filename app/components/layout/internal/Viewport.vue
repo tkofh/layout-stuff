@@ -1,11 +1,6 @@
-<template>
-  <RadixSlot :data-viewport="direction">
-    <slot />
-  </RadixSlot>
-</template>
-
 <script lang="ts">
 import type { MaybeComputedElementRef } from "@vueuse/core";
+import type { PrimitiveSlots } from "~/components/layout/internal/Primitive.vue";
 
 export type ScrollDirection = "vertical" | "horizontal";
 
@@ -23,15 +18,19 @@ export interface ViewportProps {
   direction?: ScrollDirection;
 }
 
-export interface ViewportSlots {
-  default?: () => unknown;
-}
+export type ViewportSlots = PrimitiveSlots;
 </script>
 
 <script setup lang="ts">
 const { direction = "vertical" } = defineProps<ViewportProps>();
 defineSlots<ViewportSlots>();
 </script>
+
+<template>
+  <RadixSlot :data-viewport="direction">
+    <slot />
+  </RadixSlot>
+</template>
 
 <style>
 @property --layout-scroll {
