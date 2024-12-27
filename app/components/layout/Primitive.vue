@@ -8,6 +8,7 @@
 
 <script lang="ts" setup>
 import { RadixSlot } from "#components";
+
 export type ContentSectioningTag =
   | "div"
   | "address"
@@ -29,6 +30,7 @@ export interface PrimitiveProps<T extends PrimitiveTag = PrimitiveTag> {
    */
   as?: T;
 }
+
 export interface PrimitiveSlots {
   default?: () => unknown;
 }

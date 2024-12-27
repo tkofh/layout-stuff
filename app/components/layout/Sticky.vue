@@ -1,11 +1,24 @@
 <template>
-  <LayoutPrimitive :id :as class="layout-sticky" :style>
+  <LayoutViewportEdgesTrait
+    :id
+    :as
+    class="layout-sticky"
+    :style
+    viewport="nearest"
+    :data-sticky-state="stickyState"
+    @on-update-start="onUpdateStart"
+    @on-update-end="onUpdateEnd"
+  >
     <slot />
-  </LayoutPrimitive>
+  </LayoutViewportEdgesTrait>
 </template>
 
 <script lang="ts">
-import type { PrimitiveProps } from "~/components/layout/Primitive.vue";
+import type {
+  PrimitiveProps,
+  ContentSectioningTag,
+} from "~/components/layout/Primitive.vue";
+import { useBreakpoint } from "~/components/layout/Root.vue";
 import { fillResponsive, responsiveToAttributes } from "~/utils/responsive";
 
 const startLookup = {
@@ -21,7 +34,7 @@ const endLookup = {
   none: "auto",
 } as const;
 
-function stickyStyle(edge: StickyEdge) {
+function stickyStyle(edge: ViewportEdge) {
   const filled = fillResponsive(normalizeResponsive(edge));
   return {
     ...responsiveToAttributes(
@@ -35,10 +48,11 @@ function stickyStyle(edge: StickyEdge) {
   };
 }
 
-export type StickyEdge = ResponsiveValue<"start" | "end" | "both" | "none">;
+export type ViewportEdge = ResponsiveValue<"start" | "end" | "both" | "none">;
 
-export interface LayoutStickyProps extends PrimitiveProps {
-  edge?: StickyEdge;
+export interface LayoutStickyProps
+  extends PrimitiveProps<ContentSectioningTag> {
+  edge?: ViewportEdge;
 }
 
 export interface LayoutStickySlots {
@@ -47,12 +61,55 @@ export interface LayoutStickySlots {
 </script>
 
 <script setup lang="ts">
-const { edge = "both" } = defineProps<LayoutStickyProps>();
+const props = defineProps<LayoutStickyProps>();
 defineSlots<LayoutStickySlots>();
+
+const edge = computed(() =>
+  fillResponsive(normalizeResponsive(props.edge ?? "both")),
+);
+
+const breakpoint = useBreakpoint();
+
+const currentEdge = computed(() => edge.value[toValue(breakpoint)]);
+
+const startStuck = ref(false);
+const endStuck = ref(false);
+
+const onUpdateStart = (value: boolean) => {
+  startStuck.value = !value;
+};
+
+const onUpdateEnd = (value: boolean) => {
+  endStuck.value = !value;
+};
+
+const stickyState = computed(() => {
+  const isStuck =
+    ((currentEdge.value === "start" || currentEdge.value === "both") &&
+      startStuck.value) ||
+    ((currentEdge.value === "end" || currentEdge.value === "both") &&
+      endStuck.value);
+
+  if (isStuck) {
+    let result = "stuck";
+
+    if (startStuck.value) {
+      result += " start";
+    }
+
+    if (endStuck.value) {
+      result += " end";
+    }
+
+    return result;
+  }
+
+  return "scrolling";
+});
 
 const id = useId();
 
-const style = computed(() => stickyStyle(edge));
+const style = computed(() => stickyStyle(edge.value));
 </script>
 
 <style>
@@ -120,6 +177,9 @@ const style = computed(() => stickyStyle(edge));
 
 @layer components.layout {
   .layout-sticky {
+    --layout-viewport-edges-start-offset: var(--layout-sticky-start-offset);
+    --layout-viewport-edges-end-offset: var(--layout-sticky-end-offset);
+
     position: sticky;
 
     [data-viewport~="vertical"] & {

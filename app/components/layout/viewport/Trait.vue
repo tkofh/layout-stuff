@@ -5,7 +5,19 @@
 </template>
 
 <script lang="ts">
+import type { MaybeComputedElementRef } from "@vueuse/core";
+
 export type ScrollDirection = "vertical" | "horizontal";
+
+export type Viewport = MaybeComputedElementRef | Document;
+
+export function provideViewport(viewport: Viewport) {
+  provide(Symbol.for("layout.viewport"), viewport);
+}
+
+export function useViewport() {
+  return inject(Symbol.for("layout.viewport")) as Viewport;
+}
 
 export interface ViewportProps {
   direction?: ScrollDirection;
