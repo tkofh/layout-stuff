@@ -8,6 +8,15 @@ export default defineNuxtConfig({
     "nuxt-security",
   ],
 
+  components: {
+    dirs: [
+      {
+        path: "~/components",
+        ignore: ["**/internal/**"],
+      },
+    ],
+  },
+
   devtools: {
     enabled: true,
 
