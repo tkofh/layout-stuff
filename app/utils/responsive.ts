@@ -1,5 +1,3 @@
-import { hasProperty, isRecord } from "~/utils/predicates";
-
 export interface SparseResponsiveMap<V> {
   readonly mobile: V;
   readonly tablet?: V | null | undefined;
@@ -112,6 +110,7 @@ export function responsiveToAttributes<V>(
 }
 
 type ValueMapper<V> = (value: V, key: BreakpointName) => unknown;
+
 export function mapResponsive<V, M extends ValueMapper<NoInfer<V>>>(
   input: PartialResponsiveMap<V>,
   mapper: M,

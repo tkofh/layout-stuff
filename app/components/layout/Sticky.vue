@@ -70,16 +70,15 @@ const start = useTemplateRef<HTMLElement>("start");
 const startState = useVisibilityProbe(start, "nearest", {
   enabled: startEnabled,
 });
+const isStuckStart = computed(
+  () => startEnabled.value && startState.value === "before-viewport",
+);
 
 const endEnabled = computed(
   () => currentEdge.value === "end" || currentEdge.value === "both",
 );
 const end = useTemplateRef<HTMLElement>("end");
 const endState = useVisibilityProbe(end, "nearest", { enabled: endEnabled });
-
-const isStuckStart = computed(
-  () => startEnabled.value && startState.value === "before-viewport",
-);
 const isStuckEnd = computed(
   () => endEnabled.value && endState.value === "after-viewport",
 );
