@@ -1,9 +1,10 @@
 <script lang="ts">
-import InternalLayoutEdgeVisibility, {
-  type EdgeVisibilityProps,
-} from "~/components/layout/internal/EdgeVisibility.vue";
 import { useBreakpoint } from "~/components/layout/Root.vue";
-import { fillResponsive, responsiveToAttributes } from "~/utils/responsive";
+import InternalLayoutPrimitive, {
+  type PrimitiveProps,
+  type ContentSectioningTag,
+} from "~/components/layout/internal/Primitive.vue";
+import { useVisibilityProbe } from "~/components/layout/internal/Viewport.vue";
 
 const startLookup = {
   start: undefined,
@@ -35,7 +36,7 @@ function stickyStyle(edge: ViewportEdge) {
 export type ViewportEdge = ResponsiveValue<"start" | "end" | "both" | "none">;
 
 export interface LayoutStickyProps
-  extends Omit<EdgeVisibilityProps, "viewport"> {
+  extends PrimitiveProps<ContentSectioningTag> {
   edge?: ViewportEdge;
 }
 
@@ -52,7 +53,7 @@ export interface LayoutStickySlots {
 const props = defineProps<LayoutStickyProps>();
 defineSlots<LayoutStickySlots>();
 
-const LayoutEdgeVisibility = InternalLayoutEdgeVisibility;
+const LayoutPrimitive = InternalLayoutPrimitive;
 
 const edge = computed(() =>
   fillResponsive(normalizeResponsive(props.edge ?? "both")),
@@ -62,29 +63,28 @@ const breakpoint = useBreakpoint();
 
 const currentEdge = computed(() => edge.value[toValue(breakpoint)]);
 
-const startStuck = ref(false);
-const endStuck = ref(false);
+const startEnabled = computed(
+  () => currentEdge.value === "start" || currentEdge.value === "both",
+);
+const start = useTemplateRef<HTMLElement>("start");
+const startState = useVisibilityProbe(start, "nearest", {
+  enabled: startEnabled,
+});
+
+const endEnabled = computed(
+  () => currentEdge.value === "end" || currentEdge.value === "both",
+);
+const end = useTemplateRef<HTMLElement>("end");
+const endState = useVisibilityProbe(end, "nearest", { enabled: endEnabled });
 
 const isStuckStart = computed(
-  () =>
-    (currentEdge.value === "start" || currentEdge.value === "both") &&
-    startStuck.value,
+  () => startEnabled.value && startState.value === "before-viewport",
 );
 const isStuckEnd = computed(
-  () =>
-    (currentEdge.value === "end" || currentEdge.value === "both") &&
-    endStuck.value,
+  () => endEnabled.value && endState.value === "after-viewport",
 );
 
 const isStuck = computed(() => isStuckStart.value || isStuckEnd.value);
-
-const onUpdateStart = (value: boolean) => {
-  startStuck.value = !value;
-};
-
-const onUpdateEnd = (value: boolean) => {
-  endStuck.value = !value;
-};
 
 const stickyState = computed(() => {
   if (isStuck.value) {
@@ -110,18 +110,17 @@ const style = computed(() => stickyStyle(edge.value));
 </script>
 
 <template>
-  <LayoutEdgeVisibility
+  <LayoutPrimitive
     :id
     :as
     class="layout-sticky"
     :style
-    viewport="nearest"
     :data-sticky-state="stickyState"
-    @on-update-start="onUpdateStart"
-    @on-update-end="onUpdateEnd"
   >
+    <span ref="start" class="layout-sticky-edge" data-edge="start" />
     <slot :is-stuck :is-stuck-start :is-stuck-end />
-  </LayoutEdgeVisibility>
+    <span ref="end" class="layout-sticky-edge" data-edge="end" />
+  </LayoutPrimitive>
 </template>
 
 <style>
@@ -195,6 +194,7 @@ const style = computed(() => stickyStyle(edge.value));
     position: sticky;
 
     [data-viewport~="vertical"] & {
+      inline-size: 100%;
       inset-block: var(--layout-sticky-start, var(--layout-sticky-start-offset))
         var(--layout-sticky-end, var(--layout-sticky-end-offset));
     }
@@ -205,6 +205,38 @@ const style = computed(() => stickyStyle(edge.value));
           var(--layout-sticky-start-offset)
         )
         var(--layout-sticky-end, var(--layout-sticky-end-offset));
+    }
+  }
+
+  .layout-sticky-edge {
+    position: absolute;
+    pointer-events: none;
+    z-index: -1;
+
+    [data-viewport~="vertical"] & {
+      inline-size: 100%;
+      block-size: 1px;
+
+      &[data-edge="start"] {
+        inset-block-start: calc(-1 * var(--layout-sticky-start-offset));
+      }
+
+      &[data-edge="end"] {
+        inset-block-end: calc(-1 * var(--layout-sticky-end-offset));
+      }
+    }
+
+    [data-viewport~="horizontal"] & {
+      inline-size: 1px;
+      block-size: 100%;
+
+      &[data-edge="start"] {
+        inset-inline-start: calc(-1 * var(--layout-sticky-start-offset));
+      }
+
+      &[data-edge="end"] {
+        inset-inline-end: calc(-1 * var(--layout-sticky-end-offset));
+      }
     }
   }
 }

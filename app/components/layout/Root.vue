@@ -14,34 +14,32 @@
 </template>
 
 <script lang="ts">
-import LayoutPrimitive, {
+import InternalLayoutPrimitive, {
   type PrimitiveProps,
   type PrimitiveSlots,
 } from "~/components/layout/internal/Primitive.vue";
-import {
-  provideScrollPosition,
-  provideScrollArea,
-  provideScrollDirection,
-} from "~/components/layout/Scroll.vue";
-import LayoutViewport, {
-  provideViewport,
-} from "~/components/layout/internal/Viewport.vue";
+import InternalLayoutViewport from "~/components/layout/internal/Viewport.vue";
 import type { MaybeRefOrGetter } from "vue";
 
+const BREAKPOINT = Symbol.for(
+  "layout.breakpoint",
+) as InjectionKey<BreakpointName>;
+
 function provideBreakpoint(breakpoint: MaybeRefOrGetter) {
-  provide(Symbol.for("layout.breakpoint"), breakpoint);
+  provide(BREAKPOINT, breakpoint);
 }
 
 export function useBreakpoint() {
-  return inject(
-    Symbol.for("layout.breakpoint"),
-  ) as MaybeRefOrGetter<BreakpointName>;
+  return inject(BREAKPOINT, "mobile");
 }
 </script>
 
 <script setup lang="ts">
 defineProps<PrimitiveProps>();
 defineSlots<PrimitiveSlots>();
+
+const LayoutPrimitive = InternalLayoutPrimitive;
+const LayoutViewport = InternalLayoutViewport;
 
 const root = templateRef<HTMLElement>("root");
 
@@ -60,22 +58,6 @@ provideBreakpoint(
           : "mobile",
   ),
 );
-
-provideScrollPosition(y as ComputedRef<number>);
-provideScrollDirection("vertical");
-provideScrollArea(
-  computed(() => {
-    if (import.meta.server) return null;
-
-    return document.body;
-  }),
-);
-
-if (import.meta.client) {
-  provideViewport(document);
-} else {
-  provideViewport(null);
-}
 
 const style = computed(() => ({
   "--layout-scroll": `${y.value}px`,
@@ -106,7 +88,7 @@ onPrehydrate(() => {
     min-block-size: 100dvb;
     display: block grid;
     grid-template: minmax(auto, 1fr) / 1fr;
-    place-items: stretch;
+    place-items: start stretch;
     contain: content;
 
     --layout-scroll-viewport: 100dvb;

@@ -31,8 +31,8 @@
 import { RadixScrollAreaViewport } from "#components";
 import InternalLayoutViewport, {
   provideViewport,
+  provideScrollDirection,
   type ViewportProps,
-  type ScrollDirection,
 } from "~/components/layout/internal/Viewport.vue";
 import InternalLayoutSized, {
   type SizedProps,
@@ -41,36 +41,6 @@ import InternalLayoutPrimitive, {
   type PrimitiveProps,
   type PrimitiveSlots,
 } from "~/components/layout/internal/Primitive.vue";
-import type { MaybeElementRef } from "@vueuse/core";
-
-export function provideScrollArea(area: MaybeElementRef) {
-  provide(Symbol.for("layout.scroll.area"), area);
-}
-
-export function useScrollArea() {
-  return inject(Symbol.for("layout.scroll.area")) as MaybeElementRef;
-}
-
-export function provideScrollDirection(
-  direction: MaybeRefOrGetter<ScrollDirection>,
-) {
-  provide(Symbol.for("layout.scroll.direction"), direction);
-}
-
-export function useScrollDirection() {
-  return inject(
-    Symbol.for("layout.scroll.direction"),
-    () => "vertical",
-  ) as MaybeRefOrGetter<ScrollDirection>;
-}
-
-export function provideScrollPosition(scroll: ComputedRef<number>) {
-  provide(Symbol.for("layout.scroll.position"), scroll);
-}
-
-export function useScrollPosition() {
-  return inject(Symbol.for("layout.scroll.position")) as ComputedRef<number>;
-}
 
 export interface LayoutScrollProps
   extends PrimitiveProps,
@@ -114,11 +84,7 @@ const { width: viewportInlineSize, height: viewportBlockSize } = useElementSize(
 
 const { x, y } = useScroll(viewportElement);
 
-const scroll = computed(() => (direction === "vertical" ? y.value : x.value));
-
-provideScrollArea(area);
 provideScrollDirection(direction);
-provideScrollPosition(scroll);
 
 const style = computed(() => ({
   "--layout-scroll-length":
@@ -129,7 +95,7 @@ const style = computed(() => ({
     direction === "vertical"
       ? `${viewportBlockSize.value}px`
       : `${viewportInlineSize.value}px`,
-  "--layout-scroll": `${scroll.value}px`,
+  "--layout-scroll": direction === "vertical" ? `${y.value}px` : `${x.value}px`,
 }));
 </script>
 
