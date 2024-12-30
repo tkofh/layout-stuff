@@ -1,10 +1,15 @@
 <script lang="ts">
-import { useBreakpoint } from "~/components/layout/Root.vue";
+import { useResponsiveValue } from "~/components/layout/Root.vue";
 import InternalLayoutPrimitive, {
   type PrimitiveProps,
   type ContentSectioningTag,
 } from "~/components/layout/internal/Primitive.vue";
-import { useVisibilityProbe } from "~/components/layout/internal/Viewport.vue";
+import {
+  useVisibilityProbe,
+  useScrollDirection,
+  useStickyNeighbors,
+} from "~/components/layout/internal/Viewport.vue";
+import { useDataString } from "~/composables/useDataString";
 
 const startLookup = {
   start: undefined,
@@ -33,11 +38,20 @@ function stickyStyle(edge: ViewportEdge) {
   };
 }
 
+function stickyStaticStylesheet(id: string) {
+  return [
+    `.layout-sticky[data-sticky-id="${id}"] {`,
+    `  --layout-sticky-start-peer-offset: var(--layout-sticky-${id}-start);`,
+    `  --layout-sticky-end-peer-offset: var(--layout-sticky-${id}-end);`,
+    `}`,
+  ].join("\n");
+}
+
 export type ViewportEdge = ResponsiveValue<"start" | "end" | "both" | "none">;
 
 export interface LayoutStickyProps
   extends PrimitiveProps<ContentSectioningTag> {
-  edge?: ViewportEdge;
+  stick?: ViewportEdge;
 }
 
 export interface LayoutStickySlots {
@@ -50,75 +64,90 @@ export interface LayoutStickySlots {
 </script>
 
 <script setup lang="ts">
-const props = defineProps<LayoutStickyProps>();
+const { stick = "both" } = defineProps<LayoutStickyProps>();
 defineSlots<LayoutStickySlots>();
 
 const LayoutPrimitive = InternalLayoutPrimitive;
 
-const edge = computed(() =>
-  fillResponsive(normalizeResponsive(props.edge ?? "both")),
-);
+const edge = useResponsiveValue(() => stick);
 
-const breakpoint = useBreakpoint();
-
-const currentEdge = computed(() => edge.value[toValue(breakpoint)]);
-
-const startEnabled = computed(
-  () => currentEdge.value === "start" || currentEdge.value === "both",
-);
 const start = useTemplateRef<HTMLElement>("start");
 const startState = useVisibilityProbe(start, "nearest", {
-  enabled: startEnabled,
+  enabled: () => edge.value === "start" || edge.value === "both",
 });
-const isStuckStart = computed(
-  () => startEnabled.value && startState.value === "before-viewport",
-);
 
-const endEnabled = computed(
-  () => currentEdge.value === "end" || currentEdge.value === "both",
-);
 const end = useTemplateRef<HTMLElement>("end");
-const endState = useVisibilityProbe(end, "nearest", { enabled: endEnabled });
-const isStuckEnd = computed(
-  () => endEnabled.value && endState.value === "after-viewport",
-);
+const endState = useVisibilityProbe(end, "nearest", {
+  enabled: () => edge.value === "end" || edge.value === "both",
+});
 
+const isStuckStart = computed(() => startState.value === "before-viewport");
+const isStuckEnd = computed(() => endState.value === "after-viewport");
 const isStuck = computed(() => isStuckStart.value || isStuckEnd.value);
 
-const stickyState = computed(() => {
-  if (isStuck.value) {
-    let result = "stuck";
+const id = useId();
+const neighbors = useStickyNeighbors(id);
 
-    if (isStuckStart.value) {
-      result += " start";
-    }
+const state = useDataString(() => ({
+  scrolling: !isStuck.value,
+  stuck: isStuck.value,
+  start: isStuckStart.value,
+  end: isStuckEnd.value,
+}));
 
-    if (isStuckEnd.value) {
-      result += " end";
-    }
+const self = useTemplateRef<HTMLElement>("self");
+const { width, height } = useElementSize(
+  self,
+  { width: 0, height: 0 },
+  { box: "content-box" },
+);
+const direction = useScrollDirection();
+const size = computed(() =>
+  toValue(direction) === "vertical" ? height.value : width.value,
+);
 
-    return result;
+const style = computed(() => stickyStyle(stick));
+
+const stylesheet = computed(() => {
+  const rules = [stickyStaticStylesheet(id)] as Array<string>;
+
+  const next = neighbors.value.next;
+  if (next !== null) {
+    rules.push(
+      `:root { --layout-sticky-${next}-start: calc(var(--layout-sticky-${id}-start) + ${size.value}px); }`,
+    );
   }
 
-  return "scrolling";
+  const previous = neighbors.value.previous;
+  if (previous !== null) {
+    rules.push(
+      `:root { --layout-sticky-${previous}-end: calc(var(--layout-sticky-${id}-end) + ${size.value}px); }`,
+    );
+  }
+
+  return rules.join("\n");
 });
-
-const id = useId();
-
-const style = computed(() => stickyStyle(edge.value));
 </script>
 
 <template>
   <LayoutPrimitive
-    :id
+    ref="self"
     :as
     class="layout-sticky"
     :style
-    :data-sticky-state="stickyState"
+    :data-sticky-id="id"
+    :data-sticky-state="state"
   >
     <span ref="start" class="layout-sticky-edge" data-edge="start" />
     <slot :is-stuck :is-stuck-start :is-stuck-end />
     <span ref="end" class="layout-sticky-edge" data-edge="end" />
+    <ClientOnly>
+      <Teleport to="#teleports">
+        <RadixPrimitive as="style">
+          {{ stylesheet }}
+        </RadixPrimitive>
+      </Teleport>
+    </ClientOnly>
   </LayoutPrimitive>
 </template>
 
@@ -185,29 +214,68 @@ const style = computed(() => stickyStyle(edge.value));
   initial-value: 0;
 }
 
+@property --layout-sticky-start-peer-offset {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0;
+}
+
+@property --layout-sticky-end-peer-offset {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0;
+}
+
+@property --layout-sticky-start-offset-sum {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0;
+}
+
+@property --layout-sticky-end-offset-sum {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0;
+}
+
 @layer components.layout {
+  :has(> .layout-sticky) {
+    --layout-sticky-start-ancestor-offset: 0;
+    --layout-sticky-end-ancestor-offset: 0;
+  }
+
   .layout-sticky {
-    --layout-viewport-edges-start-offset: var(--layout-sticky-start-offset);
-    --layout-viewport-edges-end-offset: var(--layout-sticky-end-offset);
+    --layout-sticky-start-offset-sum: calc(
+      var(--layout-sticky-start-offset) + var(--layout-sticky-start-peer-offset)
+    );
+    --layout-sticky-end-offset-sum: calc(
+      var(--layout-sticky-end-offset) + var(--layout-sticky-end-peer-offset)
+    );
 
     position: sticky;
 
     [data-viewport~="vertical"] & {
       inline-size: 100%;
-      inset-block: var(--layout-sticky-start, var(--layout-sticky-start-offset))
-        var(--layout-sticky-end, var(--layout-sticky-end-offset));
+      inset-block: var(
+          --layout-sticky-start,
+          var(--layout-sticky-start-offset-sum)
+        )
+        var(--layout-sticky-end, var(--layout-sticky-end-offset-sum));
     }
 
     [data-viewport~="horizontal"] & {
       inset-inline: var(
           --layout-sticky-start,
-          var(--layout-sticky-start-offset)
+          var(--layout-sticky-start-offset-sum)
         )
-        var(--layout-sticky-end, var(--layout-sticky-end-offset));
+        var(--layout-sticky-end, var(--layout-sticky-end-offset-sum));
     }
   }
 
   .layout-sticky-edge {
+    --layout-sticky-start-offset-sum: inherit;
+    --layout-sticky-end-offset-sum: inherit;
+
     position: absolute;
     pointer-events: none;
     z-index: -1;
@@ -217,11 +285,11 @@ const style = computed(() => stickyStyle(edge.value));
       block-size: 1px;
 
       &[data-edge="start"] {
-        inset-block-start: calc(-1 * var(--layout-sticky-start-offset));
+        inset-block-start: calc(-1 * var(--layout-sticky-start-offset-sum));
       }
 
       &[data-edge="end"] {
-        inset-block-end: calc(-1 * var(--layout-sticky-end-offset));
+        inset-block-end: calc(-1 * var(--layout-sticky-end-offset-sum));
       }
     }
 
@@ -230,11 +298,11 @@ const style = computed(() => stickyStyle(edge.value));
       block-size: 100%;
 
       &[data-edge="start"] {
-        inset-inline-start: calc(-1 * var(--layout-sticky-start-offset));
+        inset-inline-start: calc(-1 * var(--layout-sticky-start-offset-sum));
       }
 
       &[data-edge="end"] {
-        inset-inline-end: calc(-1 * var(--layout-sticky-end-offset));
+        inset-inline-end: calc(-1 * var(--layout-sticky-end-offset-sum));
       }
     }
   }

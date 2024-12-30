@@ -48,8 +48,9 @@ export type VisibilityProbeMode = "root" | "nearest" | "all";
 export type DirectedVisibilityState =
   | "before-viewport"
   | "visible"
-  | "after-viewport";
-export type VisibilityState = "visible" | "invisible";
+  | "after-viewport"
+  | "disabled";
+export type VisibilityState = "visible" | "invisible" | "disabled";
 
 export interface UseVisibilityProbeOptions {
   enabled?: MaybeRefOrGetter<boolean>;
@@ -110,8 +111,6 @@ function useProbeIntersectionObserver(
   threshold: number,
   callback: (entry: IntersectionObserverEntry) => void,
 ) {
-  const state = ref<DirectedVisibilityState>("before-viewport");
-
   const observer = useIntersectionObserver(
     probe,
     (entries) => {
@@ -144,8 +143,6 @@ function useProbeIntersectionObserver(
       immediate: true,
     },
   );
-
-  return state;
 }
 
 export function useVisibilityProbe<M extends VisibilityProbeMode>(
@@ -158,9 +155,7 @@ export function useVisibilityProbe<M extends VisibilityProbeMode>(
   const { enabled = true, margin = -2, threshold = 0.5 } = options;
 
   if (typeof enabled === "boolean" && !enabled) {
-    return (
-      mode === "all" ? ref("invisible") : ref("before-viewport")
-    ) as never;
+    return ref("disabled");
   }
 
   const normalizedThreshold = Math.min(1, Math.max(0, threshold));
@@ -183,6 +178,10 @@ export function useVisibilityProbe<M extends VisibilityProbeMode>(
     }
 
     return computed(() => {
+      if (!toValue(enabled)) {
+        return "disabled";
+      }
+
       if (states.value.size === 0) {
         return "invisible";
       }
@@ -216,7 +215,31 @@ export function useVisibilityProbe<M extends VisibilityProbeMode>(
     },
   );
 
+  watchEffect(() => {
+    if (!toValue(enabled)) {
+      state.value = "disabled";
+    }
+  });
+
   return state as never;
+}
+
+export interface StickyNeighbors {
+  previous: string | null;
+  next: string | null;
+}
+
+const defaultStickyNeighbors: StickyNeighbors = {
+  previous: null,
+  next: null,
+};
+
+export function useStickyNeighbors(id: string): Readonly<Ref<StickyNeighbors>> {
+  return useChild<string, StickyNeighbors>(
+    "sticky-neighbors",
+    id,
+    defaultStickyNeighbors,
+  );
 }
 
 export interface ViewportProps {
@@ -229,11 +252,44 @@ export type ViewportSlots = PrimitiveSlots;
 <script setup lang="ts">
 const { direction = "vertical" } = defineProps<ViewportProps>();
 defineSlots<ViewportSlots>();
+const { inputs: ids } = useChildren<string, StickyNeighbors>(
+  "sticky-neighbors",
+  (ids) => {
+    const links = [] as Array<StickyNeighbors>;
+
+    for (const index in ids) {
+      const previous = ids[Number(index) - 1] ?? null;
+      const next = ids[Number(index) + 1] ?? null;
+
+      links.push({ previous, next });
+    }
+
+    return links;
+  },
+);
+const stylesheet = computed(() => {
+  const rules = [] as Array<string>;
+  for (const id of ids.value) {
+    rules.push(
+      `@property --layout-sticky-${id}-start { syntax: "<length>"; inherits: true; initial-value: 0; }`,
+      `@property --layout-sticky-${id}-end { syntax: "<length>"; inherits: true; initial-value: 0; }`,
+    );
+  }
+
+  return rules.join("\n");
+});
 </script>
 
 <template>
   <RadixSlot :data-viewport="direction">
     <slot />
+    <ClientOnly>
+      <Teleport to="#teleports">
+        <RadixPrimitive as="style">
+          {{ stylesheet }}
+        </RadixPrimitive>
+      </Teleport>
+    </ClientOnly>
   </RadixSlot>
 </template>
 

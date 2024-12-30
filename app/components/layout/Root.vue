@@ -21,9 +21,9 @@ import InternalLayoutPrimitive, {
 import InternalLayoutViewport from "~/components/layout/internal/Viewport.vue";
 import type { MaybeRefOrGetter } from "vue";
 
-const BREAKPOINT = Symbol.for(
-  "layout.breakpoint",
-) as InjectionKey<BreakpointName>;
+const BREAKPOINT = Symbol.for("layout.breakpoint") as InjectionKey<
+  MaybeRefOrGetter<BreakpointName>
+>;
 
 function provideBreakpoint(breakpoint: MaybeRefOrGetter) {
   provide(BREAKPOINT, breakpoint);
@@ -31,6 +31,16 @@ function provideBreakpoint(breakpoint: MaybeRefOrGetter) {
 
 export function useBreakpoint() {
   return inject(BREAKPOINT, "mobile");
+}
+
+export function useResponsiveValue<T>(
+  value: MaybeRefOrGetter<ResponsiveValue<T>>,
+) {
+  const breakpoint = useBreakpoint();
+  return computed<T>(() => {
+    const resolved = normalizeResponsive(toValue(value));
+    return fillResponsive(resolved)[toValue(breakpoint)];
+  });
 }
 </script>
 
