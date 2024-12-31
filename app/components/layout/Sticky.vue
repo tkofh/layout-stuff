@@ -250,28 +250,32 @@ const style = computed(() => stickyStyle(stick));
     z-index: -1;
 
     [data-viewport~="vertical"] & {
-      inline-size: 100%;
       block-size: 1px;
+      inline-size: auto;
 
       &[data-edge="start"] {
-        inset-block-start: calc(-1 * var(--layout-sticky-start-offset-sum));
+        inset-block: calc(-1 * var(--layout-sticky-start-offset-sum)) auto;
+        inset-inline: 0;
       }
 
       &[data-edge="end"] {
-        inset-block-end: calc(-1 * var(--layout-sticky-end-offset-sum));
+        inset-block: auto calc(-1 * var(--layout-sticky-end-offset-sum));
+        inset-inline: 0;
       }
     }
 
     [data-viewport~="horizontal"] & {
+      block-size: auto;
       inline-size: 1px;
-      block-size: 100%;
 
       &[data-edge="start"] {
-        inset-inline-start: calc(-1 * var(--layout-sticky-start-offset-sum));
+        inset-inline: calc(-1 * var(--layout-sticky-start-offset-sum)) auto;
+        inset-block: 0;
       }
 
       &[data-edge="end"] {
-        inset-inline-end: calc(-1 * var(--layout-sticky-end-offset-sum));
+        inset-inline: auto calc(-1 * var(--layout-sticky-end-offset-sum));
+        inset-block: 0;
       }
     }
   }
