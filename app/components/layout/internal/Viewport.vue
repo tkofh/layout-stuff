@@ -5,33 +5,9 @@ import type { MaybeRefOrGetter } from "vue";
 
 export type ScrollDirection = "vertical" | "horizontal";
 
-const emptyViewportSet = new Set<MaybeComputedElementRef>(null);
-
-const ALL_VIEWPORTS = Symbol.for("layout.viewport.all") as InjectionKey<
-  Set<MaybeComputedElementRef>
->;
-const NEAREST_VIEWPORT = Symbol.for(
-  "layout.viewport.nearest",
-) as InjectionKey<MaybeComputedElementRef>;
-
 const SCROLL_DIRECTION = Symbol.for("layout.scroll.direction") as InjectionKey<
   MaybeRefOrGetter<ScrollDirection>
 >;
-
-export function provideViewport(viewport: MaybeComputedElementRef) {
-  const all = inject(ALL_VIEWPORTS, emptyViewportSet);
-
-  provide(ALL_VIEWPORTS, all.union(new Set([viewport])));
-  provide(NEAREST_VIEWPORT, viewport);
-}
-
-export function useAllViewports() {
-  return inject(ALL_VIEWPORTS, emptyViewportSet);
-}
-
-export function useNearestViewport() {
-  return inject(NEAREST_VIEWPORT, null);
-}
 
 export function provideScrollDirection(
   direction: MaybeRefOrGetter<ScrollDirection>,
@@ -41,6 +17,41 @@ export function provideScrollDirection(
 
 export function useScrollDirection() {
   return inject(SCROLL_DIRECTION, "vertical");
+}
+
+const defaultViewports = new Set<MaybeComputedElementRef>(null);
+
+const ALL_VIEWPORTS = Symbol.for("layout.viewport.all") as InjectionKey<
+  Set<MaybeComputedElementRef>
+>;
+
+const NEAREST_VIEWPORT = Symbol.for(
+  "layout.viewport.nearest",
+) as InjectionKey<MaybeComputedElementRef>;
+
+export function provideViewport(viewport: MaybeComputedElementRef) {
+  const all = inject(ALL_VIEWPORTS, defaultViewports);
+
+  provide(ALL_VIEWPORTS, all.union(new Set([viewport])));
+  provide(NEAREST_VIEWPORT, viewport);
+}
+
+export function useAllViewports() {
+  return inject(ALL_VIEWPORTS, defaultViewports);
+}
+
+export function useNearestViewport() {
+  return inject(NEAREST_VIEWPORT, null);
+}
+
+export function useNearestViewportElement(): MaybeComputedElementRef {
+  const nearest = useNearestViewport();
+
+  if (nearest === null) {
+    return () => (import.meta.client ? document.body : null);
+  }
+  return () =>
+    unrefElement(nearest) ?? (import.meta.client ? document.body : null);
 }
 
 export type VisibilityProbeMode = "root" | "nearest" | "all";
@@ -224,22 +235,16 @@ export function useVisibilityProbe<M extends VisibilityProbeMode>(
   return state as never;
 }
 
-export interface StickyNeighbors {
-  previous: string | null;
-  next: string | null;
+export function useStickyElement(id: string) {
+  useChild<string>("sticky-neighbors", id);
 }
 
-const defaultStickyNeighbors: StickyNeighbors = {
-  previous: null,
-  next: null,
-};
+function defineCustomProperty(name: string, inherits = false) {
+  return `@property ${name} { syntax: "<length>"; inherits: ${String(inherits)}; initial-value: 0; }`;
+}
 
-export function useStickyNeighbors(id: string): Readonly<Ref<StickyNeighbors>> {
-  return useChild<string, StickyNeighbors>(
-    "sticky-neighbors",
-    id,
-    defaultStickyNeighbors,
-  );
+function assignCustomProperty(name: string, value: string) {
+  return `  ${name}: ${value};`;
 }
 
 export interface ViewportProps {
@@ -252,36 +257,66 @@ export type ViewportSlots = PrimitiveSlots;
 <script setup lang="ts">
 const { direction = "vertical" } = defineProps<ViewportProps>();
 defineSlots<ViewportSlots>();
-const { inputs: ids } = useChildren<string, StickyNeighbors>(
-  "sticky-neighbors",
-  (ids) => {
-    const links = [] as Array<StickyNeighbors>;
 
-    for (const index in ids) {
-      const previous = ids[Number(index) - 1] ?? null;
-      const next = ids[Number(index) + 1] ?? null;
+const id = useId();
 
-      links.push({ previous, next });
-    }
+const viewport = useDataString(() => ({
+  [id]: true,
+  [direction]: true,
+}));
 
-    return links;
-  },
-);
+const { inputs: ids } = useChildren<string>("sticky-neighbors");
+
 const stylesheet = computed(() => {
   const rules = [] as Array<string>;
-  for (const id of ids.value) {
+  const peerAssignments = [] as Array<string>;
+
+  for (const [index, current] of ids.value.entries()) {
+    const previous = ids.value[index - 1] ?? null;
+    const next = ids.value[index + 1] ?? null;
+
     rules.push(
-      `@property --layout-sticky-${id}-start { syntax: "<length>"; inherits: true; initial-value: 0; }`,
-      `@property --layout-sticky-${id}-end { syntax: "<length>"; inherits: true; initial-value: 0; }`,
+      defineCustomProperty(`--layout-sticky-${current}-size`, true),
+      defineCustomProperty(`--layout-sticky-${current}-start`),
+      defineCustomProperty(`--layout-sticky-${current}-end`),
+      `[data-sticky~="${current}"] {`,
+      assignCustomProperty(
+        "--layout-sticky-start-peer-offset",
+        `var(--layout-sticky-${current}-start)`,
+      ),
+      assignCustomProperty(
+        "--layout-sticky-end-peer-offset",
+        `var(--layout-sticky-${current}-end)`,
+      ),
+      `}`,
     );
+
+    if (previous) {
+      peerAssignments.push(
+        assignCustomProperty(
+          `--layout-sticky-${current}-start`,
+          `calc(var(--layout-sticky-${previous}-start) + var(--layout-sticky-${previous}-size))`,
+        ),
+      );
+    }
+    if (next) {
+      peerAssignments.push(
+        assignCustomProperty(
+          `--layout-sticky-${current}-end`,
+          `calc(var(--layout-sticky-${next}-end) + var(--layout-sticky-${next}-size))`,
+        ),
+      );
+    }
   }
+
+  rules.push(`[data-viewport~=${id}] [data-sticky] {`, ...peerAssignments, "}");
 
   return rules.join("\n");
 });
 </script>
 
 <template>
-  <RadixSlot :data-viewport="direction">
+  <RadixSlot :data-viewport="viewport">
     <slot />
     <ClientOnly>
       <Teleport to="#teleports">

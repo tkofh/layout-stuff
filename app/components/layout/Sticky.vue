@@ -7,7 +7,8 @@ import InternalLayoutPrimitive, {
 import {
   useVisibilityProbe,
   useScrollDirection,
-  useStickyNeighbors,
+  useStickyElement,
+  useNearestViewportElement,
 } from "~/components/layout/internal/Viewport.vue";
 import { useDataString } from "~/composables/useDataString";
 
@@ -36,15 +37,6 @@ function stickyStyle(edge: ViewportEdge) {
       mapResponsive(filled, (value) => endLookup[value]),
     ),
   };
-}
-
-function stickyStaticStylesheet(id: string) {
-  return [
-    `.layout-sticky[data-sticky-id="${id}"] {`,
-    `  --layout-sticky-start-peer-offset: var(--layout-sticky-${id}-start);`,
-    `  --layout-sticky-end-peer-offset: var(--layout-sticky-${id}-end);`,
-    `}`,
-  ].join("\n");
 }
 
 export type ViewportEdge = ResponsiveValue<"start" | "end" | "both" | "none">;
@@ -86,9 +78,10 @@ const isStuckEnd = computed(() => endState.value === "after-viewport");
 const isStuck = computed(() => isStuckStart.value || isStuckEnd.value);
 
 const id = useId();
-const neighbors = useStickyNeighbors(id);
+useStickyElement(id);
 
 const state = useDataString(() => ({
+  [id]: true,
   scrolling: !isStuck.value,
   stuck: isStuck.value,
   start: isStuckStart.value,
@@ -102,31 +95,15 @@ const { width, height } = useElementSize(
   { box: "content-box" },
 );
 const direction = useScrollDirection();
-const size = computed(() =>
-  toValue(direction) === "vertical" ? height.value : width.value,
+const size = useCssVar(
+  `--layout-sticky-${id}-size`,
+  toRef(useNearestViewportElement()),
 );
+watchEffect(() => {
+  size.value = `${toValue(direction) === "vertical" ? height.value : width.value}px`;
+});
 
 const style = computed(() => stickyStyle(stick));
-
-const stylesheet = computed(() => {
-  const rules = [stickyStaticStylesheet(id)] as Array<string>;
-
-  const next = neighbors.value.next;
-  if (next !== null) {
-    rules.push(
-      `:root { --layout-sticky-${next}-start: calc(var(--layout-sticky-${id}-start) + ${size.value}px); }`,
-    );
-  }
-
-  const previous = neighbors.value.previous;
-  if (previous !== null) {
-    rules.push(
-      `:root { --layout-sticky-${previous}-end: calc(var(--layout-sticky-${id}-end) + ${size.value}px); }`,
-    );
-  }
-
-  return rules.join("\n");
-});
 </script>
 
 <template>
@@ -135,19 +112,11 @@ const stylesheet = computed(() => {
     :as
     class="layout-sticky"
     :style
-    :data-sticky-id="id"
-    :data-sticky-state="state"
+    :data-sticky="state"
   >
     <span ref="start" class="layout-sticky-edge" data-edge="start" />
     <slot :is-stuck :is-stuck-start :is-stuck-end />
     <span ref="end" class="layout-sticky-edge" data-edge="end" />
-    <ClientOnly>
-      <Teleport to="#teleports">
-        <RadixPrimitive as="style">
-          {{ stylesheet }}
-        </RadixPrimitive>
-      </Teleport>
-    </ClientOnly>
   </LayoutPrimitive>
 </template>
 

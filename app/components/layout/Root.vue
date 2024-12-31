@@ -76,18 +76,21 @@ const style = computed(() => ({
 
 const isMounted = ref(false);
 onMounted(() => {
-  nextTick(() => {
-    isMounted.value = true;
-  });
+  // nextTick(() => {
+  isMounted.value = true;
+  // });
 });
 
 onPrehydrate(() => {
   document.addEventListener("DOMContentLoaded", () => {
-    document.body.style.setProperty("--layout-scroll", `${window.scrollY}px`);
-    document.body.style.setProperty(
-      "--layout-scroll-length",
-      `${document.documentElement.scrollHeight}px`,
-    );
+    const root = document.querySelector<HTMLElement>(".layout-root");
+    if (root) {
+      root.style.setProperty("--layout-scroll", `${window.scrollY}px`);
+      root.style.setProperty(
+        "--layout-scroll-length",
+        `${document.documentElement.scrollHeight}px`,
+      );
+    }
   });
 });
 </script>

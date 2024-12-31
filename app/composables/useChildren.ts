@@ -53,17 +53,17 @@ function* walkChildren<I, O>(
 class ChildRef<I, O> {
   readonly uid: number;
   readonly input: Readonly<Ref<I>>;
-  readonly output: ShallowRef<O>;
+  readonly output: ShallowRef<O> | null;
 
   constructor(
     context: ChildrenContext<I, O>,
     uid: number,
     input: Readonly<Ref<I>>,
-    output: O,
+    initial: O | undefined,
   ) {
     this.uid = uid;
     this.input = input;
-    this.output = shallowRef(output);
+    this.output = initial === undefined ? null : shallowRef(initial);
 
     watch(
       input,
@@ -75,7 +75,7 @@ class ChildRef<I, O> {
   }
 }
 
-class ChildrenContext<I, O> {
+class ChildrenContext<I, O = never> {
   readonly order: ShallowRef<ReadonlyArray<ChildRef<I, O>>>;
   readonly inputs: ShallowRef<ReadonlyArray<I>>;
 
@@ -85,7 +85,7 @@ class ChildrenContext<I, O> {
 
   readonly #skipSubtreesOf: ReadonlySet<ConcreteComponent>;
 
-  constructor(vm: ComponentInternalInstance, map: ChildrenMapper<I, O>) {
+  constructor(vm: ComponentInternalInstance, map?: ChildrenMapper<I, O>) {
     this.#vm = vm;
     this.#skipSubtreesOf = new Set([vm.type]);
 
@@ -128,21 +128,28 @@ class ChildrenContext<I, O> {
       { flush: "pre" },
     );
 
-    watchEffect(() => {
-      const outputs = map(inputs.value);
+    if (map !== undefined) {
+      watchEffect(() => {
+        const outputs = map(inputs.value);
 
-      if (outputs.length !== inputs.value.length) {
-        throw new Error(
-          "mapper returned different number of outputs than inputs",
-        );
-      }
+        if (outputs.length !== inputs.value.length) {
+          throw new Error(
+            "mapper returned different number of outputs than inputs",
+          );
+        }
 
-      for (const index in order.value) {
-        (order.value[index] as ChildRef<I, O>).output.value = outputs[
-          index
-        ] as O;
-      }
-    });
+        for (const index in order.value) {
+          const child = order.value[index] as ChildRef<I, O>;
+          if (child.output === null) {
+            throw new Error(
+              "mapper returned output for child that has no initial value",
+            );
+          }
+
+          child.output.value = outputs[index] as O;
+        }
+      });
+    }
 
     this.order = order;
     this.inputs = inputs;
@@ -169,7 +176,19 @@ class ChildrenContext<I, O> {
   }
 }
 
-export function useChildren<I, O>(channel: string, map: ChildrenMapper<I, O>) {
+export interface UseChildrenReturn<I> {
+  inputs: Readonly<ShallowRef<ReadonlyArray<I>>>;
+}
+
+export function useChildren<I>(channel: string): UseChildrenReturn<I>;
+export function useChildren<I, O>(
+  channel: string,
+  map: ChildrenMapper<I, O>,
+): UseChildrenReturn<I>;
+export function useChildren<I, O = never>(
+  channel: string,
+  map?: ChildrenMapper<I, O>,
+): UseChildrenReturn<I> {
   const vm = getCurrentInstance();
 
   if (!vm) {
@@ -190,11 +209,17 @@ export function useChildren<I, O>(channel: string, map: ChildrenMapper<I, O>) {
   };
 }
 
+export function useChild<I>(channel: string, value: MaybeRefOrGetter<I>): void;
 export function useChild<I, O>(
   channel: string,
   value: MaybeRefOrGetter<I>,
   initial: O,
-): Readonly<ShallowRef<O>> {
+): Readonly<Ref<O>>;
+export function useChild<I, O = never>(
+  channel: string,
+  value: MaybeRefOrGetter<I>,
+  initial?: O,
+): Readonly<ShallowRef<O>> | undefined {
   const context = inject(
     Symbol.for(`use-children:${channel}`) as InjectionKey<
       ChildrenContext<I, O>
@@ -225,5 +250,7 @@ export function useChild<I, O>(
     context.unregister(ref);
   });
 
-  return ref.output;
+  if (ref.output) {
+    return ref.output;
+  }
 }
