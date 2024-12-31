@@ -183,13 +183,13 @@ const style = computed(() => stickyStyle(stick));
   initial-value: 0;
 }
 
-@property --layout-sticky-start-peer-offset {
+@property --layout-sticky-peer-start {
   syntax: "<length>";
   inherits: true;
   initial-value: 0;
 }
 
-@property --layout-sticky-end-peer-offset {
+@property --layout-sticky-peer-end {
   syntax: "<length>";
   inherits: true;
   initial-value: 0;
@@ -207,18 +207,13 @@ const style = computed(() => stickyStyle(stick));
   initial-value: 0;
 }
 
-@layer components.layout {
-  :has(> .layout-sticky) {
-    --layout-sticky-start-ancestor-offset: 0;
-    --layout-sticky-end-ancestor-offset: 0;
-  }
-
+@layer components.layout.base {
   .layout-sticky {
     --layout-sticky-start-offset-sum: calc(
-      var(--layout-sticky-start-offset) + var(--layout-sticky-start-peer-offset)
+      var(--layout-sticky-start-offset) + var(--layout-sticky-peer-start)
     );
     --layout-sticky-end-offset-sum: calc(
-      var(--layout-sticky-end-offset) + var(--layout-sticky-end-peer-offset)
+      var(--layout-sticky-end-offset) + var(--layout-sticky-peer-end)
     );
 
     position: sticky;
@@ -230,14 +225,19 @@ const style = computed(() => stickyStyle(stick));
           var(--layout-sticky-start-offset-sum)
         )
         var(--layout-sticky-end, var(--layout-sticky-end-offset-sum));
+
+      /* without unsetting this, sticky elements in horizontal scroll boxes would force inlines to wrap on them */
+      inset-inline: initial;
     }
 
     [data-viewport~="horizontal"] & {
+      inline-size: unset;
       inset-inline: var(
           --layout-sticky-start,
           var(--layout-sticky-start-offset-sum)
         )
         var(--layout-sticky-end, var(--layout-sticky-end-offset-sum));
+      inset-block: initial;
     }
   }
 

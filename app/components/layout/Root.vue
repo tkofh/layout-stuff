@@ -1,15 +1,17 @@
 <template>
   <LayoutViewport direction="vertical">
-    <LayoutPrimitive
-      ref="root"
-      :as
-      class="layout-root"
-      :data-layout-mounted="isMounted"
-      data-allow-mismatch="style"
-      :style
-    >
-      <slot />
-    </LayoutPrimitive>
+    <LayoutFillable layout>
+      <LayoutPrimitive
+        ref="root"
+        :as
+        class="layout-root"
+        :data-layout-mounted="isMounted"
+        data-allow-mismatch="style"
+        :style
+      >
+        <slot />
+      </LayoutPrimitive>
+    </LayoutFillable>
   </LayoutViewport>
 </template>
 
@@ -19,6 +21,7 @@ import InternalLayoutPrimitive, {
   type PrimitiveSlots,
 } from "~/components/layout/internal/Primitive.vue";
 import InternalLayoutViewport from "~/components/layout/internal/Viewport.vue";
+import InternalLayoutFillable from "~/components/layout/internal/Fillable.vue";
 import type { MaybeRefOrGetter } from "vue";
 
 const BREAKPOINT = Symbol.for("layout.breakpoint") as InjectionKey<
@@ -50,6 +53,7 @@ defineSlots<PrimitiveSlots>();
 
 const LayoutPrimitive = InternalLayoutPrimitive;
 const LayoutViewport = InternalLayoutViewport;
+const LayoutFillable = InternalLayoutFillable;
 
 const root = templateRef<HTMLElement>("root");
 
@@ -76,9 +80,7 @@ const style = computed(() => ({
 
 const isMounted = ref(false);
 onMounted(() => {
-  // nextTick(() => {
   isMounted.value = true;
-  // });
 });
 
 onPrehydrate(() => {
@@ -96,13 +98,9 @@ onPrehydrate(() => {
 </script>
 
 <style>
-@layer components.layout {
+@layer components.layout.base {
   .layout-root {
     min-block-size: 100dvb;
-    display: block grid;
-    grid-template: minmax(auto, 1fr) / 1fr;
-    place-items: start stretch;
-    contain: content;
 
     --layout-scroll-viewport: 100dvb;
   }

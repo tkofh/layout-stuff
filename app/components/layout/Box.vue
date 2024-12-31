@@ -51,7 +51,7 @@ const LayoutPrimitive = InternalLayoutPrimitive;
 </script>
 
 <style>
-@layer components.layout {
+@layer components.layout.base {
   .layout-box {
     display: block flow-root;
   }

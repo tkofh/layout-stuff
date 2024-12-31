@@ -265,7 +265,7 @@ const style = computed(() => ({
   initial-value: 0;
 }
 
-@layer components.layout {
+@layer components.layout.base {
   .layout-areas {
     --layout-areas-size-top: initial;
     --layout-areas-size-right: initial;
@@ -277,10 +277,9 @@ const style = computed(() => ({
     inline-size: 100%;
     place-items: start stretch;
     contain: paint;
+    grid-template: auto minmax(max-content, 1fr) auto / auto 1fr auto;
 
     [data-viewport~="vertical"] & {
-      grid-template: auto minmax(max-content, 1fr) auto / auto 1fr auto;
-
       &
         > .layout-sticky:is(
           [data-layout-area~="left"],
@@ -318,7 +317,7 @@ const style = computed(() => ({
     }
 
     [data-viewport~="horizontal"] & {
-      grid-template: auto 1fr auto / auto minmax(max-content, 1fr) auto;
+      /* grid-template: auto 1fr auto / auto minmax(max-content, 1fr) auto; */
 
       &
         > .layout-sticky:is(

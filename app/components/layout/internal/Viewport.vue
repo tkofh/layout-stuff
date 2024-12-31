@@ -281,11 +281,11 @@ const stylesheet = computed(() => {
       defineCustomProperty(`--layout-sticky-${current}-end`),
       `[data-sticky~="${current}"] {`,
       assignCustomProperty(
-        "--layout-sticky-start-peer-offset",
+        "--layout-sticky-peer-start",
         `var(--layout-sticky-${current}-start)`,
       ),
       assignCustomProperty(
-        "--layout-sticky-end-peer-offset",
+        "--layout-sticky-peer-end",
         `var(--layout-sticky-${current}-end)`,
       ),
       `}`,

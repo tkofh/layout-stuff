@@ -15,7 +15,7 @@ defineProps<{
 </script>
 
 <style>
-@layer components.app {
+@layer components.app.base {
   .app-placeholder {
     display: grid;
     grid: "main" 1fr / 1fr;

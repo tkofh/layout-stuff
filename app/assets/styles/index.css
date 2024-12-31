@@ -9,4 +9,12 @@
 
 @layer components {
   @layer layout app;
+
+  @layer layout {
+    @layer base override;
+  }
+
+  @layer app {
+    @layer base override;
+  }
 }

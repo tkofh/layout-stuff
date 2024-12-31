@@ -48,8 +48,9 @@ const LayoutPrimitive = InternalLayoutPrimitive;
 </script>
 
 <style>
-@layer components.layout {
+@layer components.layout.base {
   .layout-stack {
+    max-inline-size: 100%;
     display: block flex;
     flex-flow: column nowrap;
     gap: var(--layout-space-current);

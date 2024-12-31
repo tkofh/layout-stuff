@@ -12,7 +12,9 @@
       >
         <RadixScrollAreaViewport ref="viewport" as-child :style>
           <LayoutPrimitive ref="area" :as class="layout-scroll-area">
-            <slot />
+            <LayoutFillable unwrap>
+              <slot />
+            </LayoutFillable>
           </LayoutPrimitive>
           <RadixScrollAreaScrollbar
             :orientation="direction"
@@ -41,6 +43,7 @@ import InternalLayoutPrimitive, {
   type PrimitiveProps,
   type PrimitiveSlots,
 } from "~/components/layout/internal/Primitive.vue";
+import InternalLayoutFillable from "~/components/layout/internal/Fillable.vue";
 
 export interface LayoutScrollProps
   extends PrimitiveProps,
@@ -59,6 +62,7 @@ defineSlots<LayoutScrollSlots>();
 const LayoutViewport = InternalLayoutViewport;
 const LayoutSized = InternalLayoutSized;
 const LayoutPrimitive = InternalLayoutPrimitive;
+const LayoutFillable = InternalLayoutFillable;
 
 const area = useTemplateRef<HTMLElement>("area");
 const viewport =
@@ -100,7 +104,7 @@ const style = computed(() => ({
 </script>
 
 <style>
-@layer components.layout {
+@layer components.layout.base {
   .layout-scroll {
     --layout-viewport-block-size: 100%;
     --layout-viewport-inline-size: 100%;
