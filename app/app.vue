@@ -48,9 +48,9 @@
 </template>
 
 <script setup lang="ts">
-const sections = 5;
+const sections = 2;
 
-const subSections = 6;
+const subSections = 3;
 </script>
 
 <style>

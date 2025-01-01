@@ -238,11 +238,15 @@ export function useVisibilityProbe<M extends VisibilityProbeMode>(
 export interface StickyElement {
   start: number;
   end: number;
+  startLayer: number;
+  endLayer: number;
 }
 
 const defaultStickyElement = {
   start: 0,
   end: 0,
+  startLayer: 100,
+  endLayer: 99,
 } satisfies StickyElement;
 
 export function useStickyElement(size: MaybeRefOrGetter<number>) {
@@ -272,19 +276,19 @@ const viewport = useDataString(() => ({
 }));
 
 useChildren<number, StickyElement>("sticky-neighbors", (children) => {
-  const elements = [] as Array<StickyElement>;
-
   const sizes = new Map<(typeof children)[number], number>();
 
   for (const child of children) {
     sizes.set(child, toValue(child.input));
   }
 
-  for (const child of children) {
+  for (const [index, child] of children.entries()) {
     const element = {
       start: 0,
       end: 0,
-    };
+      startLayer: children.length * 2 - index,
+      endLayer: index + 1,
+    } satisfies StickyElement;
 
     for (const other of child.before()) {
       element.start += sizes.get(other) ?? 0;
@@ -293,10 +297,8 @@ useChildren<number, StickyElement>("sticky-neighbors", (children) => {
       element.end += sizes.get(other) ?? 0;
     }
 
-    elements.push(element);
+    child.output!.value = element;
   }
-
-  return elements;
 });
 </script>
 

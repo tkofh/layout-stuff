@@ -8,6 +8,7 @@ import {
   useVisibilityProbe,
   useScrollDirection,
   useStickyElement,
+  type StickyElement,
 } from "~/components/layout/internal/Viewport.vue";
 import { useDataString } from "~/composables/useDataString";
 
@@ -24,7 +25,7 @@ const endLookup = {
   none: "auto",
 } as const;
 
-function stickyStyle(edge: ViewportEdge, start: number, end: number) {
+function stickyStyle(edge: ViewportEdge, element: StickyElement) {
   const filled = fillResponsive(normalizeResponsive(edge));
   return {
     ...responsiveToAttributes(
@@ -35,8 +36,10 @@ function stickyStyle(edge: ViewportEdge, start: number, end: number) {
       "--layout-sticky-end",
       mapResponsive(filled, (value) => endLookup[value]),
     ),
-    "--layout-sticky-start-offset": `${start}px`,
-    "--layout-sticky-end-offset": `${end}px`,
+    "--layout-sticky-start-offset": `${element.start}px`,
+    "--layout-sticky-end-offset": `${element.end}px`,
+    "--layout-sticky-start-layer": element.startLayer,
+    "--layout-sticky-end-layer": element.endLayer,
   };
 }
 
@@ -95,9 +98,7 @@ const size = computed(() =>
 );
 
 const offsets = useStickyElement(size);
-const style = computed(() =>
-  stickyStyle(stick, offsets.value.start, offsets.value.end),
-);
+const style = computed(() => stickyStyle(stick, offsets.value));
 </script>
 
 <template>
@@ -177,9 +178,30 @@ const style = computed(() =>
   initial-value: 0;
 }
 
+@property --layout-sticky-start-layer {
+  syntax: "<integer>";
+  inherits: false;
+  initial-value: 0;
+}
+
+@property --layout-sticky-end-layer {
+  syntax: "<integer>";
+  inherits: false;
+  initial-value: 0;
+}
+
 @layer layout.component {
   .layout-sticky {
     position: sticky;
+    z-index: 1;
+
+    &[data-sticky~="start"] {
+      z-index: var(--layout-sticky-start-layer);
+    }
+
+    &[data-sticky~="end"] {
+      z-index: var(--layout-sticky-end-layer);
+    }
 
     [data-viewport~="vertical"] & {
       inline-size: 100%;

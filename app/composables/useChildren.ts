@@ -8,14 +8,14 @@ import {
 } from "vue";
 
 export type ChildrenMapper<I, O> = (
-  children: ReadonlyArray<ChildInfo<I>>,
-) => ReadonlyArray<O>;
+  children: ReadonlyArray<Child<I, O>>,
+) => void;
 
 function* walkChildren<I, O>(
   child: VNodeChild,
-  lookup: Map<number, ChildRef<I, O>>,
+  lookup: Map<number, Child<I, O>>,
   skipSubtreesOf: ReadonlySet<ConcreteComponent>,
-): Generator<ChildRef<I, O> | number> {
+): Generator<Child<I, O> | number> {
   const queue = Array.isArray(child) ? Array.from(child) : [child];
   let index = 0;
   let depth = 0;
@@ -44,7 +44,6 @@ function* walkChildren<I, O>(
       if (vnode.component) {
         const element = lookup.get(vnode.component.uid);
         if (element) {
-          element.depth = depth;
           yield element;
           index++;
         }
@@ -68,49 +67,15 @@ function* walkChildren<I, O>(
   }
 }
 
-class ChildInfo<I> {
-  readonly #ref: ChildRef<I, unknown>;
-
-  constructor(ref: ChildRef<I, unknown>) {
-    this.#ref = ref;
-  }
-
-  get input(): I {
-    return this.#ref.input.value;
-  }
-
-  *before() {
-    for (const ref of this.#ref.ancestors) {
-      yield ref.info;
-    }
-  }
-
-  *after() {
-    let ref: ChildRef<I, unknown> | undefined = this.#ref;
-
-    while (ref != null) {
-      for (const ref of this.#ref.peers.slice(
-        this.#ref.peers.indexOf(this.#ref) + 1,
-      )) {
-        yield ref.info;
-      }
-
-      ref = ref.ancestors.at(-1);
-    }
-  }
-}
-
-export type { ChildInfo };
-
-class ChildRef<I, O> {
-  depth: number = 0;
-  peers: ReadonlyArray<ChildRef<I, O>> = [];
-  ancestors: ReadonlyArray<ChildRef<I, O>> = [];
+class Child<I, O> {
+  peers: ReadonlyArray<Child<I, O>> = [];
+  ancestors: ReadonlyArray<Child<I, O>> = [];
 
   readonly uid: number;
   readonly input: Readonly<Ref<I>>;
   readonly output: ShallowRef<O> | null;
-  readonly #info: ChildInfo<I>;
+
+  // readonly #info: ChildInfo<I>;
 
   constructor(
     context: ChildrenContext<I, O>,
@@ -129,15 +94,30 @@ class ChildRef<I, O> {
       },
       { flush: "sync" },
     );
-
-    this.#info = new ChildInfo(this);
   }
 
-  get info() {
-    return this.#info;
+  *before() {
+    for (const ref of this.ancestors) {
+      yield ref;
+    }
   }
 
-  compare(other: ChildRef<I, O> | undefined): boolean {
+  *after() {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    let current: Child<I, O> | undefined = this;
+
+    while (current != null) {
+      for (const ref of current.peers.slice(
+        current.peers.indexOf(current) + 1,
+      )) {
+        yield ref;
+      }
+
+      current = current.ancestors.at(-1);
+    }
+  }
+
+  compare(other: Child<I, O> | undefined): boolean {
     return (
       other != null && this.uid === other.uid && this.input === other.input
     );
@@ -145,11 +125,10 @@ class ChildRef<I, O> {
 }
 
 class ChildrenContext<I, O = never> {
-  readonly order: ShallowRef<ReadonlyArray<ChildRef<I, O>>>;
-  readonly info: ShallowRef<ReadonlyArray<ChildInfo<I>>>;
+  readonly children: ShallowRef<ReadonlyArray<Child<I, O>>>;
 
   readonly #vm: ComponentInternalInstance;
-  readonly #storage: Map<number, ChildRef<I, O>>;
+  readonly #storage: Map<number, Child<I, O>>;
   readonly #updateTrigger: ShallowRef<number>;
 
   readonly #skipSubtreesOf: ReadonlySet<ConcreteComponent>;
@@ -158,18 +137,17 @@ class ChildrenContext<I, O = never> {
     this.#vm = vm;
     this.#skipSubtreesOf = new Set([vm.type]);
 
-    this.#storage = new Map<number, ChildRef<I, O>>();
+    this.#storage = new Map<number, Child<I, O>>();
 
-    const order = shallowRef<ReadonlyArray<ChildRef<I, O>>>([]);
-    const info = shallowRef<ReadonlyArray<ChildInfo<I>>>([]);
+    const children = shallowRef<ReadonlyArray<Child<I, O>>>([]);
 
     const updateTrigger = shallowRef(0);
 
     watch(
       updateTrigger,
       () => {
-        const incoming = [] as Array<ChildRef<I, O>>;
-        const peerLists = new Map<number, Array<ChildRef<I, O>>>();
+        const incoming = [] as Array<Child<I, O>>;
+        const peerLists = new Map<number, Array<Child<I, O>>>();
         let depth = 0;
 
         let needsUpdate = false;
@@ -185,13 +163,12 @@ class ChildrenContext<I, O = never> {
             }
             depth = value;
           } else {
-            value.depth = depth;
             const peers = peerLists.get(depth) ?? [];
             peerLists.set(depth, peers);
             peers.push(value);
             value.peers = peers;
 
-            const ancestors = [] as Array<ChildRef<I, O>>;
+            const ancestors = [] as Array<Child<I, O>>;
             for (const list of peerLists.values()) {
               if (list !== peers) {
                 ancestors.push(...list);
@@ -201,7 +178,7 @@ class ChildrenContext<I, O = never> {
 
             if (
               !needsUpdate &&
-              !value.compare(this.order.value[incoming.length])
+              !value.compare(this.children.value[incoming.length])
             ) {
               needsUpdate = true;
             }
@@ -211,13 +188,13 @@ class ChildrenContext<I, O = never> {
         }
 
         if (needsUpdate) {
-          order.value = incoming;
-          const incomingInfo: Array<ChildInfo<I>> = [];
+          children.value = incoming;
+          const incomingInfo: Array<Child<I, O>> = [];
           for (const ref of incoming) {
-            incomingInfo.push(ref.info);
+            incomingInfo.push(ref);
           }
 
-          info.value = incomingInfo;
+          children.value = incomingInfo;
         }
       },
       { flush: "pre" },
@@ -226,72 +203,46 @@ class ChildrenContext<I, O = never> {
     if (map !== undefined) {
       watchEffect(
         () => {
-          const outputs = map(info.value);
-          if (outputs.length !== info.value.length) {
-            throw new Error(
-              "mapper returned different number of outputs than inputs",
-            );
-          }
-
-          for (const index in order.value) {
-            const child = order.value[index] as ChildRef<I, O>;
-            if (child.output === null) {
-              throw new Error(
-                "mapper returned output for child that has no initial value",
-              );
-            }
-
-            child.output.value = outputs[index] as O;
-          }
+          map(children.value);
         },
         { flush: "post" },
       );
     }
 
-    this.order = order;
-    this.info = info;
+    this.children = children;
     this.#updateTrigger = updateTrigger;
   }
 
-  register(ref: ChildRef<I, O>) {
+  register(ref: Child<I, O>) {
     this.#storage.set(ref.uid, ref);
     triggerRef(this.#updateTrigger);
   }
 
-  unregister(ref: ChildRef<I, O>) {
+  unregister(ref: Child<I, O>) {
     this.#storage.delete(ref.uid);
     triggerRef(this.#updateTrigger);
   }
 
-  update(ref: ChildRef<I, O>) {
-    const index = this.order.value.indexOf(ref) as number;
+  update(ref: Child<I, O>) {
+    const index = this.children.value.indexOf(ref) as number;
     if (index < 0) {
       return;
     }
-    triggerRef(this.info);
+    triggerRef(this.children);
   }
 }
 
-export interface UseChildrenReturn<I> {
-  info: Readonly<ShallowRef<ReadonlyArray<ChildInfo<I>>>>;
-}
-
-export function useChildren<I>(channel: string): UseChildrenReturn<I>;
-export function useChildren<I, O>(
-  channel: string,
-  map: ChildrenMapper<I, O>,
-): UseChildrenReturn<I>;
 export function useChildren<I, O = never>(
   channel: string,
-  map?: ChildrenMapper<I, O>,
-): UseChildrenReturn<I> {
+  handler: ChildrenMapper<I, O>,
+) {
   const vm = getCurrentInstance();
 
   if (!vm) {
     throw new Error("useChildIndex must be used inside a component");
   }
 
-  const context = new ChildrenContext<I, O>(vm, map);
+  const context = new ChildrenContext<I, O>(vm, handler);
 
   provide(
     Symbol.for(`use-children:${channel}`) as InjectionKey<
@@ -299,10 +250,6 @@ export function useChildren<I, O = never>(
     >,
     context,
   );
-
-  return {
-    info: context.info,
-  };
 }
 
 export function useChild<I>(channel: string, value: MaybeRefOrGetter<I>): void;
@@ -333,12 +280,7 @@ export function useChild<I, O = never>(
     throw new Error("useChildIndex must be used inside a component");
   }
 
-  const ref = new ChildRef<I, O>(
-    context,
-    vm.uid,
-    toRef(value) as Ref<I>,
-    initial,
-  );
+  const ref = new Child<I, O>(context, vm.uid, toRef(value) as Ref<I>, initial);
 
   context.register(ref);
 
