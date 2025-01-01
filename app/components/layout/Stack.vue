@@ -48,7 +48,7 @@ const LayoutPrimitive = InternalLayoutPrimitive;
 </script>
 
 <style>
-@layer components.layout.base {
+@layer layout.component {
   .layout-stack {
     max-inline-size: 100%;
     display: block flex;

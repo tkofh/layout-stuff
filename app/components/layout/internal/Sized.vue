@@ -141,7 +141,7 @@ const style = computed(() =>
 </script>
 
 <template>
-  <RadixSlot :style data-layout-sized>
+  <RadixSlot :style class="layout-sized">
     <slot />
   </RadixSlot>
 </template>
@@ -328,8 +328,8 @@ const style = computed(() =>
   initial-value: none;
 }
 
-@layer trait {
-  [data-layout-sized] {
+@layer layout.trait {
+  .layout-sized {
     --layout-size-width-current: var(--layout-size-width);
     --layout-size-height-current: var(--layout-size-height);
     --layout-size-aspect-current: var(--layout-size-aspect);

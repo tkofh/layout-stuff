@@ -265,7 +265,7 @@ const style = computed(() => ({
   initial-value: 0;
 }
 
-@layer components.layout.base {
+@layer layout.component {
   .layout-areas {
     --layout-areas-size-top: initial;
     --layout-areas-size-right: initial;

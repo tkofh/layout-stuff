@@ -316,7 +316,7 @@ const stylesheet = computed(() => {
 </script>
 
 <template>
-  <RadixSlot :data-viewport="viewport">
+  <RadixSlot :data-viewport="viewport" class="layout-viewport">
     <slot />
     <ClientOnly>
       <Teleport to="#teleports">
@@ -359,8 +359,8 @@ const stylesheet = computed(() => {
   initial-value: 0;
 }
 
-@layer trait {
-  [data-viewport] {
+@layer layout.trait {
+  .layout-viewport {
     --layout-scroll-start: max(0px, var(--layout-scroll));
     --layout-scroll-end: max(
       0px,

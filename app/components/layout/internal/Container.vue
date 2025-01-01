@@ -75,15 +75,14 @@ const style = computed(() => ({
   ...alignYStyles(alignY),
   ...spaceStyles(space),
 }));
-const data = computed(() => {
-  if (collapseBelow === undefined) return "";
-
-  return `collapse-below-${collapseBelow}`;
-});
 </script>
 
 <template>
-  <RadixSlot :style :data-layout-container="data">
+  <RadixSlot
+    :style
+    class="layout-container"
+    :data-collapse-below="collapseBelow ?? 'none'"
+  >
     <slot />
   </RadixSlot>
 </template>
@@ -185,8 +184,8 @@ const data = computed(() => {
   initial-value: column;
 }
 
-@layer trait {
-  [data-layout-container] {
+@layer layout.trait {
+  .layout-container {
     --layout-align: unset;
     --layout-align-tablet: unset;
     --layout-align-laptop: unset;
@@ -206,13 +205,13 @@ const data = computed(() => {
     --layout-collapse-below-direction-collapsed: initial;
     --layout-collapse-below-direction-current: initial;
 
-    &:not([data-layout-container*="collapse-below"]) {
+    &[data-collapse-below="none"] {
       --layout-collapse-below-direction-current: var(
         --layout-collapse-below-direction-initial
       );
     }
 
-    [data-layout-container*="collapse-below"] {
+    &:not([data-collapse-below="none"]) {
       --layout-collapse-below-direction-current: var(
         --layout-collapse-below-direction-collapsed
       );
@@ -226,7 +225,7 @@ const data = computed(() => {
       --layout-space-tablet: var(--layout-space);
       --layout-space-current: var(--layout-space-tablet);
 
-      &[data-layout-container~="collapse-below-tablet"] {
+      &[data-collapse-below="tablet"] {
         --layout-collapse-below-direction-current: var(
           --layout-collapse-below-direction-initial
         );
@@ -241,7 +240,7 @@ const data = computed(() => {
       --layout-space-laptop: var(--layout-space-tablet);
       --layout-space-current: var(--layout-space-laptop);
 
-      &[data-layout-container~="collapse-below-laptop"] {
+      &[data-collapse-below="laptop"] {
         --layout-collapse-below-direction-current: var(
           --layout-collapse-below-direction-initial
         );
@@ -256,7 +255,7 @@ const data = computed(() => {
       --layout-space-desktop: var(--layout-space-laptop);
       --layout-space-current: var(--layout-space-desktop);
 
-      &[data-layout-container~="collapse-below-desktop"] {
+      &[data-collapse-below="desktop"] {
         --layout-collapse-below-direction-current: var(
           --layout-collapse-below-direction-initial
         );

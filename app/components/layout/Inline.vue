@@ -10,11 +10,11 @@
     :frame-left
   >
     <LayoutContainer :align :align-y :space :collapse-below>
-      <LayoutUnwrappable>
+      <LayoutWrap role="unwrappable">
         <LayoutPrimitive :as class="layout-inline">
           <slot />
         </LayoutPrimitive>
-      </LayoutUnwrappable>
+      </LayoutWrap>
     </LayoutContainer>
   </LayoutFrame>
 </template>
@@ -32,7 +32,7 @@ import InternalLayoutContainer, {
 import InternalLayoutFrame, {
   type FrameProps,
 } from "~/components/layout/internal/Frame.vue";
-import InternalLayoutUnwrappable from "~/components/layout/internal/Unwrappable.vue";
+import InternalLayoutWrap from "~/components/layout/internal/Wrap.vue";
 
 export interface InlineProps
   extends PrimitiveProps,
@@ -51,11 +51,11 @@ defineSlots<InlineSlots>();
 const LayoutFrame = InternalLayoutFrame;
 const LayoutContainer = InternalLayoutContainer;
 const LayoutPrimitive = InternalLayoutPrimitive;
-const LayoutUnwrappable = InternalLayoutUnwrappable;
+const LayoutWrap = InternalLayoutWrap;
 </script>
 
 <style>
-@layer components.layout.base {
+@layer layout.component {
   .layout-inline {
     display: block flex;
     flex-flow: var(--layout-collapse-below-direction-current) wrap;

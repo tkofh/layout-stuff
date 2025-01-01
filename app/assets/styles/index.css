@@ -1,4 +1,4 @@
-@layer reset media trait components app;
+@layer reset media layout app;
 @import url("sanitize.css") layer(reset);
 @import url("sanitize.css/assets.css") layer(reset);
 @import url("sanitize.css/typography.css") layer(reset);
@@ -7,14 +7,12 @@
 @import url("sanitize.css/ui-monospace.css") layer(reset);
 @import url("./media.css");
 
-@layer components {
-  @layer layout app;
 
-  @layer layout {
-    @layer base override;
-  }
-
-  @layer app {
-    @layer base override;
-  }
+@layer layout {
+  @layer trait component override;
 }
+
+@layer app {
+  @layer trait component override;
+}
+

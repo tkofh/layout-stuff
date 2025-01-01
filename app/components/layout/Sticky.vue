@@ -207,7 +207,7 @@ const style = computed(() => stickyStyle(stick));
   initial-value: 0;
 }
 
-@layer components.layout.base {
+@layer layout.component {
   .layout-sticky {
     --layout-sticky-start-offset-sum: calc(
       var(--layout-sticky-start-offset) + var(--layout-sticky-peer-start)

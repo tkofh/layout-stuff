@@ -92,7 +92,7 @@ const style = computed(() =>
 </script>
 
 <template>
-  <RadixSlot data-layout-frame :style>
+  <RadixSlot class="layout-frame" :style>
     <slot />
   </RadixSlot>
 </template>
@@ -273,8 +273,8 @@ const style = computed(() =>
   inherits: false;
 }
 
-@layer trait {
-  [data-layout-frame] {
+@layer layout.trait {
+  .layout-frame {
     --layout-frame: unset;
     --layout-frame-tablet: unset;
     --layout-frame-laptop: unset;
