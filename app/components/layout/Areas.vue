@@ -294,31 +294,9 @@ const style = computed(() => ({
           var(--layout-areas-size-bottom) - var(--layout-scroll-end)
         );
       }
-
-      &:has(
-          > .layout-sticky[data-layout-area~="top"][data-layout-area~="start"]
-        )
-        > .layout-sticky[data-layout-area~="left"],
-      &:has(> .layout-sticky[data-layout-area~="top"][data-layout-area~="end"])
-        > .layout-sticky[data-layout-area~="right"] {
-        --layout-sticky-start-offset: var(--layout-areas-size-top);
-      }
-
-      &:has(
-          > .layout-sticky[data-layout-area~="bottom"][data-layout-area~="start"]
-        )
-        > .layout-sticky[data-layout-area~="left"],
-      &:has(
-          > .layout-sticky[data-layout-area~="bottom"][data-layout-area~="end"]
-        )
-        > .layout-sticky[data-layout-area~="right"] {
-        --layout-sticky-end-offset: var(--layout-areas-size-bottom);
-      }
     }
 
     [data-viewport~="horizontal"] & {
-      /* grid-template: auto 1fr auto / auto minmax(max-content, 1fr) auto; */
-
       &
         > .layout-sticky:is(
           [data-layout-area~="top"],
@@ -332,26 +310,6 @@ const style = computed(() => ({
           var(--layout-sticky-end-offset),
           var(--layout-areas-size-right) - var(--layout-scroll-end)
         );
-      }
-
-      &:has(
-          > .layout-sticky[data-layout-area~="left"][data-layout-area~="start"]
-        )
-        > .layout-sticky[data-layout-area~="top"],
-      &:has(> .layout-sticky[data-layout-area~="left"][data-layout-area~="end"])
-        > .layout-sticky[data-layout-area~="bottom"] {
-        --layout-sticky-start-offset: var(--layout-areas-size-left);
-      }
-
-      &:has(
-          > .layout-sticky[data-layout-area~="right"][data-layout-area~="start"]
-        )
-        > .layout-sticky[data-layout-area~="top"],
-      &:has(
-          > .layout-sticky[data-layout-area~="right"][data-layout-area~="end"]
-        )
-        > .layout-sticky[data-layout-area~="bottom"] {
-        --layout-sticky-end-offset: var(--layout-areas-size-right);
       }
     }
   }

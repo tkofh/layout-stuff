@@ -235,16 +235,22 @@ export function useVisibilityProbe<M extends VisibilityProbeMode>(
   return state as never;
 }
 
-export function useStickyElement(id: string) {
-  useChild<string>("sticky-neighbors", id);
+export interface StickyElement {
+  start: number;
+  end: number;
 }
 
-function defineCustomProperty(name: string, inherits = false) {
-  return `@property ${name} { syntax: "<length>"; inherits: ${String(inherits)}; initial-value: 0; }`;
-}
+const defaultStickyElement = {
+  start: 0,
+  end: 0,
+} satisfies StickyElement;
 
-function assignCustomProperty(name: string, value: string) {
-  return `  ${name}: ${value};`;
+export function useStickyElement(size: MaybeRefOrGetter<number>) {
+  return useChild<number, StickyElement>(
+    "sticky-neighbors",
+    size,
+    defaultStickyElement,
+  );
 }
 
 export interface ViewportProps {
@@ -265,66 +271,38 @@ const viewport = useDataString(() => ({
   [direction]: true,
 }));
 
-const { inputs: ids } = useChildren<string>("sticky-neighbors");
+useChildren<number, StickyElement>("sticky-neighbors", (children) => {
+  const elements = [] as Array<StickyElement>;
 
-const stylesheet = computed(() => {
-  const rules = [] as Array<string>;
-  const peerAssignments = [] as Array<string>;
+  const sizes = new Map<(typeof children)[number], number>();
 
-  for (const [index, current] of ids.value.entries()) {
-    const previous = ids.value[index - 1] ?? null;
-    const next = ids.value[index + 1] ?? null;
-
-    rules.push(
-      defineCustomProperty(`--layout-sticky-${current}-size`, true),
-      defineCustomProperty(`--layout-sticky-${current}-start`),
-      defineCustomProperty(`--layout-sticky-${current}-end`),
-      `[data-sticky~="${current}"] {`,
-      assignCustomProperty(
-        "--layout-sticky-peer-start",
-        `var(--layout-sticky-${current}-start)`,
-      ),
-      assignCustomProperty(
-        "--layout-sticky-peer-end",
-        `var(--layout-sticky-${current}-end)`,
-      ),
-      `}`,
-    );
-
-    if (previous) {
-      peerAssignments.push(
-        assignCustomProperty(
-          `--layout-sticky-${current}-start`,
-          `calc(var(--layout-sticky-${previous}-start) + var(--layout-sticky-${previous}-size))`,
-        ),
-      );
-    }
-    if (next) {
-      peerAssignments.push(
-        assignCustomProperty(
-          `--layout-sticky-${current}-end`,
-          `calc(var(--layout-sticky-${next}-end) + var(--layout-sticky-${next}-size))`,
-        ),
-      );
-    }
+  for (const child of children) {
+    sizes.set(child, toValue(child.input));
   }
 
-  rules.push(`[data-viewport~=${id}] [data-sticky] {`, ...peerAssignments, "}");
+  for (const child of children) {
+    const element = {
+      start: 0,
+      end: 0,
+    };
 
-  return rules.join("\n");
+    for (const other of child.before()) {
+      element.start += sizes.get(other) ?? 0;
+    }
+    for (const other of child.after()) {
+      element.end += sizes.get(other) ?? 0;
+    }
+
+    elements.push(element);
+  }
+
+  return elements;
 });
 </script>
 
 <template>
   <RadixSlot :data-viewport="viewport" class="layout-viewport">
     <slot />
-    <ClientOnly>
-      <Teleport to="#teleports">
-        <RadixPrimitive as="style">
-          {{ stylesheet }}
-        </RadixPrimitive>
-      </Teleport>
-    </ClientOnly>
   </RadixSlot>
 </template>
 

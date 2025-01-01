@@ -8,7 +8,6 @@ import {
   useVisibilityProbe,
   useScrollDirection,
   useStickyElement,
-  useNearestViewportElement,
 } from "~/components/layout/internal/Viewport.vue";
 import { useDataString } from "~/composables/useDataString";
 
@@ -25,7 +24,7 @@ const endLookup = {
   none: "auto",
 } as const;
 
-function stickyStyle(edge: ViewportEdge) {
+function stickyStyle(edge: ViewportEdge, start: number, end: number) {
   const filled = fillResponsive(normalizeResponsive(edge));
   return {
     ...responsiveToAttributes(
@@ -36,6 +35,8 @@ function stickyStyle(edge: ViewportEdge) {
       "--layout-sticky-end",
       mapResponsive(filled, (value) => endLookup[value]),
     ),
+    "--layout-sticky-start-offset": `${start}px`,
+    "--layout-sticky-end-offset": `${end}px`,
   };
 }
 
@@ -77,11 +78,7 @@ const isStuckStart = computed(() => startState.value === "before-viewport");
 const isStuckEnd = computed(() => endState.value === "after-viewport");
 const isStuck = computed(() => isStuckStart.value || isStuckEnd.value);
 
-const id = useId();
-useStickyElement(id);
-
 const state = useDataString(() => ({
-  [id]: true,
   scrolling: !isStuck.value,
   stuck: isStuck.value,
   start: isStuckStart.value,
@@ -89,21 +86,18 @@ const state = useDataString(() => ({
 }));
 
 const self = useTemplateRef<HTMLElement>("self");
-const { width, height } = useElementSize(
-  self,
-  { width: 0, height: 0 },
-  { box: "content-box" },
-);
-const direction = useScrollDirection();
-const size = useCssVar(
-  `--layout-sticky-${id}-size`,
-  toRef(useNearestViewportElement()),
-);
-watchEffect(() => {
-  size.value = `${toValue(direction) === "vertical" ? height.value : width.value}px`;
+const { width, height } = useElementSize(self, undefined, {
+  box: "content-box",
 });
+const direction = useScrollDirection();
+const size = computed(() =>
+  toValue(direction) === "vertical" ? height.value : width.value,
+);
 
-const style = computed(() => stickyStyle(stick));
+const offsets = useStickyElement(size);
+const style = computed(() =>
+  stickyStyle(stick, offsets.value.start, offsets.value.end),
+);
 </script>
 
 <template>
@@ -183,50 +177,14 @@ const style = computed(() => stickyStyle(stick));
   initial-value: 0;
 }
 
-@property --layout-sticky-peer-start {
-  syntax: "<length>";
-  inherits: true;
-  initial-value: 0;
-}
-
-@property --layout-sticky-peer-end {
-  syntax: "<length>";
-  inherits: true;
-  initial-value: 0;
-}
-
-@property --layout-sticky-start-offset-sum {
-  syntax: "<length>";
-  inherits: false;
-  initial-value: 0;
-}
-
-@property --layout-sticky-end-offset-sum {
-  syntax: "<length>";
-  inherits: false;
-  initial-value: 0;
-}
-
 @layer layout.component {
   .layout-sticky {
-    --layout-sticky-start-offset-sum: calc(
-      var(--layout-sticky-start-offset) + var(--layout-sticky-peer-start)
-    );
-    --layout-sticky-end-offset-sum: calc(
-      var(--layout-sticky-end-offset) + var(--layout-sticky-peer-end)
-    );
-
     position: sticky;
 
     [data-viewport~="vertical"] & {
       inline-size: 100%;
-      inset-block: var(
-          --layout-sticky-start,
-          var(--layout-sticky-start-offset-sum)
-        )
-        var(--layout-sticky-end, var(--layout-sticky-end-offset-sum));
-
-      /* without unsetting this, sticky elements in horizontal scroll boxes would force inlines to wrap on them */
+      inset-block: var(--layout-sticky-start, var(--layout-sticky-start-offset))
+        var(--layout-sticky-end, var(--layout-sticky-end-offset));
       inset-inline: initial;
     }
 
@@ -234,16 +192,16 @@ const style = computed(() => stickyStyle(stick));
       inline-size: unset;
       inset-inline: var(
           --layout-sticky-start,
-          var(--layout-sticky-start-offset-sum)
+          var(--layout-sticky-start-offset)
         )
-        var(--layout-sticky-end, var(--layout-sticky-end-offset-sum));
+        var(--layout-sticky-end, var(--layout-sticky-end-offset));
       inset-block: initial;
     }
   }
 
   .layout-sticky-edge {
-    --layout-sticky-start-offset-sum: inherit;
-    --layout-sticky-end-offset-sum: inherit;
+    --layout-sticky-start-offset: inherit;
+    --layout-sticky-end-offset: inherit;
 
     position: absolute;
     pointer-events: none;
@@ -254,12 +212,12 @@ const style = computed(() => stickyStyle(stick));
       inline-size: auto;
 
       &[data-edge="start"] {
-        inset-block: calc(-1 * var(--layout-sticky-start-offset-sum)) auto;
+        inset-block: calc(-1 * var(--layout-sticky-start-offset)) auto;
         inset-inline: 0;
       }
 
       &[data-edge="end"] {
-        inset-block: auto calc(-1 * var(--layout-sticky-end-offset-sum));
+        inset-block: auto calc(-1 * var(--layout-sticky-end-offset));
         inset-inline: 0;
       }
     }
@@ -269,12 +227,12 @@ const style = computed(() => stickyStyle(stick));
       inline-size: 1px;
 
       &[data-edge="start"] {
-        inset-inline: calc(-1 * var(--layout-sticky-start-offset-sum)) auto;
+        inset-inline: calc(-1 * var(--layout-sticky-start-offset)) auto;
         inset-block: 0;
       }
 
       &[data-edge="end"] {
-        inset-inline: auto calc(-1 * var(--layout-sticky-end-offset-sum));
+        inset-inline: auto calc(-1 * var(--layout-sticky-end-offset));
         inset-block: 0;
       }
     }

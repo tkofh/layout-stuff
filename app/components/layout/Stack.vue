@@ -50,7 +50,7 @@ const LayoutPrimitive = InternalLayoutPrimitive;
 <style>
 @layer layout.component {
   .layout-stack {
-    max-inline-size: 100%;
+    inline-size: 100%;
     display: block flex;
     flex-flow: column nowrap;
     gap: var(--layout-space-current);
