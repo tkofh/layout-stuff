@@ -75,8 +75,6 @@ class Child<I, O> {
   readonly input: Readonly<Ref<I>>;
   readonly output: ShallowRef<O> | null;
 
-  // readonly #info: ChildInfo<I>;
-
   constructor(
     context: ChildrenContext<I, O>,
     uid: number,
@@ -146,7 +144,7 @@ class ChildrenContext<I, O = never> {
     watch(
       updateTrigger,
       () => {
-        const incoming = [] as Array<Child<I, O>>;
+        const children = [] as Array<Child<I, O>>;
         const peerLists = new Map<number, Array<Child<I, O>>>();
         let depth = 0;
 
@@ -178,23 +176,17 @@ class ChildrenContext<I, O = never> {
 
             if (
               !needsUpdate &&
-              !value.compare(this.children.value[incoming.length])
+              !value.compare(this.children.value[children.length])
             ) {
               needsUpdate = true;
             }
 
-            incoming.push(value);
+            children.push(value);
           }
         }
 
         if (needsUpdate) {
-          children.value = incoming;
-          const incomingInfo: Array<Child<I, O>> = [];
-          for (const ref of incoming) {
-            incomingInfo.push(ref);
-          }
-
-          children.value = incomingInfo;
+          this.children.value = children;
         }
       },
       { flush: "pre" },
