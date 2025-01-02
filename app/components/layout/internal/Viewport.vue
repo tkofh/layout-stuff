@@ -235,24 +235,37 @@ export function useVisibilityProbe<M extends VisibilityProbeMode>(
   return state as never;
 }
 
+export type ViewportEdge = "start" | "end" | "both" | "none";
+
+interface StickyElementInput {
+  size: number;
+  edge: ResponsiveMap<ViewportEdge>;
+}
+
 export interface StickyElement {
-  start: number;
-  end: number;
+  start: ResponsiveMap<number | "auto">;
+  end: ResponsiveMap<number | "auto">;
   startLayer: number;
   endLayer: number;
 }
 
 const defaultStickyElement = {
-  start: 0,
-  end: 0,
+  start: fillResponsive(normalizeResponsive(0)),
+  end: fillResponsive(normalizeResponsive(0)),
   startLayer: 100,
   endLayer: 99,
 } satisfies StickyElement;
 
-export function useStickyElement(size: MaybeRefOrGetter<number>) {
-  return useChild<number, StickyElement>(
+export function useStickyElement(
+  size: MaybeRefOrGetter<number>,
+  edge: MaybeRefOrGetter<ResponsiveValue<ViewportEdge>>,
+) {
+  return useChild<StickyElementInput, StickyElement>(
     "viewport",
-    size,
+    () => ({
+      size: toValue(size),
+      edge: fillResponsive(normalizeResponsive(toValue(edge))),
+    }),
     defaultStickyElement,
   );
 }
@@ -272,29 +285,50 @@ const viewport = useDataString(() => ({
   [direction]: true,
 }));
 
-useChildren<number, StickyElement>("viewport", (children) => {
-  const sizes = new Map<(typeof children)[number], number>();
-
-  for (const child of children) {
-    sizes.set(child, toValue(child.input));
-  }
-
+useChildren<StickyElementInput, StickyElement>("viewport", (children) => {
   for (const [index, child] of children.entries()) {
-    const element = {
-      start: 0,
-      end: 0,
+    const edge = fillResponsive(normalizeResponsive(child.input.value.edge));
+
+    const before = Array.from(child.before());
+    const after = Array.from(child.after());
+
+    const start = mapResponsive(edge, (value, breakpoint) => {
+      if (value === "end" || value === "none") {
+        return "auto";
+      }
+
+      let offset = 0;
+      for (const other of before) {
+        const { edge, size } = other.input.value;
+        if (edge[breakpoint] === "start" || edge[breakpoint] === "both") {
+          offset += size;
+        }
+      }
+
+      return offset;
+    });
+    const end = mapResponsive(edge, (value, breakpoint) => {
+      if (value === "start" || value === "none") {
+        return "auto";
+      }
+
+      let offset = 0;
+      for (const other of after) {
+        const { edge, size } = other.input.value;
+        if (edge[breakpoint] === "end" || edge[breakpoint] === "both") {
+          offset += size;
+        }
+      }
+
+      return offset;
+    });
+
+    child.output!.value = {
+      start,
+      end,
       startLayer: children.length * 2 - index,
       endLayer: index + 1,
-    } satisfies StickyElement;
-
-    for (const other of child.before()) {
-      element.start += sizes.get(other) ?? 0;
-    }
-    for (const other of child.after()) {
-      element.end += sizes.get(other) ?? 0;
-    }
-
-    child.output!.value = element;
+    };
   }
 });
 </script>

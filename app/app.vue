@@ -38,10 +38,10 @@
                 />
               </LayoutBox>
               <AppScrollContent :section :sub-section />
-              <LayoutSticky stick="both">
+              <LayoutSticky :stick="{ mobile: 'both', tablet: 'start' }">
                 <LayoutBox aspect="1" width="80">
                   <AppPlaceholder
-                    :label="`Section ${section}.${subSection} Sidebar`"
+                    :label="`Section ${section}.${subSection} Sidebar Responsive Stickiness`"
                   />
                 </LayoutBox>
               </LayoutSticky>

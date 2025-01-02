@@ -19,6 +19,13 @@ export interface ResponsiveMap<V> {
   readonly desktop: V;
 }
 
+export interface MutableResponsiveMap<V> {
+  mobile: V;
+  tablet: V;
+  laptop: V;
+  desktop: V;
+}
+
 export type BreakpointName = "mobile" | "tablet" | "laptop" | "desktop";
 export type BreakpointsExcept<B extends BreakpointName> = Exclude<
   BreakpointName,
@@ -40,6 +47,13 @@ export type ResponsiveMapWithKey<K extends string, V> = K extends unknown
       [P in `${K}-${BreakpointsExcept<"mobile">}`]: V;
     }
   : never;
+
+export const breakpoints = new Set([
+  "mobile",
+  "tablet",
+  "laptop",
+  "desktop",
+] as const);
 
 export function isSparseResponsiveMap<V>(
   value: unknown,
@@ -91,12 +105,12 @@ export function compactResponsive<V>(
 
 export function responsiveToAttributes<const K extends string, V>(
   key: K,
-  input: PartialResponsiveMap<V>,
-): PartialResponsiveMapWithKey<K, V>;
-export function responsiveToAttributes<const K extends string, V>(
-  key: K,
   input: ResponsiveMap<V>,
 ): ResponsiveMapWithKey<K, V>;
+export function responsiveToAttributes<const K extends string, V>(
+  key: K,
+  input: PartialResponsiveMap<V>,
+): PartialResponsiveMapWithKey<K, V>;
 export function responsiveToAttributes<V>(
   key: string,
   input: PartialResponsiveMap<V> | ResponsiveMap<V>,
@@ -112,13 +126,13 @@ export function responsiveToAttributes<V>(
 type ValueMapper<V> = (value: V, key: BreakpointName) => unknown;
 
 export function mapResponsive<V, M extends ValueMapper<NoInfer<V>>>(
-  input: PartialResponsiveMap<V>,
-  mapper: M,
-): PartialResponsiveMap<ReturnType<M>>;
-export function mapResponsive<V, M extends ValueMapper<NoInfer<V>>>(
   input: ResponsiveMap<V>,
   mapper: M,
 ): ResponsiveMap<ReturnType<M>>;
+export function mapResponsive<V, M extends ValueMapper<NoInfer<V>>>(
+  input: PartialResponsiveMap<V>,
+  mapper: M,
+): PartialResponsiveMap<ReturnType<M>>;
 export function mapResponsive<V>(
   input: PartialResponsiveMap<V> | ResponsiveMap<V>,
   mapper: ValueMapper<V>,

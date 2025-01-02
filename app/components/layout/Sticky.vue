@@ -9,45 +9,33 @@ import {
   useScrollDirection,
   useStickyElement,
   type StickyElement,
+  type ViewportEdge,
 } from "~/components/layout/internal/Viewport.vue";
 import { useDataString } from "~/composables/useDataString";
 
-const startLookup = {
-  start: undefined,
-  end: "auto",
-  both: undefined,
-  none: "auto",
-} as const;
-const endLookup = {
-  start: "auto",
-  end: undefined,
-  both: undefined,
-  none: "auto",
-} as const;
-
-function stickyStyle(edge: ViewportEdge, element: StickyElement) {
-  const filled = fillResponsive(normalizeResponsive(edge));
+function stickyStyle(element: StickyElement) {
   return {
     ...responsiveToAttributes(
       "--layout-sticky-start",
-      mapResponsive(filled, (value) => startLookup[value]),
+      mapResponsive(compactResponsive(element.start), (value) =>
+        value === "auto" ? "auto" : `${value}px`,
+      ),
     ),
     ...responsiveToAttributes(
       "--layout-sticky-end",
-      mapResponsive(filled, (value) => endLookup[value]),
+      mapResponsive(compactResponsive(element.end), (value) =>
+        value === "auto" ? "auto" : `${value}px`,
+      ),
     ),
-    "--layout-sticky-start-offset": `${element.start}px`,
-    "--layout-sticky-end-offset": `${element.end}px`,
+
     "--layout-sticky-start-layer": element.startLayer,
     "--layout-sticky-end-layer": element.endLayer,
   };
 }
 
-export type ViewportEdge = ResponsiveValue<"start" | "end" | "both" | "none">;
-
 export interface LayoutStickyProps
   extends PrimitiveProps<ContentSectioningTag> {
-  stick?: ViewportEdge;
+  stick?: ResponsiveValue<ViewportEdge>;
 }
 
 export interface LayoutStickySlots {
@@ -97,8 +85,8 @@ const size = computed(() =>
   toValue(direction) === "vertical" ? height.value : width.value,
 );
 
-const offsets = useStickyElement(size);
-const style = computed(() => stickyStyle(stick, offsets.value));
+const offsets = useStickyElement(size, stick);
+const style = computed(() => stickyStyle(offsets.value));
 </script>
 
 <template>
@@ -137,8 +125,9 @@ const style = computed(() => stickyStyle(stick, offsets.value));
 }
 
 @property --layout-sticky-start-current {
-  syntax: "*";
+  syntax: "<length> | auto";
   inherits: false;
+  initial-value: auto;
 }
 
 @property --layout-sticky-end {
@@ -162,8 +151,9 @@ const style = computed(() => stickyStyle(stick, offsets.value));
 }
 
 @property --layout-sticky-end-current {
-  syntax: "*";
+  syntax: "<length> | auto";
   inherits: false;
+  initial-value: auto;
 }
 
 @property --layout-sticky-start-offset {
@@ -192,6 +182,32 @@ const style = computed(() => stickyStyle(stick, offsets.value));
 
 @layer layout.component {
   .layout-sticky {
+    --layout-sticky-start-current: var(--layout-sticky-start);
+    --layout-sticky-end-current: var(--layout-sticky-end);
+    --layout-sticky-start-offset: var(--layout-sticky-start-current);
+    --layout-sticky-end-offset: var(--layout-sticky-end-current);
+
+    @container style(--media-gte-tablet: true) {
+      --layout-sticky-start-tablet: var(--layout-sticky-start);
+      --layout-sticky-end-tablet: var(--layout-sticky-end);
+      --layout-sticky-start-current: var(--layout-sticky-start-tablet);
+      --layout-sticky-end-current: var(--layout-sticky-end-tablet);
+    }
+
+    @container style(--media-gte-laptop: true) {
+      --layout-sticky-start-laptop: var(--layout-sticky-start-tablet);
+      --layout-sticky-end-laptop: var(--layout-sticky-end-tablet);
+      --layout-sticky-start-current: var(--layout-sticky-start-laptop);
+      --layout-sticky-end-current: var(--layout-sticky-end-laptop);
+    }
+
+    @container style(--media-gte-desktop: true) {
+      --layout-sticky-start-desktop: var(--layout-sticky-start-laptop);
+      --layout-sticky-end-desktop: var(--layout-sticky-end-laptop);
+      --layout-sticky-start-current: var(--layout-sticky-start-desktop);
+      --layout-sticky-end-current: var(--layout-sticky-end-desktop);
+    }
+
     position: sticky;
     z-index: 1;
 
@@ -205,18 +221,15 @@ const style = computed(() => stickyStyle(stick, offsets.value));
 
     [data-viewport~="vertical"] & {
       inline-size: 100%;
-      inset-block: var(--layout-sticky-start, var(--layout-sticky-start-offset))
-        var(--layout-sticky-end, var(--layout-sticky-end-offset));
+      inset-block: var(--layout-sticky-start-current)
+        var(--layout-sticky-end-current);
       inset-inline: initial;
     }
 
     [data-viewport~="horizontal"] & {
       inline-size: unset;
-      inset-inline: var(
-          --layout-sticky-start,
-          var(--layout-sticky-start-offset)
-        )
-        var(--layout-sticky-end, var(--layout-sticky-end-offset));
+      inset-inline: var(--layout-sticky-start-current)
+        var(--layout-sticky-end-current);
       inset-block: initial;
     }
   }
@@ -238,7 +251,7 @@ const style = computed(() => stickyStyle(stick, offsets.value));
         inset-inline: 0;
       }
 
-      &[data-edge="end"] {
+      &[data-edge="end"]:not([data-edge~="start"]) {
         inset-block: auto calc(-1 * var(--layout-sticky-end-offset));
         inset-inline: 0;
       }
@@ -253,7 +266,7 @@ const style = computed(() => stickyStyle(stick, offsets.value));
         inset-block: 0;
       }
 
-      &[data-edge="end"] {
+      &[data-edge="end"]:not([data-edge~="start"]) {
         inset-inline: auto calc(-1 * var(--layout-sticky-end-offset));
         inset-block: 0;
       }
