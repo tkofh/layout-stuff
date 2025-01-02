@@ -105,6 +105,10 @@ const style = computed(() => ({
 
 <style>
 @layer layout.component {
+  .layout-scroll-area {
+    overflow: clip;
+  }
+
   .layout-scroll {
     --layout-viewport-block-size: 100%;
     --layout-viewport-inline-size: 100%;
@@ -115,18 +119,15 @@ const style = computed(() => ({
 
     &[data-viewport~="horizontal"] {
       container-type: inline-size;
+
+      & > .layout-scroll-area {
+        min-inline-size: fit-content;
+        min-block-size: 100%;
+      }
     }
 
     &[data-viewport~="vertical"] {
       container-type: size;
-    }
-  }
-
-  .layout-scroll-area {
-    overflow: clip;
-
-    [data-viewport~="horizontal"] & {
-      min-block-size: 100%;
     }
   }
 }

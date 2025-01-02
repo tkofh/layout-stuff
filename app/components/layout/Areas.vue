@@ -279,7 +279,7 @@ const style = computed(() => ({
     contain: paint;
     grid-template: auto minmax(max-content, 1fr) auto / auto 1fr auto;
 
-    [data-viewport~="vertical"] & {
+    .layout-viewport[data-viewport~="vertical"] & {
       &
         > .layout-sticky:is(
           [data-layout-area~="left"],
@@ -296,7 +296,7 @@ const style = computed(() => ({
       }
     }
 
-    [data-viewport~="horizontal"] & {
+    .layout-viewport[data-viewport~="horizontal"] & {
       &
         > .layout-sticky:is(
           [data-layout-area~="top"],
@@ -377,7 +377,7 @@ const style = computed(() => ({
     &.layout-sticky {
       z-index: 1;
 
-      [data-viewport~="vertical"]
+      .layout-viewport[data-viewport~="vertical"]
         &:is([data-layout-area~="left"], [data-layout-area~="right"]) {
         --layout-sticky-area-size: calc(
           var(--layout-scroll-viewport) - var(--layout-sticky-clip-start) -
@@ -396,7 +396,7 @@ const style = computed(() => ({
       }
 
       /* stylelint-disable-next-line no-descending-specificity */
-      [data-viewport~="horizontal"]
+      .layout-viewport[data-viewport~="horizontal"]
         &:is([data-layout-area~="top"], [data-layout-area~="bottom"]) {
         --layout-sticky-area-size: calc(
           var(--layout-scroll-viewport) - var(--layout-sticky-clip-start) -
