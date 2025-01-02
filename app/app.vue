@@ -30,7 +30,7 @@
               <LayoutBox
                 v-for="index in 5"
                 :key="`index-${index}`"
-                aspect-ratio="1"
+                aspect="1"
                 width="80"
               >
                 <AppPlaceholder
@@ -39,7 +39,7 @@
               </LayoutBox>
               <AppScrollContent :section :sub-section />
               <LayoutSticky stick="both">
-                <LayoutBox aspect-ratio="1" width="80">
+                <LayoutBox aspect="1" width="80">
                   <AppPlaceholder
                     :label="`Section ${section}.${subSection} Sidebar`"
                   />
@@ -48,7 +48,7 @@
               <LayoutBox
                 v-for="index in 5"
                 :key="`index-${index}`"
-                aspect-ratio="1"
+                aspect="1"
                 width="80"
               >
                 <AppPlaceholder
@@ -67,7 +67,7 @@
           </LayoutSticky>
         </LayoutStack>
       </LayoutStack>
-      <LayoutBox aspect-ratio="1 / 2">
+      <LayoutBox aspect="1 / 2">
         <AppPlaceholder label="Filler" />
       </LayoutBox>
     </LayoutStack>

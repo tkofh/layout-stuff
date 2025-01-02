@@ -8,7 +8,7 @@
         :height
         :min-height
         :max-height
-        :aspect-ratio
+        :aspect
       >
         <RadixScrollAreaViewport ref="viewport" as-child :style>
           <LayoutPrimitive ref="area" :as class="layout-scroll-area">

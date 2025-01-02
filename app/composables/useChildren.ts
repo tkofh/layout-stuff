@@ -140,7 +140,6 @@ class ChildrenContext<I, O = never> {
     watch(
       updateTrigger,
       () => {
-        const start = performance.now();
         const children = [] as Array<Child<I, O>>;
         const siblingLists = new Map<number, Array<Child<I, O>>>();
         let depth = 0;
@@ -180,7 +179,6 @@ class ChildrenContext<I, O = never> {
         }
 
         this.children.value = children;
-        console.log("update", performance.now() - start);
       },
       { flush: "pre" },
     );

@@ -4,7 +4,7 @@ import type { PrimitiveSlots } from "~/components/layout/internal/Primitive.vue"
 function sizeStyles(
   width: Size | undefined,
   height: Size | undefined,
-  aspectRatio: AspectRatio | undefined,
+  aspect: AspectRatio | undefined,
   minWidth: Size | undefined,
   minHeight: Size | undefined,
   maxWidth: ResponsiveValue<SizeKey | "none"> | undefined,
@@ -12,7 +12,7 @@ function sizeStyles(
 ): Record<string, string> {
   const hasWidth = width !== undefined;
   const hasHeight = height !== undefined;
-  const hasAspectRatio = aspectRatio !== undefined;
+  const hasAspectRatio = aspect !== undefined;
 
   const output = {} as Record<string, string>;
 
@@ -48,7 +48,7 @@ function sizeStyles(
       output,
       responsiveToAttributes(
         "--layout-size-aspect",
-        normalizeResponsive(aspectRatio),
+        normalizeResponsive(aspect),
       ),
     );
   }
@@ -113,7 +113,7 @@ export type AspectRatio = ResponsiveValue<
 export interface SizedProps {
   width?: Size;
   height?: Size;
-  aspectRatio?: AspectRatio;
+  aspect?: AspectRatio;
   minWidth?: Size;
   minHeight?: Size;
   maxWidth?: ResponsiveValue<SizeKey | "none">;
@@ -131,7 +131,7 @@ const style = computed(() =>
   sizeStyles(
     props.width,
     props.height,
-    props.aspectRatio,
+    props.aspect,
     props.minWidth,
     props.minHeight,
     props.maxWidth,

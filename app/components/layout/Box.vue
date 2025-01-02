@@ -2,7 +2,7 @@
   <LayoutSized
     :width
     :height
-    :aspect-ratio
+    :aspect
     :min-width
     :min-height
     :max-width
