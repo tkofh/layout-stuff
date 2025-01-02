@@ -17,7 +17,7 @@
           :key="`section-${section}.${subSection}`"
           space="md"
         >
-          <LayoutSticky stick="start">
+          <LayoutSticky stick="both">
             <LayoutBox height="20">
               <AppPlaceholder
                 :label="`Section ${section}.${subSection} Header`"
@@ -25,13 +25,40 @@
             </LayoutBox>
           </LayoutSticky>
 
-          <LayoutBox aspect-ratio="2">
-            <AppPlaceholder
-              :label="`Section ${section}.${subSection} Content`"
-            />
-          </LayoutBox>
+          <LayoutScroll direction="horizontal">
+            <LayoutInline space="md">
+              <LayoutBox
+                v-for="index in 5"
+                :key="`index-${index}`"
+                aspect-ratio="1"
+                width="80"
+              >
+                <AppPlaceholder
+                  :label="`Section ${section}.${subSection} Content ${index}`"
+                />
+              </LayoutBox>
+              <AppScrollContent :section :sub-section />
+              <LayoutSticky stick="both">
+                <LayoutBox aspect-ratio="1" width="80">
+                  <AppPlaceholder
+                    :label="`Section ${section}.${subSection} Sidebar`"
+                  />
+                </LayoutBox>
+              </LayoutSticky>
+              <LayoutBox
+                v-for="index in 5"
+                :key="`index-${index}`"
+                aspect-ratio="1"
+                width="80"
+              >
+                <AppPlaceholder
+                  :label="`Section ${section}.${subSection} Content ${index}`"
+                />
+              </LayoutBox>
+            </LayoutInline>
+          </LayoutScroll>
 
-          <LayoutSticky stick="start">
+          <LayoutSticky stick="both">
             <LayoutBox height="20">
               <AppPlaceholder
                 :label="`Section ${section}.${subSection} Footer`"
@@ -48,9 +75,9 @@
 </template>
 
 <script setup lang="ts">
-const sections = 2;
+const sections = 1;
 
-const subSections = 3;
+const subSections = 1;
 </script>
 
 <style>

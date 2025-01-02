@@ -251,7 +251,7 @@ const defaultStickyElement = {
 
 export function useStickyElement(size: MaybeRefOrGetter<number>) {
   return useChild<number, StickyElement>(
-    "sticky-neighbors",
+    "viewport",
     size,
     defaultStickyElement,
   );
@@ -268,14 +268,11 @@ export type ViewportSlots = PrimitiveSlots;
 const { direction = "vertical" } = defineProps<ViewportProps>();
 defineSlots<ViewportSlots>();
 
-const id = useId();
-
 const viewport = useDataString(() => ({
-  [id]: true,
   [direction]: true,
 }));
 
-useChildren<number, StickyElement>("sticky-neighbors", (children) => {
+useChildren<number, StickyElement>("viewport", (children) => {
   const sizes = new Map<(typeof children)[number], number>();
 
   for (const child of children) {

@@ -4,27 +4,36 @@ import {
   isVNode,
   type ShallowRef,
   type VNodeArrayChildren,
-  type VNodeChild,
 } from "vue";
 
 export type ChildrenMapper<I, O> = (
   children: ReadonlyArray<Child<I, O>>,
 ) => void;
 
-function* walkChildren<I, O>(
-  child: VNodeChild,
-  lookup: Map<number, Child<I, O>>,
-  skipSubtreesOf: ReadonlySet<ConcreteComponent>,
-): Generator<Child<I, O> | number> {
-  const queue = Array.isArray(child) ? Array.from(child) : [child];
-  let index = 0;
+function* vnodeChildrenOf(vnode: VNode): Generator<VNode> {
+  if (vnode.component?.subTree) {
+    yield vnode.component.subTree;
+  } else if (Array.isArray(vnode.children)) {
+    for (const child of vnode.children) {
+      if (isVNode(child)) {
+        yield child;
+      }
+    }
+  }
+}
+
+function* walkChildComponents(
+  root: VNode,
+  shouldTraverseChildrenOf: (vnode: VNode) => boolean,
+): Generator<ComponentInternalInstance | number> {
+  const queue = Array.from(vnodeChildrenOf(root));
   let depth = 0;
   const riseAt = [] as VNodeArrayChildren;
 
   while (queue.length) {
     const vnode = queue.shift();
 
-    if (vnode === null) {
+    if (vnode == null) {
       break;
     }
 
@@ -34,41 +43,27 @@ function* walkChildren<I, O>(
       yield depth;
     }
 
-    if (Array.isArray(vnode) && vnode.length > 0) {
-      queue.unshift(...vnode);
+    if (vnode.component) {
+      yield vnode.component;
+    }
 
+    if (!shouldTraverseChildrenOf(vnode)) {
       continue;
     }
 
-    if (isVNode(vnode)) {
-      if (vnode.component) {
-        const element = lookup.get(vnode.component.uid);
-        if (element) {
-          yield element;
-          index++;
-        }
-        if (index === lookup.size) {
-          break;
-        }
-
-        if (vnode === child || !skipSubtreesOf.has(vnode.component.type)) {
-          queue.unshift(vnode.component.subTree);
-        }
-      } else if (Array.isArray(vnode.children) && vnode.children.length > 0) {
-        if (queue[0] != null) {
-          riseAt.unshift(queue[0]);
-        }
-        depth++;
-        yield depth;
-
-        queue.unshift(...vnode.children);
+    if (typeof vnode.type === "string") {
+      if (queue[0] != null) {
+        riseAt.unshift(queue[0]);
       }
+      depth++;
+      yield depth;
     }
+    queue.unshift(...vnodeChildrenOf(vnode));
   }
 }
 
 class Child<I, O> {
-  peers: ReadonlyArray<Child<I, O>> = [];
+  siblings: ReadonlyArray<Child<I, O>> = [];
   ancestors: ReadonlyArray<Child<I, O>> = [];
 
   readonly uid: number;
@@ -98,6 +93,12 @@ class Child<I, O> {
     for (const ref of this.ancestors) {
       yield ref;
     }
+    for (const ref of this.siblings) {
+      if (ref === this) {
+        break;
+      }
+      yield ref;
+    }
   }
 
   *after() {
@@ -105,8 +106,8 @@ class Child<I, O> {
     let current: Child<I, O> | undefined = this;
 
     while (current != null) {
-      for (const ref of current.peers.slice(
-        current.peers.indexOf(current) + 1,
+      for (const ref of current.siblings.slice(
+        current.siblings.indexOf(current) + 1,
       )) {
         yield ref;
       }
@@ -129,65 +130,57 @@ class ChildrenContext<I, O = never> {
   readonly #storage: Map<number, Child<I, O>>;
   readonly #updateTrigger: ShallowRef<number>;
 
-  readonly #skipSubtreesOf: ReadonlySet<ConcreteComponent>;
-
   constructor(vm: ComponentInternalInstance, map?: ChildrenMapper<I, O>) {
     this.#vm = vm;
-    this.#skipSubtreesOf = new Set([vm.type]);
 
     this.#storage = new Map<number, Child<I, O>>();
-
     const children = shallowRef<ReadonlyArray<Child<I, O>>>([]);
-
     const updateTrigger = shallowRef(0);
 
     watch(
       updateTrigger,
       () => {
+        const start = performance.now();
         const children = [] as Array<Child<I, O>>;
-        const peerLists = new Map<number, Array<Child<I, O>>>();
+        const siblingLists = new Map<number, Array<Child<I, O>>>();
         let depth = 0;
 
-        let needsUpdate = false;
-
-        for (const value of walkChildren(
+        for (const value of walkChildComponents(
           this.#vm.vnode,
-          this.#storage,
-          this.#skipSubtreesOf,
+          (vnode) =>
+            vnode !== this.#vm.vnode && vnode.component?.type !== this.#vm.type,
         )) {
           if (typeof value === "number") {
             if (value < depth) {
-              peerLists.delete(depth);
+              siblingLists.delete(depth);
             }
             depth = value;
-          } else {
-            const peers = peerLists.get(depth) ?? [];
-            peerLists.set(depth, peers);
-            peers.push(value);
-            value.peers = peers;
+          } else if (this.#storage.has(value.uid)) {
+            const child = this.#storage.get(value.uid) as Child<I, O>;
 
-            const ancestors = [] as Array<Child<I, O>>;
-            for (const list of peerLists.values()) {
-              if (list !== peers) {
+            const siblings = siblingLists.get(depth) ?? [];
+            siblingLists.set(depth, siblings);
+            siblings.push(child);
+            child.siblings = siblings;
+
+            const ancestors: Array<Child<I, O>> = [];
+            for (const list of siblingLists.values()) {
+              if (list !== siblings) {
                 ancestors.push(...list);
               }
             }
-            value.ancestors = ancestors;
+            child.ancestors = ancestors;
 
-            if (
-              !needsUpdate &&
-              !value.compare(this.children.value[children.length])
-            ) {
-              needsUpdate = true;
+            children.push(child);
+
+            if (children.length === this.#storage.size) {
+              break;
             }
-
-            children.push(value);
           }
         }
 
-        if (needsUpdate) {
-          this.children.value = children;
-        }
+        this.children.value = children;
+        console.log("update", performance.now() - start);
       },
       { flush: "pre" },
     );
