@@ -44,15 +44,15 @@ export function useNearestViewport() {
   return inject(NEAREST_VIEWPORT, null);
 }
 
-export function useNearestViewportElement(): MaybeComputedElementRef {
-  const nearest = useNearestViewport();
-
-  if (nearest === null) {
-    return () => (import.meta.client ? document.body : null);
-  }
-  return () =>
-    unrefElement(nearest) ?? (import.meta.client ? document.body : null);
-}
+// export function useNearestViewportElement(): MaybeComputedElementRef {
+//   const nearest = useNearestViewport();
+//
+//   if (nearest === null) {
+//     return () => (import.meta.client ? document.body : null);
+//   }
+//   return () =>
+//     unrefElement(nearest) ?? (import.meta.client ? document.body : null);
+// }
 
 export type VisibilityProbeMode = "root" | "nearest" | "all";
 
@@ -235,11 +235,12 @@ export function useVisibilityProbe<M extends VisibilityProbeMode>(
   return state as never;
 }
 
-export type ViewportEdge = "start" | "end" | "both" | "none";
+export type ViewportEdgeName = "start" | "end" | "both" | "none" | "cross";
+export type ViewportEdge = ResponsiveValue<ViewportEdgeName>;
 
-interface StickyElementInput {
+export interface StickyElementInput {
   size: number;
-  edge: ResponsiveMap<ViewportEdge>;
+  edge: ResponsiveMap<ViewportEdgeName>;
 }
 
 export interface StickyElement {
@@ -258,7 +259,7 @@ const defaultStickyElement = {
 
 export function useStickyElement(
   size: MaybeRefOrGetter<number>,
-  edge: MaybeRefOrGetter<ResponsiveValue<ViewportEdge>>,
+  edge: MaybeRefOrGetter<ViewportEdge>,
 ) {
   return useChild<StickyElementInput, StickyElement>(
     "viewport",
@@ -298,10 +299,22 @@ useChildren<StickyElementInput, StickyElement>("viewport", (children) => {
       }
 
       let offset = 0;
+
       for (const other of before) {
         const { edge, size } = other.input.value;
         if (edge[breakpoint] === "start" || edge[breakpoint] === "both") {
           offset += size;
+        }
+      }
+
+      if (value === "cross") {
+        for (const other of child.siblings.slice(
+          child.siblings.indexOf(child) + 1,
+        )) {
+          const { edge, size } = other.input.value;
+          if (edge[breakpoint] === "start" || edge[breakpoint] === "both") {
+            offset += size;
+          }
         }
       }
 
@@ -313,10 +326,23 @@ useChildren<StickyElementInput, StickyElement>("viewport", (children) => {
       }
 
       let offset = 0;
+
       for (const other of after) {
         const { edge, size } = other.input.value;
         if (edge[breakpoint] === "end" || edge[breakpoint] === "both") {
           offset += size;
+        }
+      }
+
+      if (value === "cross") {
+        for (const other of child.siblings.slice(
+          0,
+          child.siblings.indexOf(child),
+        )) {
+          const { edge, size } = other.input.value;
+          if (edge[breakpoint] === "end" || edge[breakpoint] === "both") {
+            offset += size;
+          }
         }
       }
 

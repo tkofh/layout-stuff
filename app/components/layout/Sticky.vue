@@ -35,7 +35,7 @@ function stickyStyle(element: StickyElement) {
 
 export interface LayoutStickyProps
   extends PrimitiveProps<ContentSectioningTag> {
-  stick?: ResponsiveValue<ViewportEdge>;
+  stick?: ViewportEdge;
 }
 
 export interface LayoutStickySlots {
@@ -55,42 +55,23 @@ const LayoutPrimitive = InternalLayoutPrimitive;
 
 const attrs = useAttrs();
 
-const areaType = computed(() => {
+const stick = computed(() => {
   if (
     "data-layout-area" in attrs &&
     typeof attrs["data-layout-area"] === "string"
   ) {
-    if (attrs["data-layout-area"].includes("main")) {
-      return "main";
-    } else if (attrs["data-layout-area"].includes("inline")) {
-      return "inline";
-    }
-  }
-  return "none";
-});
-const stick = computed(() => {
-  if (areaType.value === "main") {
-    if (import.meta.dev) {
-      if (props.stick != null && props.stick !== "none") {
-        console.warn(
-          "LayoutSticky should not be the root element of a LayoutArea's main area.",
-        );
-      }
+    const area = attrs["data-layout-area"];
+    if (area === "main") {
+      return "none";
     }
 
-    return "none";
-  }
-
-  if (areaType.value === "inline") {
-    if (import.meta.dev) {
-      if (props.stick != null && props.stick !== "both") {
-        console.warn(
-          "LayoutSticky should must stick to both edges when used in an inline area.",
-        );
-      }
+    if (area.includes("inline")) {
+      return "cross";
+    } else if (area.includes("top") || area.includes("left")) {
+      return "start";
+    } else if (area.includes("bottom") || area.includes("right")) {
+      return "end";
     }
-
-    return "both";
   }
 
   return props.stick ?? "start";
@@ -100,12 +81,14 @@ const edge = useResponsiveValue(stick);
 
 const start = useTemplateRef<HTMLElement>("start");
 const startState = useVisibilityProbe(start, "nearest", {
-  enabled: () => edge.value === "start" || edge.value === "both",
+  enabled: () =>
+    edge.value === "start" || edge.value === "both" || edge.value === "cross",
 });
 
 const end = useTemplateRef<HTMLElement>("end");
 const endState = useVisibilityProbe(end, "nearest", {
-  enabled: () => edge.value === "end" || edge.value === "both",
+  enabled: () =>
+    edge.value === "end" || edge.value === "both" || edge.value === "cross",
 });
 
 const isStuckStart = computed(() => startState.value === "before-viewport");
@@ -117,20 +100,17 @@ const state = useDataString(() => ({
   stuck: isStuck.value,
   start: isStuckStart.value,
   end: isStuckEnd.value,
+  cross: edge.value === "cross",
 }));
 
 const self = useTemplateRef<HTMLElement>("self");
 const { width, height } = useElementSize(self, undefined, {
   box: "content-box",
 });
-const direction = useScrollDirection();
+const direction = toRef(useScrollDirection());
 
 const size = computed(() =>
-  areaType.value === "inline"
-    ? 0
-    : toValue(direction) === "vertical"
-      ? height.value
-      : width.value,
+  direction.value === "vertical" ? height.value : width.value,
 );
 
 const offsets = useStickyElement(size, stick);
@@ -144,6 +124,7 @@ const style = computed(() => stickyStyle(offsets.value));
     class="layout-sticky"
     :style
     :data-sticky="state"
+    :data-scroll-direction="direction"
   >
     <span ref="start" class="layout-sticky-edge" data-edge="start" />
     <slot :is-stuck :is-stuck-start :is-stuck-end />
@@ -228,12 +209,41 @@ const style = computed(() => stickyStyle(offsets.value));
   initial-value: 0;
 }
 
+@property --layout-sticky-cross-clip-start {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0;
+}
+
+@property --layout-sticky-cross-clip-end {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0;
+}
+
+@property --layout-sticky-cross-size {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0;
+}
+
 @layer layout.component {
   .layout-sticky {
     --layout-sticky-start-current: var(--layout-sticky-start);
     --layout-sticky-end-current: var(--layout-sticky-end);
     --layout-sticky-start-offset: var(--layout-sticky-start-current);
     --layout-sticky-end-offset: var(--layout-sticky-end-current);
+    --layout-sticky-cross-size: calc(
+      var(--layout-scroll-viewport) -
+        max(
+          var(--layout-sticky-start-offset),
+          var(--layout-sticky-cross-clip-start)
+        ) -
+        max(
+          var(--layout-sticky-end-offset),
+          var(--layout-sticky-cross-clip-end)
+        )
+    );
 
     @container style(--media-gte-tablet: true) {
       --layout-sticky-start-tablet: var(--layout-sticky-start);
@@ -267,18 +277,33 @@ const style = computed(() => stickyStyle(offsets.value));
       z-index: var(--layout-sticky-end-layer);
     }
 
-    [data-viewport~="vertical"] & {
+    [data-layout-mounted="false"] &[data-sticky~="inline"] {
+      z-index: -1;
+
+      --layout-sticky-start-current: auto;
+      --layout-sticky-end-current: auto;
+    }
+
+    &[data-scroll-direction~="vertical"] {
       inline-size: 100%;
       inset-block: var(--layout-sticky-start-current)
         var(--layout-sticky-end-current);
-      inset-inline: initial;
+
+      &[data-sticky~="cross"] {
+        block-size: var(--layout-sticky-cross-size);
+        margin-block-end: calc(-1 * var(--layout-sticky-cross-size));
+      }
     }
 
-    [data-viewport~="horizontal"] & {
-      inline-size: unset;
+    &[data-scroll-direction~="horizontal"] {
+      block-size: 100%;
       inset-inline: var(--layout-sticky-start-current)
         var(--layout-sticky-end-current);
-      inset-block: initial;
+
+      &[data-sticky~="cross"] {
+        inline-size: var(--layout-sticky-cross-size);
+        margin-inline-end: calc(-1 * var(--layout-sticky-cross-size));
+      }
     }
   }
 

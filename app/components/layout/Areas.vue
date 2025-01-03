@@ -211,18 +211,6 @@ const style = computed(() => ({
   initial-value: 0;
 }
 
-@property --layout-sticky-clip-start {
-  syntax: "<length>";
-  inherits: false;
-  initial-value: 0;
-}
-
-@property --layout-sticky-clip-end {
-  syntax: "<length>";
-  inherits: false;
-  initial-value: 0;
-}
-
 @property --layout-sticky-area-size {
   syntax: "<length>";
   inherits: false;
@@ -245,26 +233,48 @@ const style = computed(() => ({
 
     &[data-scroll-direction="vertical"]
       > .layout-sticky[data-layout-area~="x"] {
-      --layout-sticky-clip-start: max(
-        var(--layout-sticky-start-offset),
-        var(--layout-areas-size-top) - var(--layout-scroll-start)
-      );
-      --layout-sticky-clip-end: max(
-        var(--layout-sticky-end-offset),
-        var(--layout-areas-size-bottom) - var(--layout-scroll-end)
-      );
+      &:not([data-layout-area~="start"]) {
+        --layout-sticky-cross-clip-start: calc(
+          var(--layout-areas-size-top) - var(--layout-scroll-start)
+        );
+      }
+
+      &:not([data-layout-area~="end"]) {
+        --layout-sticky-cross-clip-end: calc(
+          var(--layout-areas-size-bottom) - var(--layout-scroll-end)
+        );
+      }
+
+      &[data-layout-area~="start"] {
+        --layout-sticky-start-current: 0px;
+      }
+
+      &[data-layout-area~="end"] {
+        --layout-sticky-end-current: 0px;
+      }
     }
 
     &[data-scroll-direction~="horizontal"]
       > .layout-sticky[data-layout-area~="y"] {
-      --layout-sticky-clip-start: max(
-        var(--layout-sticky-start-offset),
-        var(--layout-areas-size-left) - var(--layout-scroll-start)
-      );
-      --layout-sticky-clip-end: max(
-        var(--layout-sticky-end-offset),
-        var(--layout-areas-size-right) - var(--layout-scroll-end)
-      );
+      &:not([data-layout-area~="start"]) {
+        --layout-sticky-cross-clip-start: calc(
+          var(--layout-areas-size-left) - var(--layout-scroll-start)
+        );
+      }
+
+      &:not([data-layout-area~="end"]) {
+        --layout-sticky-cross-clip-end: calc(
+          var(--layout-areas-size-right) - var(--layout-scroll-end)
+        );
+      }
+
+      &[data-layout-area~="start"] {
+        --layout-sticky-start-current: 0px;
+      }
+
+      &[data-layout-area~="end"] {
+        --layout-sticky-end-current: 0px;
+      }
     }
   }
 
@@ -326,53 +336,6 @@ const style = computed(() => ({
     &[data-layout-area="main"] {
       grid-row: 2 / 3;
       grid-column: 2 / 3;
-    }
-
-    &.layout-sticky {
-      --layout-sticky-area-size: calc(
-        var(--layout-scroll-viewport) - var(--layout-sticky-clip-start) -
-          var(--layout-sticky-clip-end)
-      );
-
-      z-index: 1;
-
-      [data-scroll-direction="vertical"] > & {
-        &[data-layout-area~="x"] {
-          block-size: var(--layout-sticky-area-size);
-          margin-block-end: calc(-1 * var(--layout-sticky-area-size));
-
-          [data-layout-mounted="false"] & {
-            z-index: -1;
-
-            --layout-sticky-start: unset !important;
-            --layout-sticky-end: unset !important;
-          }
-        }
-
-        &[data-layout-area~="y"] {
-          inline-size: 100%;
-        }
-      }
-
-      [data-scroll-direction="horizontal"] > & {
-        &[data-layout-area~="y"] {
-          inline-size: var(--layout-sticky-area-size);
-          margin-inline-end: calc(-1 * var(--layout-sticky-area-size));
-
-          /* stylelint-disable-next-line no-descending-specificity */
-          [data-layout-mounted="false"] & {
-            z-index: -1;
-
-            --layout-sticky-start: unset !important;
-            --layout-sticky-end: unset !important;
-          }
-        }
-
-        /* stylelint-disable-next-line no-descending-specificity */
-        &[data-layout-area~="x"] {
-          block-size: 100%;
-        }
-      }
     }
   }
 }

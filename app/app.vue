@@ -1,16 +1,9 @@
 <template>
   <LayoutRoot>
     <LayoutScroll direction="horizontal">
-      <LayoutAreas large="x" small="y">
+      <LayoutAreas large="right" small="bottom">
         <template #left>
-          <LayoutSticky
-            :stick="{
-              mobile: 'none',
-              tablet: 'start',
-              laptop: 'none',
-              desktop: 'start',
-            }"
-          >
+          <LayoutSticky>
             <LayoutBox width="40">
               <AppPlaceholder label="Left" />
             </LayoutBox>
