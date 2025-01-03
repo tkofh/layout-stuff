@@ -15,7 +15,7 @@ export function provideScrollDirection(
   provide(SCROLL_DIRECTION, direction);
 }
 
-export function useScrollDirection() {
+export function useScrollDirection(): MaybeRefOrGetter<ScrollDirection> {
   return inject(SCROLL_DIRECTION, "vertical");
 }
 

@@ -1,10 +1,15 @@
 <template>
-  <LayoutPrimitive :as class="layout-areas" :style>
+  <LayoutPrimitive
+    :as
+    class="layout-areas"
+    :style
+    :data-scroll-direction="direction"
+  >
     <RadixSlot
       v-if="slots.top"
       ref="top"
       class="layout-area"
-      :data-layout-area="areas.top"
+      :data-layout-area="topArea"
     >
       <slot name="top" />
     </RadixSlot>
@@ -12,7 +17,7 @@
       v-if="slots.left"
       ref="left"
       class="layout-area"
-      :data-layout-area="areas.left"
+      :data-layout-area="leftArea"
     >
       <slot name="left" />
     </RadixSlot>
@@ -20,7 +25,7 @@
       v-if="slots.right"
       ref="right"
       class="layout-area"
-      :data-layout-area="areas.right"
+      :data-layout-area="rightArea"
     >
       <slot name="right" />
     </RadixSlot>
@@ -33,7 +38,7 @@
       v-if="slots.bottom"
       ref="bottom"
       class="layout-area"
-      :data-layout-area="areas.bottom"
+      :data-layout-area="bottomArea"
     >
       <slot name="bottom" />
     </RadixSlot>
@@ -44,6 +49,7 @@
 import InternalLayoutPrimitive, {
   type PrimitiveProps,
 } from "~/components/layout/internal/Primitive.vue";
+import { useScrollDirection } from "~/components/layout/internal/Viewport.vue";
 
 const defaultSmall = {
   top: "bottom",
@@ -81,121 +87,79 @@ const slots = defineSlots<LayoutAreasSlots>();
 
 const LayoutPrimitive = InternalLayoutPrimitive;
 
-const areas = computed(() => {
-  const large = props.large ?? "top";
-  const small =
-    props.small == null || props.small === large
-      ? defaultSmall[large]
-      : props.small;
+const direction = toRef(useScrollDirection());
 
-  if (large === "x") {
-    return {
-      top: "top",
-      right: "right start end",
-      bottom: "bottom",
-      left: "left start end",
-    };
-  } else if (large === "y") {
-    return {
-      top: "top start end",
-      right: "right",
-      bottom: "bottom start end",
-      left: "left",
-    };
-  } else if (large === "top") {
-    if (small === "left") {
-      return {
-        top: "top start end",
-        right: "right end",
-        bottom: "bottom start",
-        left: "left",
-      };
-    } else if (small === "bottom") {
-      return {
-        top: "top start end",
-        right: "right end",
-        bottom: "bottom",
-        left: "left end",
-      };
-    } else {
-      return {
-        top: "top start end",
-        right: "right",
-        bottom: "bottom end",
-        left: "left end",
-      };
-    }
-  } else if (large === "right") {
-    if (small === "top") {
-      return {
-        top: "top",
-        right: "right start end",
-        bottom: "bottom start",
-        left: "left start",
-      };
-    } else if (small === "left") {
-      return {
-        top: "top start",
-        right: "right start end",
-        bottom: "bottom start",
-        left: "left",
-      };
-    } else {
-      return {
-        top: "top start",
-        right: "right start end",
-        bottom: "bottom",
-        left: "left end",
-      };
-    }
-  } else if (large === "bottom") {
-    if (small === "right") {
-      return {
-        top: "top end",
-        right: "right",
-        bottom: "bottom start end",
-        left: "left start",
-      };
-    } else if (small === "top") {
-      return {
-        top: "top",
-        right: "right start",
-        bottom: "bottom start end",
-        left: "left start",
-      };
-    } else {
-      return {
-        top: "top start",
-        right: "right start",
-        bottom: "bottom start end",
-        left: "left",
-      };
-    }
-  } else {
-    if (small === "bottom") {
-      return {
-        top: "top end",
-        right: "right end",
-        bottom: "bottom",
-        left: "left start end",
-      };
-    } else if (small === "right") {
-      return {
-        top: "top end",
-        right: "right",
-        bottom: "bottom end",
-        left: "left start end",
-      };
-    } else {
-      return {
-        top: "top",
-        right: "right start",
-        bottom: "bottom end",
-        left: "left start end",
-      };
-    }
-  }
-});
+const large = computed(() => (props.large ?? "top") as AreaLarge);
+const small = computed(
+  () =>
+    (props.small == null || props.small === large.value
+      ? defaultSmall[large.value]
+      : props.small) as AreaSmall<L>,
+);
+
+const leftArea = useDataString(() => ({
+  left: true,
+  x: true,
+  start:
+    large.value === "x" ||
+    large.value === "left" ||
+    (large.value === "bottom" && small.value !== "left") ||
+    (large.value === "right" && small.value === "top"),
+  end:
+    large.value === "x" ||
+    large.value === "left" ||
+    (large.value === "top" && small.value !== "left") ||
+    (large.value === "right" && small.value === "bottom"),
+  inline: direction.value === "vertical",
+}));
+
+const rightArea = useDataString(() => ({
+  right: true,
+  x: true,
+  start:
+    large.value === "x" ||
+    large.value === "right" ||
+    (large.value === "bottom" && small.value !== "right") ||
+    (large.value === "left" && small.value === "top"),
+  end:
+    large.value === "x" ||
+    large.value === "right" ||
+    (large.value === "top" && small.value !== "right") ||
+    (large.value === "left" && small.value === "bottom"),
+  inline: direction.value === "vertical",
+}));
+
+const topArea = useDataString(() => ({
+  top: true,
+  y: true,
+  start:
+    large.value === "y" ||
+    large.value === "top" ||
+    (large.value === "right" && small.value !== "top") ||
+    (large.value === "bottom" && small.value === "left"),
+  end:
+    large.value === "y" ||
+    large.value === "top" ||
+    (large.value === "left" && small.value !== "top") ||
+    (large.value === "bottom" && small.value === "right"),
+  inline: direction.value === "horizontal",
+}));
+
+const bottomArea = useDataString(() => ({
+  bottom: true,
+  y: true,
+  start:
+    large.value === "y" ||
+    large.value === "bottom" ||
+    (large.value === "right" && small.value !== "bottom") ||
+    (large.value === "top" && small.value === "left"),
+  end:
+    large.value === "y" ||
+    large.value === "bottom" ||
+    (large.value === "left" && small.value !== "bottom") ||
+    (large.value === "top" && small.value === "right"),
+  inline: direction.value === "horizontal",
+}));
 
 const top = useTemplateRef("top");
 const right = useTemplateRef("right");
@@ -279,38 +243,28 @@ const style = computed(() => ({
     contain: paint;
     grid-template: auto minmax(max-content, 1fr) auto / auto 1fr auto;
 
-    .layout-viewport[data-viewport~="vertical"] & {
-      &
-        > .layout-sticky:is(
-          [data-layout-area~="left"],
-          [data-layout-area~="right"]
-        ) {
-        --layout-sticky-clip-start: max(
-          var(--layout-sticky-start-offset),
-          var(--layout-areas-size-top) - var(--layout-scroll-start)
-        );
-        --layout-sticky-clip-end: max(
-          var(--layout-sticky-end-offset),
-          var(--layout-areas-size-bottom) - var(--layout-scroll-end)
-        );
-      }
+    &[data-scroll-direction="vertical"]
+      > .layout-sticky[data-layout-area~="x"] {
+      --layout-sticky-clip-start: max(
+        var(--layout-sticky-start-offset),
+        var(--layout-areas-size-top) - var(--layout-scroll-start)
+      );
+      --layout-sticky-clip-end: max(
+        var(--layout-sticky-end-offset),
+        var(--layout-areas-size-bottom) - var(--layout-scroll-end)
+      );
     }
 
-    .layout-viewport[data-viewport~="horizontal"] & {
-      &
-        > .layout-sticky:is(
-          [data-layout-area~="top"],
-          [data-layout-area~="bottom"]
-        ) {
-        --layout-sticky-clip-start: max(
-          var(--layout-sticky-start-offset),
-          var(--layout-areas-size-left) - var(--layout-scroll-start)
-        );
-        --layout-sticky-clip-end: max(
-          var(--layout-sticky-end-offset),
-          var(--layout-areas-size-right) - var(--layout-scroll-end)
-        );
-      }
+    &[data-scroll-direction~="horizontal"]
+      > .layout-sticky[data-layout-area~="y"] {
+      --layout-sticky-clip-start: max(
+        var(--layout-sticky-start-offset),
+        var(--layout-areas-size-left) - var(--layout-scroll-start)
+      );
+      --layout-sticky-clip-end: max(
+        var(--layout-sticky-end-offset),
+        var(--layout-areas-size-right) - var(--layout-scroll-end)
+      );
     }
   }
 
@@ -375,42 +329,48 @@ const style = computed(() => ({
     }
 
     &.layout-sticky {
+      --layout-sticky-area-size: calc(
+        var(--layout-scroll-viewport) - var(--layout-sticky-clip-start) -
+          var(--layout-sticky-clip-end)
+      );
+
       z-index: 1;
 
-      .layout-viewport[data-viewport~="vertical"]
-        &:is([data-layout-area~="left"], [data-layout-area~="right"]) {
-        --layout-sticky-area-size: calc(
-          var(--layout-scroll-viewport) - var(--layout-sticky-clip-start) -
-            var(--layout-sticky-clip-end)
-        );
+      [data-scroll-direction="vertical"] > & {
+        &[data-layout-area~="x"] {
+          block-size: var(--layout-sticky-area-size);
+          margin-block-end: calc(-1 * var(--layout-sticky-area-size));
 
-        block-size: var(--layout-sticky-area-size);
-        margin-block-end: calc(-1 * var(--layout-sticky-area-size));
+          [data-layout-mounted="false"] & {
+            z-index: -1;
 
-        [data-layout-mounted="false"] & {
-          z-index: -1;
+            --layout-sticky-start: unset !important;
+            --layout-sticky-end: unset !important;
+          }
+        }
 
-          --layout-sticky-start: unset !important;
-          --layout-sticky-end: unset !important;
+        &[data-layout-area~="y"] {
+          inline-size: 100%;
         }
       }
 
-      /* stylelint-disable-next-line no-descending-specificity */
-      .layout-viewport[data-viewport~="horizontal"]
-        &:is([data-layout-area~="top"], [data-layout-area~="bottom"]) {
-        --layout-sticky-area-size: calc(
-          var(--layout-scroll-viewport) - var(--layout-sticky-clip-start) -
-            var(--layout-sticky-clip-end)
-        );
+      [data-scroll-direction="horizontal"] > & {
+        &[data-layout-area~="y"] {
+          inline-size: var(--layout-sticky-area-size);
+          margin-inline-end: calc(-1 * var(--layout-sticky-area-size));
 
-        inline-size: var(--layout-sticky-area-size);
-        margin-inline-end: calc(-1 * var(--layout-sticky-area-size));
+          /* stylelint-disable-next-line no-descending-specificity */
+          [data-layout-mounted="false"] & {
+            z-index: -1;
 
-        [data-layout-mounted="false"] & {
-          z-index: -1;
+            --layout-sticky-start: unset !important;
+            --layout-sticky-end: unset !important;
+          }
+        }
 
-          --layout-sticky-start: unset !important;
-          --layout-sticky-end: unset !important;
+        /* stylelint-disable-next-line no-descending-specificity */
+        &[data-layout-area~="x"] {
+          block-size: 100%;
         }
       }
     }

@@ -48,12 +48,55 @@ export interface LayoutStickySlots {
 </script>
 
 <script setup lang="ts">
-const { stick = "both" } = defineProps<LayoutStickyProps>();
+const props = defineProps<LayoutStickyProps>();
 defineSlots<LayoutStickySlots>();
 
 const LayoutPrimitive = InternalLayoutPrimitive;
 
-const edge = useResponsiveValue(() => stick);
+const attrs = useAttrs();
+
+const areaType = computed(() => {
+  if (
+    "data-layout-area" in attrs &&
+    typeof attrs["data-layout-area"] === "string"
+  ) {
+    if (attrs["data-layout-area"].includes("main")) {
+      return "main";
+    } else if (attrs["data-layout-area"].includes("inline")) {
+      return "inline";
+    }
+  }
+  return "none";
+});
+const stick = computed(() => {
+  if (areaType.value === "main") {
+    if (import.meta.dev) {
+      if (props.stick != null && props.stick !== "none") {
+        console.warn(
+          "LayoutSticky should not be the root element of a LayoutArea's main area.",
+        );
+      }
+    }
+
+    return "none";
+  }
+
+  if (areaType.value === "inline") {
+    if (import.meta.dev) {
+      if (props.stick != null && props.stick !== "both") {
+        console.warn(
+          "LayoutSticky should must stick to both edges when used in an inline area.",
+        );
+      }
+    }
+
+    return "both";
+  }
+
+  return props.stick ?? "start";
+});
+
+const edge = useResponsiveValue(stick);
 
 const start = useTemplateRef<HTMLElement>("start");
 const startState = useVisibilityProbe(start, "nearest", {
@@ -81,8 +124,13 @@ const { width, height } = useElementSize(self, undefined, {
   box: "content-box",
 });
 const direction = useScrollDirection();
+
 const size = computed(() =>
-  toValue(direction) === "vertical" ? height.value : width.value,
+  areaType.value === "inline"
+    ? 0
+    : toValue(direction) === "vertical"
+      ? height.value
+      : width.value,
 );
 
 const offsets = useStickyElement(size, stick);

@@ -1,6 +1,5 @@
 import {
   type ComponentInternalInstance,
-  type ConcreteComponent,
   isVNode,
   type ShallowRef,
   type VNodeArrayChildren,
@@ -186,7 +185,9 @@ class ChildrenContext<I, O = never> {
     if (map !== undefined) {
       watchEffect(
         () => {
-          map(children.value);
+          if (children.value.length > 0) {
+            map(children.value);
+          }
         },
         { flush: "post" },
       );
