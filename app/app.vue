@@ -1,11 +1,14 @@
 <template>
   <LayoutRoot>
-    <LayoutTiles columns="3" align-y="bottom">
+    <LayoutTiles
+      :columns="{ mobile: 2, tablet: 3, laptop: 4 }"
+      align-y="bottom"
+    >
       <LayoutBox height="40">
         <AppPlaceholder label="1" />
       </LayoutBox>
       <LayoutBox height="20">
-        <AppPlaceholder label="1" />
+        <AppPlaceholder label="2" />
       </LayoutBox>
     </LayoutTiles>
   </LayoutRoot>
