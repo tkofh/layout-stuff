@@ -1,34 +1,14 @@
-<template>
-  <LayoutFrame
-    as="slot"
-    :frame
-    :frame-y
-    :frame-x
-    :frame-top
-    :frame-right
-    :frame-bottom
-    :frame-left
-  >
-    <LayoutContainer :align :align-y :space :collapse-below>
-      <LayoutWrap role="unwrappable">
-        <LayoutPrimitive :as class="layout-inline">
-          <slot />
-        </LayoutPrimitive>
-      </LayoutWrap>
-    </LayoutContainer>
-  </LayoutFrame>
-</template>
-
 <script lang="ts">
 import InternalLayoutPrimitive, {
   type PrimitiveSlots,
   type PrimitiveProps,
 } from "~/components/layout/internal/Primitive.vue";
+import type { Align2dProps } from "~/components/layout/internal/Aligned.vue";
 import InternalLayoutContainer, {
-  type Align2dProps,
   type SpaceProps,
   type CollapseBelowProps,
-} from "~/components/layout/internal/Container.vue";
+  type ReverseProps,
+} from "~/components/layout/internal/Container2.vue";
 import InternalLayoutFrame, {
   type FrameProps,
 } from "~/components/layout/internal/Frame.vue";
@@ -39,7 +19,8 @@ export interface InlineProps
     FrameProps,
     CollapseBelowProps,
     SpaceProps,
-    Align2dProps {}
+    Align2dProps,
+    ReverseProps {}
 
 export type InlineSlots = PrimitiveSlots;
 </script>
@@ -54,14 +35,32 @@ const LayoutPrimitive = InternalLayoutPrimitive;
 const LayoutWrap = InternalLayoutWrap;
 </script>
 
-<style>
-@layer layout.component {
-  .layout-inline {
-    display: block flex;
-    flex-flow: var(--layout-collapse-below-direction-current) wrap;
-    gap: var(--layout-space-current);
-    justify-content: var(--layout-align-current);
-    align-items: var(--layout-align-y-current);
-  }
-}
-</style>
+<template>
+  <LayoutFrame
+    as="slot"
+    :frame
+    :frame-y
+    :frame-x
+    :frame-top
+    :frame-right
+    :frame-bottom
+    :frame-left
+  >
+    <LayoutContainer
+      axis="row"
+      items="independent"
+      :collapse-below
+      :align
+      :align-y
+      :space
+      :reverse
+      wrap
+    >
+      <LayoutWrap role="unwrappable">
+        <LayoutPrimitive :as class="layout-inline">
+          <slot />
+        </LayoutPrimitive>
+      </LayoutWrap>
+    </LayoutContainer>
+  </LayoutFrame>
+</template>

@@ -2,8 +2,8 @@
 import type { PrimitiveSlots } from "~/components/layout/internal/Primitive.vue";
 
 function sizeStyles(
-  width: Size | undefined,
-  height: Size | undefined,
+  width: Size | undefined | false,
+  height: Size | undefined | false,
   aspect: AspectRatio | undefined,
   minWidth: Size | undefined,
   minHeight: Size | undefined,
@@ -17,28 +17,35 @@ function sizeStyles(
   const output = {} as Record<string, string>;
 
   if (hasWidth) {
-    Object.assign(
-      output,
-      responsiveToAttributes(
-        "--layout-size-width",
-        mapResponsive(normalizeResponsive(width), (value) => SIZE_SCALE[value]),
-      ),
-    );
+    if (width !== false) {
+      Object.assign(
+        output,
+        responsiveToAttributes(
+          "--layout-size-width",
+          mapResponsive(
+            normalizeResponsive(width),
+            (value) => SIZE_SCALE[value],
+          ),
+        ),
+      );
+    }
   } else if (!hasHeight || !hasAspectRatio) {
     Object.assign(output, { "--layout-size-width": "100%" });
   }
 
   if (hasHeight) {
-    Object.assign(
-      output,
-      responsiveToAttributes(
-        "--layout-size-height",
-        mapResponsive(
-          normalizeResponsive(height),
-          (value) => SIZE_SCALE[value],
+    if (height !== false) {
+      Object.assign(
+        output,
+        responsiveToAttributes(
+          "--layout-size-height",
+          mapResponsive(
+            normalizeResponsive(height),
+            (value) => SIZE_SCALE[value],
+          ),
         ),
-      ),
-    );
+      );
+    }
   } else if (!hasWidth || !hasAspectRatio) {
     Object.assign(output, { "--layout-size-height": "100%" });
   }
@@ -120,11 +127,17 @@ export interface SizedProps {
   maxHeight?: ResponsiveValue<SizeKey | "none">;
 }
 
+export interface DisableableSizedProps
+  extends Omit<SizedProps, "width" | "height"> {
+  width?: Size | false;
+  height?: Size | false;
+}
+
 export type SizedSlots = PrimitiveSlots;
 </script>
 
 <script setup lang="ts">
-const props = defineProps<SizedProps>();
+const props = defineProps<DisableableSizedProps>();
 defineSlots<SizedSlots>();
 
 const style = computed(() =>

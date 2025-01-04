@@ -33,6 +33,9 @@ export type BreakpointsExcept<B extends BreakpointName> = Exclude<
 >;
 export type ResponsiveValue<V> = V | SparseResponsiveMap<V>;
 
+export type ExtractResponsiveValue<V extends PartialResponsiveMap<unknown>> =
+  V extends PartialResponsiveMap<infer T> ? T : never;
+
 export type PartialResponsiveMapWithKey<K extends string, V> = K extends unknown
   ? Omit<
       { [P in K]: V } & {
@@ -55,6 +58,25 @@ export const breakpoints = new Set([
   "desktop",
 ] as const);
 
+export function smallerBreakpoint(
+  a: BreakpointName,
+  b: BreakpointName,
+): BreakpointName {
+  if (a === "mobile" || b === "mobile") {
+    return "mobile";
+  }
+
+  if (a === "tablet" || b === "tablet") {
+    return "tablet";
+  }
+
+  if (a === "laptop" || b === "laptop") {
+    return "laptop";
+  }
+
+  return "desktop";
+}
+
 export function isSparseResponsiveMap<V>(
   value: unknown,
 ): value is SparseResponsiveMap<V> {
@@ -67,9 +89,18 @@ export function normalizeResponsive<V>(
   if (isSparseResponsiveMap(input)) {
     return {
       mobile: input.mobile,
-      tablet: input.tablet ?? null,
-      laptop: input.laptop ?? null,
-      desktop: input.desktop ?? null,
+      tablet:
+        input.tablet == null || input.tablet === input.mobile
+          ? null
+          : input.tablet,
+      laptop:
+        input.laptop == null || input.laptop === input.tablet
+          ? null
+          : input.laptop,
+      desktop:
+        input.desktop == null || input.desktop === input.laptop
+          ? null
+          : input.desktop,
     };
   }
 
@@ -123,24 +154,36 @@ export function responsiveToAttributes<V>(
   };
 }
 
-type ValueMapper<V> = (value: V, key: BreakpointName) => unknown;
+type ValueMapper<V extends PartialResponsiveMap<unknown>> = (
+  value: ExtractResponsiveValue<V>,
+  key: BreakpointName,
+) => unknown;
 
-export function mapResponsive<V, M extends ValueMapper<NoInfer<V>>>(
-  input: ResponsiveMap<V>,
-  mapper: M,
-): ResponsiveMap<ReturnType<M>>;
-export function mapResponsive<V, M extends ValueMapper<NoInfer<V>>>(
-  input: PartialResponsiveMap<V>,
-  mapper: M,
-): PartialResponsiveMap<ReturnType<M>>;
+export function mapResponsive<
+  V extends ResponsiveMap<unknown>,
+  M extends ValueMapper<V>,
+>(input: V, mapper: M): ResponsiveMap<ReturnType<M>>;
+export function mapResponsive<
+  V extends PartialResponsiveMap<unknown>,
+  M extends ValueMapper<V>,
+>(input: V, mapper: M): PartialResponsiveMap<ReturnType<M>>;
 export function mapResponsive<V>(
-  input: PartialResponsiveMap<V> | ResponsiveMap<V>,
-  mapper: ValueMapper<V>,
+  input: PartialResponsiveMap<V>,
+  mapper: ValueMapper<PartialResponsiveMap<V>>,
 ) {
   return {
-    mobile: mapper(input.mobile, "mobile"),
-    tablet: input.tablet === null ? null : mapper(input.tablet, "tablet"),
-    laptop: input.laptop === null ? null : mapper(input.laptop, "laptop"),
-    desktop: input.desktop === null ? null : mapper(input.desktop, "desktop"),
+    mobile: mapper(input.mobile as Exclude<V, null>, "mobile"),
+    tablet:
+      input.tablet === null
+        ? null
+        : mapper(input.tablet as Exclude<V, null>, "tablet"),
+    laptop:
+      input.laptop === null
+        ? null
+        : mapper(input.laptop as Exclude<V, null>, "laptop"),
+    desktop:
+      input.desktop === null
+        ? null
+        : mapper(input.desktop as Exclude<V, null>, "desktop"),
   };
 }

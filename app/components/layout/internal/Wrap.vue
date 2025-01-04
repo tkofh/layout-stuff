@@ -30,6 +30,7 @@ defineSlots<WrapSlots>();
   .layout-should-unwrap.layout-unwrappable {
     max-inline-size: 100%;
     inline-size: max-content;
+    min-inline-size: 100%;
   }
 }
 </style>

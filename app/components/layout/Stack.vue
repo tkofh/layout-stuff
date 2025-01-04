@@ -1,21 +1,3 @@
-<template>
-  <LayoutFrame
-    :frame
-    :frame-y
-    :frame-x
-    :frame-top
-    :frame-right
-    :frame-bottom
-    :frame-left
-  >
-    <LayoutContainer :align :space>
-      <LayoutPrimitive :as class="layout-stack">
-        <slot />
-      </LayoutPrimitive>
-    </LayoutContainer>
-  </LayoutFrame>
-</template>
-
 <script lang="ts">
 import InternalLayoutPrimitive, {
   type PrimitiveProps,
@@ -24,10 +6,10 @@ import InternalLayoutPrimitive, {
 import InternalLayoutFrame, {
   type FrameProps,
 } from "~/components/layout/internal/Frame.vue";
+import type { AlignProps } from "~/components/layout/internal/Aligned.vue";
 import InternalLayoutContainer, {
-  type AlignProps,
   type SpaceProps,
-} from "~/components/layout/internal/Container.vue";
+} from "~/components/layout/internal/Container2.vue";
 
 export interface StackProps
   extends PrimitiveProps,
@@ -47,15 +29,20 @@ const LayoutContainer = InternalLayoutContainer;
 const LayoutPrimitive = InternalLayoutPrimitive;
 </script>
 
-<style>
-@layer layout.component {
-  .layout-stack {
-    inline-size: 100%;
-    display: block flex;
-    flex-flow: column nowrap;
-    gap: var(--layout-space-current);
-    justify-content: flex-start;
-    align-items: var(--layout-align-current);
-  }
-}
-</style>
+<template>
+  <LayoutFrame
+    :frame
+    :frame-y
+    :frame-x
+    :frame-top
+    :frame-right
+    :frame-bottom
+    :frame-left
+  >
+    <LayoutContainer axis="column" :align :space>
+      <LayoutPrimitive :as class="layout-stack">
+        <slot />
+      </LayoutPrimitive>
+    </LayoutContainer>
+  </LayoutFrame>
+</template>

@@ -71,3 +71,31 @@ export const SPACE_SCALE = {
 
 export type SpaceKey = "none" | "xs" | "sm" | "md" | "lg" | "xl";
 export type Space = ResponsiveValue<SpaceKey>;
+
+export const RELATIVE_SIZE_SCALE = {
+  "0": "0%",
+  "1/5": "20%",
+  "1/4": "25%",
+  "1/3": "calc(100% / 3)",
+  "2/5": "40%",
+  "1/2": "50%",
+  "3/5": "60%",
+  "2/3": "calc(100% / 1.5)",
+  "3/4": "75%",
+  "4/5": "80%",
+  full: "100%",
+} as const;
+
+export type RelativeSizeKey =
+  | "0"
+  | "1/5"
+  | "1/4"
+  | "1/3"
+  | "2/5"
+  | "1/2"
+  | "3/5"
+  | "2/3"
+  | "3/4"
+  | "4/5"
+  | "full";
+export type RelativeSize = ResponsiveValue<RelativeSizeKey>;
