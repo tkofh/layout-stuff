@@ -118,18 +118,20 @@ const style = computed(() => stickyStyle(offsets.value));
 </script>
 
 <template>
-  <LayoutPrimitive
-    ref="self"
-    :as
-    class="layout-sticky"
-    :style
-    :data-sticky="state"
-    :data-scroll-direction="direction"
-  >
-    <span ref="start" class="layout-sticky-edge" data-edge="start" />
-    <slot :is-stuck :is-stuck-start :is-stuck-end />
-    <span ref="end" class="layout-sticky-edge" data-edge="end" />
-  </LayoutPrimitive>
+  <LayoutVisibility :hide-above :hide-below>
+    <LayoutPrimitive
+      ref="self"
+      :as
+      class="layout-sticky"
+      :style
+      :data-sticky="state"
+      :data-scroll-direction="direction"
+    >
+      <span ref="start" class="layout-sticky-edge" data-edge="start" />
+      <slot :is-stuck :is-stuck-start :is-stuck-end />
+      <span ref="end" class="layout-sticky-edge" data-edge="end" />
+    </LayoutPrimitive>
+  </LayoutVisibility>
 </template>
 
 <style>
@@ -319,33 +321,31 @@ const style = computed(() => stickyStyle(offsets.value));
     pointer-events: none;
     z-index: -1;
 
-    [data-viewport~="vertical"] & {
+    [data-scroll-direction~="vertical"] > & {
       block-size: 1px;
       inline-size: auto;
+      inset-inline: 0;
 
       &[data-edge="start"] {
         inset-block: calc(-1 * var(--layout-sticky-start-offset)) auto;
-        inset-inline: 0;
       }
 
       &[data-edge="end"]:not([data-edge~="start"]) {
         inset-block: auto calc(-1 * var(--layout-sticky-end-offset));
-        inset-inline: 0;
       }
     }
 
-    [data-viewport~="horizontal"] & {
+    [data-scroll-direction~="horizontal"] > & {
       block-size: auto;
       inline-size: 1px;
+      inset-block: 0;
 
       &[data-edge="start"] {
         inset-inline: calc(-1 * var(--layout-sticky-start-offset)) auto;
-        inset-block: 0;
       }
 
       &[data-edge="end"]:not([data-edge~="start"]) {
         inset-inline: auto calc(-1 * var(--layout-sticky-end-offset));
-        inset-block: 0;
       }
     }
   }
