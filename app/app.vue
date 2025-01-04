@@ -1,16 +1,13 @@
 <template>
   <LayoutRoot>
-    <LayoutColumns align="right" collapse-below="laptop">
+    <LayoutColumns collapse-below="tablet">
       <LayoutColumn width="2/5" height="40">
         <AppPlaceholder label="2/5" />
       </LayoutColumn>
-      <LayoutColumn width="content" height="40">
+      <LayoutColumn width="content" height="40" hide-above="laptop">
         <LayoutBox height="40" aspect="2">
           <AppPlaceholder label="Content" />
         </LayoutBox>
-      </LayoutColumn>
-      <LayoutColumn width="1/5" height="40">
-        <AppPlaceholder label="1/5" />
       </LayoutColumn>
       <LayoutColumn width="fluid" height="40">
         <AppPlaceholder label="fluid" />

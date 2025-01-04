@@ -8,7 +8,6 @@ import InternalLayoutSized, {
   type SizedProps,
 } from "~/components/layout/internal/Sized.vue";
 import InternalLayoutAligned, {
-  type Align2dProps,
   type AlignedHorizontalAlignment,
 } from "~/components/layout/internal/Aligned.vue";
 import InternalLayoutFrame, {
@@ -33,7 +32,7 @@ function columnStyle(
 ) {
   const result = {
     ...responsiveToAttributes(
-      "--layout-column-width",
+      "--layout-size-width",
       compactResponsive(
         mapResponsive(
           fillResponsive(normalizeResponsive(width)),
@@ -220,32 +219,6 @@ const LayoutFlexible = InternalLayoutFlexible;
 </template>
 
 <style>
-@property --layout-column-width {
-  syntax: "*";
-  inherits: false;
-}
-
-@property --layout-column-width-tablet {
-  syntax: "*";
-  inherits: false;
-}
-
-@property --layout-column-width-laptop {
-  syntax: "*";
-  inherits: false;
-}
-
-@property --layout-column-width-desktop {
-  syntax: "*";
-  inherits: false;
-}
-
-@property --layout-column-width-current {
-  syntax: "<length-percentage> | min-content";
-  inherits: false;
-  initial-value: 0;
-}
-
 @property --layout-column-collapsed-display {
   syntax: "*";
   inherits: false;
@@ -269,14 +242,11 @@ const LayoutFlexible = InternalLayoutFlexible;
 
 @layer layout.init {
   .layout-column {
-    --layout-column-width-current: var(--layout-column-width);
     --layout-column-collapsed-display-current: var(
       --layout-column-collapsed-display
     );
 
     @container style(--media-gte-tablet: true) {
-      --layout-column-width-tablet: var(--layout-column-width);
-      --layout-column-width-current: var(--layout-column-width-tablet);
       --layout-column-collapsed-display-tablet: var(
         --layout-column-collapsed-display
       );
@@ -286,8 +256,6 @@ const LayoutFlexible = InternalLayoutFlexible;
     }
 
     @container style(--media-gte-laptop: true) {
-      --layout-column-width-laptop: var(--layout-column-width-tablet);
-      --layout-column-width-current: var(--layout-column-width-laptop);
       --layout-column-collapsed-display-laptop: var(
         --layout-column-collapsed-display-tablet
       );
@@ -295,18 +263,11 @@ const LayoutFlexible = InternalLayoutFlexible;
         --layout-column-collapsed-display-laptop
       );
     }
-
-    @container style(--media-gte-desktop: true) {
-      --layout-column-width-desktop: var(--layout-column-width-laptop);
-      --layout-column-width-current: var(--layout-column-width-desktop);
-    }
   }
 }
 
 @layer layout.component {
   .layout-column {
-    --layout-size-width: var(--layout-column-width-current);
-
     display: block flow-root;
     place-self: var(--layout-align-y-current, start)
       var(--layout-align-current, start);

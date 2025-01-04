@@ -9,10 +9,18 @@
 
 
 @layer layout {
-  @layer init component trait override;
+  @layer init {
+  }
+  @layer component {
+  }
+  @layer trait {
+  }
+  @layer override {
+  }
 }
 
 @layer app {
-  @layer trait component override;
+  @layer component {
+  }
 }
 
