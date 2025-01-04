@@ -123,7 +123,7 @@ const style = computed(() => {
 const data = useDataString(() => ({
   [axis]: true,
   [items]: true,
-  collapsable: collapseBelow !== "none",
+  collapsible: collapseBelow !== "none",
   [collapseBelow]: collapseBelow !== "none",
   reverse: (reverse as unknown) === "" ? true : Boolean(reverse),
   wrap: Boolean(wrap ?? axis === "row"),
@@ -209,7 +209,7 @@ const LayoutAligned = InternalLayoutAligned;
   initial-value: nowrap;
 }
 
-@layer layout.trait {
+@layer layout.init {
   .layout-container {
     --layout-space: unset;
     --layout-space-tablet: unset;
@@ -222,10 +222,43 @@ const LayoutAligned = InternalLayoutAligned;
     --layout-column-count-desktop: unset;
     --layout-column-count-current: var(--layout-column-count);
 
+    &[data-container~="row"][data-container~="independent"][data-container~="wrap"] {
+      --layout-container-wrap: wrap;
+    }
+
+    @container style(--media-gte-tablet: true) {
+      --layout-space-tablet: var(--layout-space);
+      --layout-space-current: var(--layout-space-tablet);
+      --layout-column-count-tablet: var(--layout-column-count);
+      --layout-column-count-current: var(--layout-column-count-tablet);
+
+      &[data-container~="row"][data-container~="independent"][data-container~="reverse"] {
+        --layout-container-row-direction: row-reverse;
+      }
+    }
+
+    @container style(--media-gte-laptop: true) {
+      --layout-space-laptop: var(--layout-space-tablet);
+      --layout-space-current: var(--layout-space-laptop);
+      --layout-column-count-laptop: var(--layout-column-count-tablet);
+      --layout-column-count-current: var(--layout-column-count-laptop);
+    }
+
+    @container style(--media-eq-desktop: true) {
+      --layout-space-desktop: var(--layout-space-laptop);
+      --layout-space-current: var(--layout-space-desktop);
+      --layout-column-count-desktop: var(--layout-column-count-laptop);
+      --layout-column-count-current: var(--layout-column-count-desktop);
+    }
+  }
+}
+
+@layer layout.trait {
+  .layout-container {
     &[data-container~="row"] {
       gap: var(--layout-space-current);
 
-      &[data-contaienr~="uniform"] {
+      &[data-container~="uniform"] {
         display: grid;
         grid-template-columns: repeat(var(--layout-column-count-current), 1fr);
       }
@@ -233,21 +266,48 @@ const LayoutAligned = InternalLayoutAligned;
       &[data-container~="independent"] {
         display: block flex;
 
-        &[data-container~="wrap"] {
-          --layout-container-wrap: wrap;
-        }
-
-        &:not([data-container~="collapsable"]) {
+        &:not([data-container~="collapsible"]) {
           flex-flow: var(--layout-container-row-direction)
             var(--layout-container-wrap);
           justify-content: var(--layout-align-current, start);
           align-items: var(--layout-align-y-current, start);
         }
 
-        &[data-container~="collapsable"] {
+        &[data-container~="collapsible"] {
           flex-flow: column nowrap;
           align-items: var(--layout-align-current, start);
           justify-content: start;
+          inline-size: 100%;
+        }
+
+        @container style(--media-gte-tablet: true) {
+          &[data-container~="tablet"] {
+            flex-flow: var(--layout-container-row-direction)
+              var(--layout-container-wrap);
+            justify-content: var(--layout-align-current, start);
+            align-items: var(--layout-align-y-current, start);
+            inline-size: revert-layer;
+          }
+        }
+
+        @container style(--media-gte-laptop: true) {
+          &[data-container~="laptop"] {
+            flex-flow: var(--layout-container-row-direction)
+              var(--layout-container-wrap);
+            justify-content: var(--layout-align-current, start);
+            align-items: var(--layout-align-y-current, start);
+            inline-size: revert-layer;
+          }
+        }
+
+        @container style(--media-eq-desktop: true) {
+          &[data-container~="desktop"] {
+            flex-flow: var(--layout-container-row-direction)
+              var(--layout-container-wrap);
+            justify-content: var(--layout-align-current, start);
+            align-items: var(--layout-align-y-current, start);
+            inline-size: revert-layer;
+          }
         }
       }
     }
@@ -277,84 +337,6 @@ const LayoutAligned = InternalLayoutAligned;
       & > * {
         grid-row: 1 / span 1;
         grid-column: 1 / span 1;
-      }
-    }
-
-    @container style(--media-gte-tablet: true) {
-      --layout-align-tablet: var(--layout-align);
-      --layout-align-current: var(--layout-align-tablet);
-      --layout-align-y-tablet: var(--layout-align-y);
-      --layout-align-y-current: var(--layout-align-y-tablet);
-      --layout-space-tablet: var(--layout-space);
-      --layout-space-current: var(--layout-space-tablet);
-      --layout-column-count-tablet: var(--layout-column-count);
-      --layout-column-count-current: var(--layout-column-count-tablet);
-
-      &[data-container~="row"][data-container~="independent"] {
-        &[data-container~="reverse"] {
-          --layout-container-row-direction: row-reverse;
-        }
-
-        &[data-container~="tablet"] {
-          flex-flow: var(--layout-container-row-direction)
-            var(--layout-container-wrap);
-          justify-content: var(--layout-align-current, start);
-          align-items: var(--layout-align-y-current, start);
-        }
-      }
-    }
-
-    @container style(--media-gte-laptop: true) {
-      --layout-align-laptop: var(--layout-align-tablet);
-      --layout-align-current: var(--layout-align-laptop);
-      --layout-align-y-laptop: var(--layout-align-y-tablet);
-      --layout-align-y-current: var(--layout-align-y-laptop);
-      --layout-space-laptop: var(--layout-space-tablet);
-      --layout-space-current: var(--layout-space-laptop);
-      --layout-column-count-laptop: var(--layout-column-count-tablet);
-      --layout-column-count-current: var(--layout-column-count-laptop);
-
-      &[data-container~="row"][data-container~="independent"][data-container~="laptop"] {
-        flex-flow: var(--layout-container-row-direction)
-          var(--layout-container-wrap);
-        justify-content: var(--layout-align-current, start);
-        align-items: var(--layout-align-y-current, start);
-      }
-    }
-
-    @container style(--media-eq-desktop: true) {
-      --layout-align-desktop: var(--layout-align-laptop);
-      --layout-align-current: var(--layout-align-desktop);
-      --layout-align-y-desktop: var(--layout-align-y-laptop);
-      --layout-align-y-current: var(--layout-align-y-desktop);
-      --layout-space-desktop: var(--layout-space-laptop);
-      --layout-space-current: var(--layout-space-desktop);
-      --layout-column-count-desktop: var(--layout-column-count-laptop);
-      --layout-column-count-current: var(--layout-column-count-desktop);
-
-      &[data-container~="row"][data-container~="independent"][data-container~="desktop"] {
-        flex-flow: var(--layout-container-row-direction)
-          var(--layout-container-wrap);
-        justify-content: var(--layout-align-current, start);
-        align-items: var(--layout-align-y-current, start);
-      }
-    }
-
-    @container style(--media-lt-tablet: true) {
-      &[data-container~="row"][data-container~="independent"][data-container~="tablet"] {
-        inline-size: 100%;
-      }
-    }
-
-    @container style(--media-lt-laptop: true) {
-      &[data-container~="row"][data-container~="independent"][data-container~="laptop"] {
-        inline-size: 100%;
-      }
-    }
-
-    @container style(--media-lt-desktop: true) {
-      &[data-container~="row"][data-container~="independent"][data-container~="desktop"] {
-        inline-size: 100%;
       }
     }
   }

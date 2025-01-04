@@ -12,7 +12,7 @@ import InternalLayoutContainer, {
   type SpaceProps,
   type CollapseBelowProps,
   type ReverseProps,
-} from "~/components/layout/internal/Container2.vue";
+} from "~/components/layout/internal/Container.vue";
 import InternalLayoutFrame, {
   type FrameProps,
 } from "~/components/layout/internal/Frame.vue";

@@ -9,7 +9,7 @@ import InternalLayoutFrame, {
 import type { AlignProps } from "~/components/layout/internal/Aligned.vue";
 import InternalLayoutContainer, {
   type SpaceProps,
-} from "~/components/layout/internal/Container2.vue";
+} from "~/components/layout/internal/Container.vue";
 
 export interface StackProps
   extends PrimitiveProps,

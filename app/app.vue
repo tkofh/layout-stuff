@@ -1,11 +1,19 @@
 <template>
   <LayoutRoot>
-    <LayoutColumns align="left" collapse-below="laptop">
-      <LayoutColumn width="1/2" height="40">
-        <AppPlaceholder label="1/2" />
+    <LayoutColumns align="right" collapse-below="laptop">
+      <LayoutColumn width="2/5" height="40">
+        <AppPlaceholder label="2/5" />
       </LayoutColumn>
-      <LayoutColumn width="1/2" height="40">
-        <AppPlaceholder label="1/2" />
+      <LayoutColumn width="content" height="40">
+        <LayoutBox height="40" aspect="2">
+          <AppPlaceholder label="Content" />
+        </LayoutBox>
+      </LayoutColumn>
+      <LayoutColumn width="1/5" height="40">
+        <AppPlaceholder label="1/5" />
+      </LayoutColumn>
+      <LayoutColumn width="fluid" height="40">
+        <AppPlaceholder label="fluid" />
       </LayoutColumn>
     </LayoutColumns>
   </LayoutRoot>

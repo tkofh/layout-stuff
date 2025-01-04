@@ -217,19 +217,12 @@ const style = computed(() => ({
   initial-value: 0;
 }
 
-@layer layout.component {
+@layer layout.init {
   .layout-areas {
     --layout-areas-size-top: initial;
     --layout-areas-size-right: initial;
     --layout-areas-size-bottom: initial;
     --layout-areas-size-left: initial;
-
-    display: block grid;
-    block-size: 100%;
-    inline-size: 100%;
-    place-items: start stretch;
-    contain: paint;
-    grid-template: auto minmax(max-content, 1fr) auto / auto 1fr auto;
 
     &[data-scroll-direction="vertical"]
       > .layout-sticky[data-layout-area~="x"] {
@@ -276,6 +269,17 @@ const style = computed(() => ({
         --layout-sticky-end-current: 0px;
       }
     }
+  }
+}
+
+@layer layout.component {
+  .layout-areas {
+    display: block grid;
+    block-size: 100%;
+    inline-size: 100%;
+    place-items: start stretch;
+    contain: paint;
+    grid-template: auto minmax(max-content, 1fr) auto / auto 1fr auto;
   }
 
   .layout-area {

@@ -273,7 +273,7 @@ const style = computed(() =>
   inherits: false;
 }
 
-@layer layout.trait {
+@layer layout.init {
   .layout-frame {
     --layout-frame: unset;
     --layout-frame-tablet: unset;
@@ -328,9 +328,6 @@ const style = computed(() =>
       --layout-frame-left,
       var(--layout-frame-x-current)
     );
-
-    padding: var(--layout-frame-top-current) var(--layout-frame-right-current)
-      var(--layout-frame-bottom-current) var(--layout-frame-left-current);
 
     @container style(--media-gte-tablet: true) {
       --layout-frame-tablet: var(--layout-frame);
@@ -490,6 +487,13 @@ const style = computed(() =>
         var(--layout-frame-x-current)
       );
     }
+  }
+}
+
+@layer layout.trait {
+  .layout-frame {
+    padding: var(--layout-frame-top-current) var(--layout-frame-right-current)
+      var(--layout-frame-bottom-current) var(--layout-frame-left-current);
   }
 }
 </style>

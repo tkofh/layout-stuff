@@ -84,8 +84,12 @@ export function isSparseResponsiveMap<V>(
 }
 
 export function normalizeResponsive<V>(
-  input: ResponsiveValue<V>,
-): PartialResponsiveMap<V> {
+  input: V,
+): V extends SparseResponsiveMap<infer R>
+  ? PartialResponsiveMap<R>
+  : V extends PartialResponsiveMap<infer R>
+    ? PartialResponsiveMap<R>
+    : PartialResponsiveMap<V> {
   if (isSparseResponsiveMap(input)) {
     return {
       mobile: input.mobile,
@@ -101,7 +105,7 @@ export function normalizeResponsive<V>(
         input.desktop == null || input.desktop === input.laptop
           ? null
           : input.desktop,
-    };
+    } as never;
   }
 
   return {
@@ -109,7 +113,7 @@ export function normalizeResponsive<V>(
     tablet: null,
     laptop: null,
     desktop: null,
-  };
+  } as never;
 }
 
 export function fillResponsive<V>(

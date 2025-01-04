@@ -9,7 +9,7 @@
 
 
 @layer layout {
-  @layer init trait component override;
+  @layer init component trait override;
 }
 
 @layer app {

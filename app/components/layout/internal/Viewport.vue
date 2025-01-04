@@ -396,7 +396,7 @@ useChildren<StickyElementInput, StickyElement>("viewport", (children) => {
   initial-value: 0;
 }
 
-@layer layout.trait {
+@layer layout.init {
   .layout-viewport {
     --layout-scroll-start: max(0px, var(--layout-scroll));
     --layout-scroll-end: max(

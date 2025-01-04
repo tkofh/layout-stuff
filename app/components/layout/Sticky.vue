@@ -227,7 +227,7 @@ const style = computed(() => stickyStyle(offsets.value));
   initial-value: 0;
 }
 
-@layer layout.component {
+@layer layout.init {
   .layout-sticky {
     --layout-sticky-start-current: var(--layout-sticky-start);
     --layout-sticky-end-current: var(--layout-sticky-end);
@@ -265,7 +265,11 @@ const style = computed(() => stickyStyle(offsets.value));
       --layout-sticky-start-current: var(--layout-sticky-start-desktop);
       --layout-sticky-end-current: var(--layout-sticky-end-desktop);
     }
+  }
+}
 
+@layer layout.component {
+  .layout-sticky {
     position: sticky;
     z-index: 1;
 

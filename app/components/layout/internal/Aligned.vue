@@ -56,13 +56,15 @@ export interface Align2dProps<T = never>
   extends AlignProps<T>,
     AlignYProps<T> {}
 
-export type AlignedProps = Align2dProps<"auto">;
+export interface AlignedProps extends Align2dProps<"auto"> {
+  apply?: "self";
+}
 
 export type AlignedSlots = PrimitiveSlots;
 </script>
 
 <script setup lang="ts">
-const { align, alignY } = defineProps<AlignedProps>();
+const { align, alignY, apply } = defineProps<AlignedProps>();
 defineSlots<AlignedSlots>();
 
 const style = computed(() => ({
@@ -90,7 +92,13 @@ const style = computed(() => ({
 </script>
 
 <template>
-  <RadixSlot class="layout-aligned" :style>
+  <RadixSlot
+    :class="{
+      'layout-aligned': apply == null,
+      'layout-aligned-self': apply === 'self',
+    }"
+    :style
+  >
     <slot />
   </RadixSlot>
 </template>
@@ -146,8 +154,8 @@ const style = computed(() => ({
   inherits: false;
 }
 
-@layer layout.trait {
-  .layout-aligned {
+@layer layout.init {
+  :is(.layout-aligned, .layout-aligned-self) {
     --layout-align: unset;
     --layout-align-tablet: unset;
     --layout-align-laptop: unset;
@@ -179,6 +187,12 @@ const style = computed(() => ({
       --layout-align-y-desktop: var(--layout-align-y-laptop);
       --layout-align-y-current: var(--layout-align-y-desktop);
     }
+  }
+}
+
+@layer layout.trait {
+  .layout-aligned-self {
+    place-self: var(--layout-align-y-current) var(--layout-align-current);
   }
 }
 </style>

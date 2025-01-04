@@ -341,7 +341,7 @@ const style = computed(() =>
   initial-value: none;
 }
 
-@layer layout.trait {
+@layer layout.init {
   .layout-sized {
     --layout-size-width-current: var(--layout-size-width);
     --layout-size-height-current: var(--layout-size-height);
@@ -350,14 +350,6 @@ const style = computed(() =>
     --layout-size-min-height-current: var(--layout-size-min-height);
     --layout-size-max-width-current: var(--layout-size-max-width);
     --layout-size-max-height-current: var(--layout-size-max-height);
-
-    block-size: var(--layout-size-height-current);
-    inline-size: var(--layout-size-width-current);
-    aspect-ratio: var(--layout-size-aspect-current);
-    min-block-size: var(--layout-size-min-height-current);
-    min-inline-size: var(--layout-size-min-width-current);
-    max-block-size: var(--layout-size-max-height-current);
-    max-inline-size: var(--layout-size-max-width-current);
 
     @container style(--media-gte-tablet: true) {
       --layout-size-width-tablet: var(--layout-size-width);
@@ -409,6 +401,18 @@ const style = computed(() =>
       --layout-size-max-width-current: var(--layout-size-max-width-desktop);
       --layout-size-max-height-current: var(--layout-size-max-height-desktop);
     }
+  }
+}
+
+@layer layout.trait {
+  .layout-sized {
+    block-size: var(--layout-size-height-current);
+    inline-size: var(--layout-size-width-current);
+    aspect-ratio: var(--layout-size-aspect-current);
+    min-block-size: var(--layout-size-min-height-current);
+    min-inline-size: var(--layout-size-min-width-current);
+    max-block-size: var(--layout-size-max-height-current);
+    max-inline-size: var(--layout-size-max-width-current);
   }
 }
 </style>
