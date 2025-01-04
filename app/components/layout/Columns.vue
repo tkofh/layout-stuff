@@ -22,10 +22,10 @@ import type { MaybeRefOrGetter } from "vue";
 export interface ColumnsProps
   extends PrimitiveProps<ContentSectioningTag>,
     FrameProps,
-    CollapseBelowProps,
+    CollapseBelowProps<"row">,
     SpaceProps,
     Align2dProps,
-    ReverseProps {}
+    ReverseProps<"row", "auto"> {}
 
 const COLUMNS_ALIGN = Symbol.for("layout.columns.align") as InjectionKey<
   MaybeRefOrGetter<AlignedHorizontalAlignment>
@@ -71,7 +71,7 @@ provideColumnsAlign(align);
   >
     <LayoutContainer
       axis="row"
-      items="independent"
+      items="auto"
       :wrap="false"
       :reverse
       :align

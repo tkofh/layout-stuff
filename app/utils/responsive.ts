@@ -33,8 +33,14 @@ export type BreakpointsExcept<B extends BreakpointName> = Exclude<
 >;
 export type ResponsiveValue<V> = V | SparseResponsiveMap<V>;
 
-export type ExtractResponsiveValue<V extends PartialResponsiveMap<unknown>> =
-  V extends PartialResponsiveMap<infer T> ? T : never;
+export type ExtractResponsiveValue<
+  V extends PartialResponsiveMap<unknown> | ResponsiveValue<unknown>,
+> =
+  V extends PartialResponsiveMap<infer T>
+    ? T
+    : V extends SparseResponsiveMap<infer T>
+      ? T
+      : V;
 
 export type PartialResponsiveMapWithKey<K extends string, V> = K extends unknown
   ? Omit<
@@ -83,13 +89,9 @@ export function isSparseResponsiveMap<V>(
   return isRecord(value) && hasProperty(value, "mobile");
 }
 
-export function normalizeResponsive<V>(
+export function normalizeResponsive<const V extends ResponsiveValue<unknown>>(
   input: V,
-): V extends SparseResponsiveMap<infer R>
-  ? PartialResponsiveMap<R>
-  : V extends PartialResponsiveMap<infer R>
-    ? PartialResponsiveMap<R>
-    : PartialResponsiveMap<V> {
+): PartialResponsiveMap<ExtractResponsiveValue<V>> {
   if (isSparseResponsiveMap(input)) {
     return {
       mobile: input.mobile,

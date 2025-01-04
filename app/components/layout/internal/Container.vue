@@ -7,16 +7,12 @@ import InternalLayoutAligned, {
 
 export type ContainerAxis = "row" | "column" | "layer";
 
-export type ContainerItemSize<A extends ContainerAxis = "row"> =
-  | "independent"
-  | (A extends "column" ? never : "uniform");
+export type ContainerItems<A extends ContainerAxis = "row"> =
+  | "auto"
+  | (A extends "row" ? ResponsiveValue<`${number}` | number> : never);
 
 export interface SpaceProps<A extends ContainerAxis = "row"> {
   space?: A extends "layer" ? "none" : Space;
-}
-
-export interface ColumnsProps<I extends ContainerItemSize = "uniform"> {
-  columns?: I extends "uniform" ? ResponsiveValue<number> : 0;
 }
 
 export type CollapseBelow<A extends ContainerAxis = "row"> =
@@ -27,8 +23,18 @@ export interface CollapseBelowProps<A extends ContainerAxis = "row"> {
   collapseBelow?: CollapseBelow<A>;
 }
 
-export interface ReverseProps<A extends ContainerAxis = "row"> {
-  reverse?: A extends "row" ? boolean : false;
+export interface ReverseProps<
+  A extends ContainerAxis = "row",
+  I extends ContainerItems<A> = "auto",
+> {
+  reverse?: A extends "row" ? (I extends "auto" ? boolean : false) : false;
+}
+
+export interface WrapProps<
+  A extends ContainerAxis = "row",
+  I extends ContainerItems<A> = "auto",
+> {
+  wrap?: A extends "row" ? (I extends "auto" ? boolean : true) : false;
 }
 
 const CONTAINER_COLLAPSE_BELOW = Symbol.for(
@@ -47,14 +53,13 @@ export function useContainerCollapseBelow() {
 
 export interface ContainerProps<
   A extends ContainerAxis = "row",
-  I extends ContainerItemSize<A> = "independent",
+  I extends ContainerItems<A> = "auto",
 > extends Align2dProps,
     SpaceProps<A>,
-    ColumnsProps<I>,
     CollapseBelowProps<A>,
-    ReverseProps<A> {
+    ReverseProps<A, I>,
+    WrapProps<A, I> {
   axis: A;
-  wrap?: A extends "row" ? (I extends "uniform" ? true : boolean) : false;
   items?: I;
 }
 
@@ -64,20 +69,23 @@ export type ContainerSlots = PrimitiveSlots;
 <script
   setup
   lang="ts"
-  generic="A extends ContainerAxis, I extends ContainerItemSize<A>"
+  generic="A extends ContainerAxis, I extends ContainerItems<A>"
 >
 const {
   axis,
-  items = "independent",
+  items = "auto",
   collapseBelow = "none",
   align = "left",
   alignY = "top",
   space = "none",
   reverse = false,
   wrap = undefined,
-  columns = 0,
 } = defineProps<ContainerProps<A, I>>();
 defineSlots<ContainerSlots>();
+
+const normalizedItems = computed(() =>
+  items === "auto" ? "auto" : normalizeResponsive(items),
+);
 
 const effectiveReverse = computed(
   () => (reverse as unknown) === "" || Boolean(reverse),
@@ -100,19 +108,18 @@ const style = computed(() => {
   const result = {
     ...responsiveToAttributes(
       "--layout-space",
-      mapResponsive(
-        normalizeResponsive<SpaceKey>(space),
-        (value) => SPACE_SCALE[value],
-      ),
+      mapResponsive(normalizeResponsive(space), (value) => SPACE_SCALE[value]),
     ),
   };
 
-  if (axis === "row" && items === "uniform") {
+  if (axis === "row" && normalizedItems.value !== "auto") {
     Object.assign(
       result,
       responsiveToAttributes(
-        "--layout-column-count",
-        normalizeResponsive(columns),
+        "--layout-items",
+        mapResponsive(normalizedItems.value, (value) =>
+          Math.max(1, Number.isFinite(Number(value)) ? Number(value) : 1),
+        ),
       ),
     );
   }
@@ -122,7 +129,8 @@ const style = computed(() => {
 
 const data = useDataString(() => ({
   [axis]: true,
-  [items]: true,
+  auto: normalizedItems.value === "auto",
+  fixed: normalizedItems.value !== "auto",
   collapsible: collapseBelow !== "none",
   [collapseBelow]: collapseBelow !== "none",
   reverse: (reverse as unknown) === "" ? true : Boolean(reverse),
@@ -171,30 +179,30 @@ const LayoutAligned = InternalLayoutAligned;
   initial-value: 0;
 }
 
-@property --layout-column-count {
+@property --layout-items {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-column-count-tablet {
+@property --layout-items-tablet {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-column-count-laptop {
+@property --layout-items-laptop {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-column-count-desktop {
+@property --layout-items-desktop {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-column-count-current {
+@property --layout-items-current {
   syntax: "<integer>";
   inherits: false;
-  initial-value: 0;
+  initial-value: 1;
 }
 
 @property --layout-container-row-direction {
@@ -216,23 +224,23 @@ const LayoutAligned = InternalLayoutAligned;
     --layout-space-laptop: unset;
     --layout-space-desktop: unset;
     --layout-space-current: var(--layout-space);
-    --layout-column-count: unset;
-    --layout-column-count-tablet: unset;
-    --layout-column-count-laptop: unset;
-    --layout-column-count-desktop: unset;
-    --layout-column-count-current: var(--layout-column-count);
+    --layout-items: unset;
+    --layout-items-tablet: unset;
+    --layout-items-laptop: unset;
+    --layout-items-desktop: unset;
+    --layout-items-current: var(--layout-items);
 
-    &[data-container~="row"][data-container~="independent"][data-container~="wrap"] {
+    &[data-container~="row"][data-container~="auto"][data-container~="wrap"] {
       --layout-container-wrap: wrap;
     }
 
     @container style(--media-gte-tablet: true) {
       --layout-space-tablet: var(--layout-space);
       --layout-space-current: var(--layout-space-tablet);
-      --layout-column-count-tablet: var(--layout-column-count);
-      --layout-column-count-current: var(--layout-column-count-tablet);
+      --layout-items-tablet: var(--layout-items);
+      --layout-items-current: var(--layout-items-tablet);
 
-      &[data-container~="row"][data-container~="independent"][data-container~="reverse"] {
+      &[data-container~="row"][data-container~="auto"][data-container~="reverse"] {
         --layout-container-row-direction: row-reverse;
       }
     }
@@ -240,30 +248,32 @@ const LayoutAligned = InternalLayoutAligned;
     @container style(--media-gte-laptop: true) {
       --layout-space-laptop: var(--layout-space-tablet);
       --layout-space-current: var(--layout-space-laptop);
-      --layout-column-count-laptop: var(--layout-column-count-tablet);
-      --layout-column-count-current: var(--layout-column-count-laptop);
+      --layout-items-laptop: var(--layout-items-tablet);
+      --layout-items-current: var(--layout-items-laptop);
     }
 
     @container style(--media-eq-desktop: true) {
       --layout-space-desktop: var(--layout-space-laptop);
       --layout-space-current: var(--layout-space-desktop);
-      --layout-column-count-desktop: var(--layout-column-count-laptop);
-      --layout-column-count-current: var(--layout-column-count-desktop);
+      --layout-items-desktop: var(--layout-items-laptop);
+      --layout-items-current: var(--layout-items-desktop);
     }
   }
 }
 
 @layer layout.trait {
   .layout-container {
+    /* inline, columns, tiles */
     &[data-container~="row"] {
       gap: var(--layout-space-current);
 
-      &[data-container~="uniform"] {
+      &[data-container~="fixed"] {
         display: grid;
-        grid-template-columns: repeat(var(--layout-column-count-current), 1fr);
+        grid-template-columns: repeat(var(--layout-items-current), 1fr);
+        place-items: var(--layout-align-y-current) var(--layout-align-current);
       }
 
-      &[data-container~="independent"] {
+      &[data-container~="auto"] {
         display: block flex;
 
         &:not([data-container~="collapsible"]) {
@@ -312,6 +322,7 @@ const LayoutAligned = InternalLayoutAligned;
       }
     }
 
+    /* stack */
     &[data-container~="column"] {
       inline-size: 100%;
       display: block flex;
@@ -321,6 +332,7 @@ const LayoutAligned = InternalLayoutAligned;
       gap: var(--layout-space-current);
     }
 
+    /* layers */
     &[data-container~="layer"] {
       display: block grid;
       grid: 1fr / 1fr;
@@ -329,7 +341,7 @@ const LayoutAligned = InternalLayoutAligned;
         place-items: stretch;
       }
 
-      &[data-container~="independent"] {
+      &[data-container~="auto"] {
         place-items: var(--layout-align-y-current, start)
           var(--layout-align-current, start);
       }

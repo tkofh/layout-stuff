@@ -48,7 +48,7 @@ const LayoutWrap = InternalLayoutWrap;
   >
     <LayoutContainer
       axis="row"
-      items="independent"
+      items="auto"
       :collapse-below
       :align
       :align-y
