@@ -89,17 +89,9 @@ provideColumnsAlign(align);
 </template>
 
 <style>
-/* @layer layout.component { */
-
-/*  .layout-columns { */
-
-/*    &:is(:not(:has(> .layout-column)), :has(> :not(.layout-column))) { */
-
-/*      display: none; */
-
-/*    } */
-
-/*  } */
-
-/* } */
+@layer layout.component {
+  .layout-columns > :not(.layout-column) {
+    display: none;
+  }
+}
 </style>

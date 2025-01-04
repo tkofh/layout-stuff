@@ -301,6 +301,10 @@ const LayoutFlexible = InternalLayoutFlexible;
         place-self: revert-layer;
       }
     }
+
+    :not(.layout-columns) > & {
+      display: none;
+    }
   }
 }
 </style>
