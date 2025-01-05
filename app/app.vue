@@ -1,16 +1,17 @@
 <template>
   <LayoutRoot>
-    <LayoutTiles
-      :columns="{ mobile: 2, tablet: 3, laptop: 4 }"
-      align-y="bottom"
-    >
-      <LayoutBox height="40">
-        <AppPlaceholder label="1" />
-      </LayoutBox>
-      <LayoutBox height="20">
-        <AppPlaceholder label="2" />
-      </LayoutBox>
-    </LayoutTiles>
+    <LayoutStack space="xl" align="center">
+      <LayoutColumns space="sm" reverse collapse-below="laptop" align="right">
+        <LayoutColumn width="fluid">
+          <AppPlaceholder label="Fluid" />
+        </LayoutColumn>
+        <LayoutColumn width="content">
+          <LayoutBox width="32">
+            <AppPlaceholder label="Content" />
+          </LayoutBox>
+        </LayoutColumn>
+      </LayoutColumns>
+    </LayoutStack>
   </LayoutRoot>
 </template>
 

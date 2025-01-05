@@ -6,10 +6,12 @@ import InternalLayoutPrimitive, {
 import InternalLayoutFrame, {
   type FrameProps,
 } from "~/components/layout/internal/Frame.vue";
-import type { AlignProps } from "~/components/layout/internal/Aligned.vue";
-import InternalLayoutContainer, {
+import InternalLayoutAligned, {
+  type AlignProps,
+} from "~/components/layout/internal/Aligned.vue";
+import InternalLayoutSpaced, {
   type SpaceProps,
-} from "~/components/layout/internal/Container.vue";
+} from "~/components/layout/internal/Spaced.vue";
 
 export interface StackProps
   extends PrimitiveProps,
@@ -25,7 +27,8 @@ defineProps<StackProps>();
 defineSlots<StackSlots>();
 
 const LayoutFrame = InternalLayoutFrame;
-const LayoutContainer = InternalLayoutContainer;
+const LayoutAligned = InternalLayoutAligned;
+const LayoutSpaced = InternalLayoutSpaced;
 const LayoutPrimitive = InternalLayoutPrimitive;
 </script>
 
@@ -39,10 +42,21 @@ const LayoutPrimitive = InternalLayoutPrimitive;
     :frame-bottom
     :frame-left
   >
-    <LayoutContainer axis="column" :align :space>
-      <LayoutPrimitive :as class="layout-stack">
-        <slot />
-      </LayoutPrimitive>
-    </LayoutContainer>
+    <LayoutAligned :align align-y="top" mode="column">
+      <LayoutSpaced :space mode="gap">
+        <LayoutPrimitive :as class="layout-stack">
+          <slot />
+        </LayoutPrimitive>
+      </LayoutSpaced>
+    </LayoutAligned>
   </LayoutFrame>
 </template>
+
+<style>
+@layer layout.component {
+  .layout-stack {
+    display: block flex;
+    flex-flow: column nowrap;
+  }
+}
+</style>

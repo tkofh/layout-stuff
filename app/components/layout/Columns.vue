@@ -4,15 +4,15 @@ import InternalLayoutPrimitive, {
   type PrimitiveProps,
   type ContentSectioningTag,
 } from "~/components/layout/internal/Primitive.vue";
-import type {
-  Align2dProps,
-  AlignedHorizontalAlignment,
+import InternalLayoutAligned, {
+  type AlignedHorizontalAlignment,
 } from "~/components/layout/internal/Aligned.vue";
-import InternalLayoutContainer, {
+import InternalLayoutCollapsible, {
+  type CollapsibleProps,
+} from "~/components/layout/internal/Collapsible.vue";
+import InternalLayoutSpaced, {
   type SpaceProps,
-  type CollapseBelowProps,
-  type ReverseProps,
-} from "~/components/layout/internal/Container.vue";
+} from "~/components/layout/internal/Spaced.vue";
 import InternalLayoutFrame, {
   type FrameProps,
 } from "~/components/layout/internal/Frame.vue";
@@ -22,10 +22,8 @@ import type { MaybeRefOrGetter } from "vue";
 export interface ColumnsProps
   extends PrimitiveProps<ContentSectioningTag>,
     FrameProps,
-    CollapseBelowProps<"row">,
-    SpaceProps,
-    Align2dProps,
-    ReverseProps<"row", "auto"> {}
+    CollapsibleProps,
+    SpaceProps {}
 
 const COLUMNS_ALIGN = Symbol.for("layout.columns.align") as InjectionKey<
   MaybeRefOrGetter<AlignedHorizontalAlignment>
@@ -51,11 +49,13 @@ const { align = defaultColumnsAlign } = defineProps<ColumnsProps>();
 defineSlots<ColumnsSlots>();
 
 const LayoutPrimitive = InternalLayoutPrimitive;
-const LayoutContainer = InternalLayoutContainer;
+const LayoutCollapsible = InternalLayoutCollapsible;
 const LayoutFrame = InternalLayoutFrame;
 const LayoutWrap = InternalLayoutWrap;
+const LayoutAligned = InternalLayoutAligned;
+const LayoutSpaced = InternalLayoutSpaced;
 
-provideColumnsAlign(align);
+provideColumnsAlign(() => align);
 </script>
 
 <template>
@@ -69,22 +69,17 @@ provideColumnsAlign(align);
     :frame-bottom
     :frame-left
   >
-    <LayoutContainer
-      axis="row"
-      items="auto"
-      :wrap="false"
-      :reverse
-      :align
-      :align-y
-      :space
-      :collapse-below
-    >
+    <LayoutCollapsible :wrap="false" :reverse :align :align-y :collapse-below>
       <LayoutWrap role="unwrappable">
-        <LayoutPrimitive :as class="layout-columns">
-          <slot />
-        </LayoutPrimitive>
+        <LayoutAligned :align :align-y mode="column">
+          <LayoutSpaced :space mode="gap">
+            <LayoutPrimitive :as class="layout-columns">
+              <slot />
+            </LayoutPrimitive>
+          </LayoutSpaced>
+        </LayoutAligned>
       </LayoutWrap>
-    </LayoutContainer>
+    </LayoutCollapsible>
   </LayoutFrame>
 </template>
 

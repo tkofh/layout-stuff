@@ -18,9 +18,9 @@ import InternalLayoutVisibility, {
 } from "~/components/layout/internal/Visibility.vue";
 import { useColumnsAlign } from "~/components/layout/Columns.vue";
 import {
-  useContainerCollapseBelow,
+  useCollapseBelow,
   type CollapseBelow,
-} from "~/components/layout/internal/Container.vue";
+} from "~/components/layout/internal/Collapsible.vue";
 import InternalLayoutFlexible from "~/components/layout/internal/Flexible.vue";
 
 export type ColumnWidth = SizeKey | RelativeSizeKey | "fluid" | "content";
@@ -108,7 +108,7 @@ const props = defineProps<ColumnProps>();
 defineSlots<ColumnSlots>();
 
 const columnsAlign = toRef(useColumnsAlign());
-const collapseBelow = toRef(useContainerCollapseBelow());
+const collapseBelow = toRef(useCollapseBelow());
 
 const width = computed(() =>
   fillResponsive(normalizeResponsive(props.width ?? "fluid")),
@@ -269,36 +269,28 @@ const LayoutFlexible = InternalLayoutFlexible;
 @layer layout.component {
   .layout-column {
     display: block flow-root;
-    place-self: var(--layout-align-y-current, start)
-      var(--layout-align-current, start);
 
     @container style(--media-lt-tablet: true) {
-      .layout-columns[data-container~="collapsible"][data-container~="tablet"]
-        > & {
+      .layout-columns[data-collapsible~="tablet"] > & {
         display: block var(--layout-column-collapsed-display-current);
         flex-flow: row nowrap;
         justify-content: var(--layout-align-current, start);
-        place-self: revert-layer;
       }
     }
 
     @container style(--media-lt-laptop: true) {
-      .layout-columns[data-container~="collapsible"][data-container~="laptop"]
-        > & {
+      .layout-columns[data-collapsible~="laptop"] > & {
         display: block var(--layout-column-collapsed-display-current);
         flex-flow: row nowrap;
         justify-content: var(--layout-align-current, start);
-        place-self: revert-layer;
       }
     }
 
     @container style(--media-lt-desktop: true) {
-      .layout-columns[data-container~="collapsible"][data-container~="desktop"]
-        > & {
+      .layout-columns[data-collapsible~="desktop"] > & {
         display: block var(--layout-column-collapsed-display-current);
         flex-flow: row nowrap;
         justify-content: var(--layout-align-current, start);
-        place-self: revert-layer;
       }
     }
 

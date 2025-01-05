@@ -57,14 +57,14 @@ export interface Align2dProps<T = never>
     AlignYProps<T> {}
 
 export interface AlignedProps extends Align2dProps<"auto"> {
-  apply?: "self";
+  mode?: "self" | "column" | "grid";
 }
 
 export type AlignedSlots = PrimitiveSlots;
 </script>
 
 <script setup lang="ts">
-const { align, alignY, apply } = defineProps<AlignedProps>();
+const { align, alignY, mode } = defineProps<AlignedProps>();
 defineSlots<AlignedSlots>();
 
 const style = computed(() => ({
@@ -89,16 +89,16 @@ const style = computed(() => ({
     }),
   ),
 }));
+
+const data = useDataString(() => ({
+  self: mode === "self",
+  column: mode === "column",
+  grid: mode === "grid",
+}));
 </script>
 
 <template>
-  <RadixSlot
-    :class="{
-      'layout-aligned': apply == null,
-      'layout-aligned-self': apply === 'self',
-    }"
-    :style
-  >
+  <RadixSlot :data-aligned="data" :style>
     <slot />
   </RadixSlot>
 </template>
@@ -125,8 +125,9 @@ const style = computed(() => ({
 }
 
 @property --layout-align-current {
-  syntax: "*";
+  syntax: "start | center | end | normal";
   inherits: false;
+  initial-value: normal;
 }
 
 @property --layout-align-y {
@@ -150,21 +151,14 @@ const style = computed(() => ({
 }
 
 @property --layout-align-y-current {
-  syntax: "*";
+  syntax: "start | center | end | normal";
   inherits: false;
+  initial-value: normal;
 }
 
 @layer layout.init {
-  :is(.layout-aligned, .layout-aligned-self) {
-    --layout-align: unset;
-    --layout-align-tablet: unset;
-    --layout-align-laptop: unset;
-    --layout-align-desktop: unset;
+  [data-aligned] {
     --layout-align-current: var(--layout-align);
-    --layout-align-y: unset;
-    --layout-align-y-tablet: unset;
-    --layout-align-y-laptop: unset;
-    --layout-align-y-desktop: unset;
     --layout-align-y-current: var(--layout-align-y);
 
     @container style(--media-gte-tablet: true) {
@@ -191,8 +185,17 @@ const style = computed(() => ({
 }
 
 @layer layout.trait {
-  .layout-aligned-self {
+  [data-aligned~="self"] {
     place-self: var(--layout-align-y-current) var(--layout-align-current);
+  }
+
+  [data-aligned~="column"] {
+    align-items: var(--layout-align-current);
+    justify-content: var(--layout-align-y-current);
+  }
+
+  [data-aligned~="grid"] {
+    place-items: var(--layout-align-y-current) var(--layout-align-current);
   }
 }
 </style>
