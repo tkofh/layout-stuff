@@ -1,17 +1,29 @@
 <template>
   <LayoutRoot>
-    <LayoutStack space="xl" align="center">
-      <LayoutColumns space="sm" reverse collapse-below="laptop" align="right">
-        <LayoutColumn width="fluid">
-          <AppPlaceholder label="Fluid" />
-        </LayoutColumn>
-        <LayoutColumn width="content">
-          <LayoutBox width="32">
-            <AppPlaceholder label="Content" />
-          </LayoutBox>
-        </LayoutColumn>
-      </LayoutColumns>
-    </LayoutStack>
+    <LayoutLayers>
+      <LayoutLayer>
+        <LayoutColumns space="sm" reverse collapse-below="laptop" align="right">
+          <LayoutColumn width="fluid">
+            <AppPlaceholder label="Fluid" />
+          </LayoutColumn>
+          <LayoutColumn width="content">
+            <LayoutBox width="32">
+              <AppPlaceholder label="Content" />
+            </LayoutBox>
+          </LayoutColumn>
+        </LayoutColumns>
+      </LayoutLayer>
+
+      <LayoutLayer layer="-1">
+        <LayoutColumns space="sm" reverse collapse-below="laptop" align="right">
+          <LayoutColumn width="content">
+            <LayoutBox aspect="1" height="80">
+              <AppPlaceholder label="Content" />
+            </LayoutBox>
+          </LayoutColumn>
+        </LayoutColumns>
+      </LayoutLayer>
+    </LayoutLayers>
   </LayoutRoot>
 </template>
 
