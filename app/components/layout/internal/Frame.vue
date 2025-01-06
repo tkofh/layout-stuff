@@ -119,8 +119,9 @@ const style = computed(() =>
 }
 
 @property --frame-actual {
-  syntax: "*";
+  syntax: "<length-percentage>";
   inherits: false;
+  initial-value: 0;
 }
 
 @property --frame-x {
@@ -144,8 +145,9 @@ const style = computed(() =>
 }
 
 @property --frame-x-actual {
-  syntax: "*";
+  syntax: "<length-percentage>";
   inherits: false;
+  initial-value: 0;
 }
 
 @property --frame-y {
@@ -169,8 +171,9 @@ const style = computed(() =>
 }
 
 @property --frame-y-actual {
-  syntax: "*";
+  syntax: "<length-percentage>";
   inherits: false;
+  initial-value: 0;
 }
 
 @property --frame-top {
@@ -194,8 +197,9 @@ const style = computed(() =>
 }
 
 @property --frame-top-actual {
-  syntax: "*";
+  syntax: "<length-percentage>";
   inherits: false;
+  initial-value: 0;
 }
 
 @property --frame-right {
@@ -219,8 +223,9 @@ const style = computed(() =>
 }
 
 @property --frame-right-actual {
-  syntax: "*";
+  syntax: "<length-percentage>";
   inherits: false;
+  initial-value: 0;
 }
 
 @property --frame-bottom {
@@ -244,8 +249,9 @@ const style = computed(() =>
 }
 
 @property --frame-bottom-actual {
-  syntax: "*";
+  syntax: "<length-percentage>";
   inherits: false;
+  initial-value: 0;
 }
 
 @property --frame-left {
@@ -269,8 +275,9 @@ const style = computed(() =>
 }
 
 @property --frame-left-actual {
-  syntax: "*";
+  syntax: "<length-percentage>";
   inherits: false;
+  initial-value: 0;
 }
 
 @layer layout.init {

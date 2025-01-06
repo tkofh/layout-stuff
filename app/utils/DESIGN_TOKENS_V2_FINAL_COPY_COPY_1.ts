@@ -99,3 +99,10 @@ export type RelativeSizeKey =
   | "4/5"
   | "full";
 export type RelativeSize = ResponsiveValue<RelativeSizeKey>;
+
+export const BLOCK_SIZE_SCALE = {
+  content: "65ch",
+  page: "80rem",
+} as const;
+
+export type BlockSize = "content" | "page";

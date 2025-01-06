@@ -32,7 +32,7 @@ function columnStyle(
 ) {
   const result = {
     ...responsiveToAttributes(
-      "--layout-size-width",
+      "--inline-size",
       compactResponsive(
         mapResponsive(
           fillResponsive(normalizeResponsive(width)),
