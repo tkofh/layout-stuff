@@ -70,8 +70,8 @@ provideBreakpoint(
 );
 
 const style = computed(() => ({
-  "--layout-scroll": `${y.value}px`,
-  "--layout-scroll-length": `${height.value}px`,
+  "--scroll": `${y.value}px`,
+  "--scroll-length": `${height.value}px`,
 }));
 
 const isMounted = ref(false);
@@ -83,9 +83,9 @@ onPrehydrate(() => {
   document.addEventListener("DOMContentLoaded", () => {
     const root = document.querySelector<HTMLElement>(".layout-root");
     if (root) {
-      root.style.setProperty("--layout-scroll", `${window.scrollY}px`);
+      root.style.setProperty("--scroll", `${window.scrollY}px`);
       root.style.setProperty(
-        "--layout-scroll-length",
+        "--scroll-length",
         `${document.documentElement.scrollHeight}px`,
       );
     }
@@ -102,7 +102,7 @@ onPrehydrate(() => {
     place-items: start stretch;
     contain: paint;
 
-    --layout-scroll-viewport: 100dvb;
+    --scroll-viewport: 100dvb;
   }
 }
 </style>

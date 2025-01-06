@@ -52,7 +52,6 @@ const LayoutPrimitive = InternalLayoutPrimitive;
 const LayoutCollapsible = InternalLayoutCollapsible;
 const LayoutFrame = InternalLayoutFrame;
 const LayoutWrap = InternalLayoutWrap;
-const LayoutAligned = InternalLayoutAligned;
 const LayoutSpaced = InternalLayoutSpaced;
 
 provideColumnsAlign(() => align);
@@ -71,13 +70,11 @@ provideColumnsAlign(() => align);
   >
     <LayoutCollapsible :wrap="false" :reverse :align :align-y :collapse-below>
       <LayoutWrap role="unwrappable">
-        <LayoutAligned :align :align-y mode="column">
-          <LayoutSpaced :space mode="gap">
-            <LayoutPrimitive :as class="layout-columns">
-              <slot />
-            </LayoutPrimitive>
-          </LayoutSpaced>
-        </LayoutAligned>
+        <LayoutSpaced :space mode="gap">
+          <LayoutPrimitive :as class="layout-columns">
+            <slot />
+          </LayoutPrimitive>
+        </LayoutSpaced>
       </LayoutWrap>
     </LayoutCollapsible>
   </LayoutFrame>

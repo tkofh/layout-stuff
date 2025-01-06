@@ -21,7 +21,7 @@ const style = computed(() =>
   space === false
     ? {}
     : responsiveToAttributes(
-        "--layout-space",
+        "--space",
         mapResponsive(
           normalizeResponsive(space ?? "none"),
           (value) => SPACE_SCALE[value],
@@ -42,27 +42,27 @@ const data = useDataString(() => ({
 </template>
 
 <style>
-@property --layout-space {
+@property --space {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-space-tablet {
+@property --space-tablet {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-space-laptop {
+@property --space-laptop {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-space-desktop {
+@property --space-desktop {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-space-current {
+@property --space-actual {
   syntax: "<length>";
   inherits: false;
   initial-value: 0;
@@ -70,32 +70,32 @@ const data = useDataString(() => ({
 
 @layer layout.init {
   [data-spaced] {
-    --layout-space-current: var(--layout-space);
+    --space-actual: var(--space);
 
     @container style(--media-gte-tablet: true) {
-      --layout-space-tablet: var(--layout-space);
-      --layout-space-current: var(--layout-space-tablet);
+      --space-tablet: var(--space);
+      --space-actual: var(--space-tablet);
     }
 
     @container style(--media-gte-laptop: true) {
-      --layout-space-laptop: var(--layout-space-tablet);
-      --layout-space-current: var(--layout-space-laptop);
+      --space-laptop: var(--space-tablet);
+      --space-actual: var(--space-laptop);
     }
 
     @container style(--media-gte-desktop: true) {
-      --layout-space-desktop: var(--layout-space-laptop);
-      --layout-space-current: var(--layout-space-desktop);
+      --space-desktop: var(--space-laptop);
+      --space-actual: var(--space-desktop);
     }
   }
 }
 
 @layer layout.trait {
   [data-spaced~="gap"] {
-    gap: var(--layout-space-current);
+    gap: var(--space-actual);
   }
 
   [data-spaced~="margin"] {
-    margin: var(--layout-space-current);
+    margin: var(--space-actual);
   }
 }
 </style>

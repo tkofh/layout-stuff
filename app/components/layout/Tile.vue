@@ -74,7 +74,7 @@ const LayoutPrimitive = InternalLayoutPrimitive;
   inherits: false;
 }
 
-@property --layout-tile-rows-current {
+@property --layout-tile-rows-actual {
   syntax: "<integer>";
   inherits: false;
   initial-value: 1;
@@ -100,7 +100,7 @@ const LayoutPrimitive = InternalLayoutPrimitive;
   inherits: false;
 }
 
-@property --layout-tile-columns-current {
+@property --layout-tile-columns-actual {
   syntax: "<integer>";
   inherits: false;
   initial-value: 1;
@@ -108,36 +108,36 @@ const LayoutPrimitive = InternalLayoutPrimitive;
 
 @layer layout.init {
   .layout-tile {
-    --layout-tile-rows-current: var(--layout-tile-rows);
-    --layout-tile-columns-current: var(--layout-tile-columns);
+    --layout-tile-rows-actual: var(--layout-tile-rows);
+    --layout-tile-columns-actual: var(--layout-tile-columns);
 
     @container style(--media-gte-tablet: true) {
       --layout-tile-rows-tablet: var(--layout-tile-rows);
       --layout-tile-columns-tablet: var(--layout-tile-columns);
-      --layout-tile-rows-current: var(--layout-tile-rows-tablet);
-      --layout-tile-columns-current: var(--layout-tile-columns-tablet);
+      --layout-tile-rows-actual: var(--layout-tile-rows-tablet);
+      --layout-tile-columns-actual: var(--layout-tile-columns-tablet);
     }
 
     @container style(--media-gte-laptop: true) {
       --layout-tile-rows-laptop: var(--layout-tile-rows-tablet);
       --layout-tile-columns-laptop: var(--layout-tile-columns-tablet);
-      --layout-tile-rows-current: var(--layout-tile-rows-laptop);
-      --layout-tile-columns-current: var(--layout-tile-columns-laptop);
+      --layout-tile-rows-actual: var(--layout-tile-rows-laptop);
+      --layout-tile-columns-actual: var(--layout-tile-columns-laptop);
     }
 
     @container style(--media-eq-desktop: true) {
       --layout-tile-rows-desktop: var(--layout-tile-rows-laptop);
       --layout-tile-columns-desktop: var(--layout-tile-columns-laptop);
-      --layout-tile-rows-current: var(--layout-tile-rows-desktop);
-      --layout-tile-columns-current: var(--layout-tile-columns-desktop);
+      --layout-tile-rows-actual: var(--layout-tile-rows-desktop);
+      --layout-tile-columns-actual: var(--layout-tile-columns-desktop);
     }
   }
 }
 
 @layer layout.component {
   .layout-tile {
-    grid-row: auto / span var(--layout-tile-rows-current);
-    grid-column: auto / span var(--layout-tile-columns-current);
+    grid-row: auto / span var(--layout-tile-rows-actual);
+    grid-column: auto / span var(--layout-tile-columns-actual);
 
     :not(.layout-tiles) > & {
       display: none;

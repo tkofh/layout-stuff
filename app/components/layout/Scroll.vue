@@ -91,15 +91,15 @@ const { x, y } = useScroll(viewportElement);
 provideScrollDirection(direction);
 
 const style = computed(() => ({
-  "--layout-scroll-length":
+  "--scroll-length":
     direction === "vertical"
       ? `${scrollBlockLength.value}px`
       : `${scrollInlineLength.value}px`,
-  "--layout-scroll-viewport":
+  "--scroll-viewport":
     direction === "vertical"
       ? `${viewportBlockSize.value}px`
       : `${viewportInlineSize.value}px`,
-  "--layout-scroll": direction === "vertical" ? `${y.value}px` : `${x.value}px`,
+  "--scroll": direction === "vertical" ? `${y.value}px` : `${x.value}px`,
 }));
 </script>
 

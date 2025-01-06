@@ -175,43 +175,41 @@ const { height: bottomSize } = useElementSize(bottom, defaultSize, sizeOptions);
 const { width: leftSize } = useElementSize(left, defaultSize, sizeOptions);
 
 const style = computed(() => ({
-  "--layout-areas-size-top":
-    topSize.value !== 0 ? `${topSize.value}px` : undefined,
-  "--layout-areas-size-right":
+  "--areas-size-top": topSize.value !== 0 ? `${topSize.value}px` : undefined,
+  "--areas-size-right":
     rightSize.value !== 0 ? `${rightSize.value}px` : undefined,
-  "--layout-areas-size-bottom":
+  "--areas-size-bottom":
     bottomSize.value !== 0 ? `${bottomSize.value}px` : undefined,
-  "--layout-areas-size-left":
-    leftSize.value !== 0 ? `${leftSize.value}px` : undefined,
+  "--areas-size-left": leftSize.value !== 0 ? `${leftSize.value}px` : undefined,
 }));
 </script>
 
 <style>
-@property --layout-areas-size-top {
+@property --areas-size-top {
   syntax: "<length>";
   inherits: true;
   initial-value: 0;
 }
 
-@property --layout-areas-size-right {
+@property --areas-size-right {
   syntax: "<length>";
   inherits: true;
   initial-value: 0;
 }
 
-@property --layout-areas-size-bottom {
+@property --areas-size-bottom {
   syntax: "<length>";
   inherits: true;
   initial-value: 0;
 }
 
-@property --layout-areas-size-left {
+@property --areas-size-left {
   syntax: "<length>";
   inherits: true;
   initial-value: 0;
 }
 
-@property --layout-sticky-area-size {
+@property --sticky-area-size {
   syntax: "<length>";
   inherits: false;
   initial-value: 0;
@@ -219,54 +217,54 @@ const style = computed(() => ({
 
 @layer layout.init {
   .layout-areas {
-    --layout-areas-size-top: initial;
-    --layout-areas-size-right: initial;
-    --layout-areas-size-bottom: initial;
-    --layout-areas-size-left: initial;
+    --areas-size-top: initial;
+    --areas-size-right: initial;
+    --areas-size-bottom: initial;
+    --areas-size-left: initial;
 
     &[data-scroll-direction="vertical"]
       > .layout-sticky[data-layout-area~="x"] {
       &:not([data-layout-area~="start"]) {
-        --layout-sticky-cross-clip-start: calc(
-          var(--layout-areas-size-top) - var(--layout-scroll-start)
+        --sticky-cross-clip-start: calc(
+          var(--areas-size-top) - var(--scroll-start)
         );
       }
 
       &:not([data-layout-area~="end"]) {
-        --layout-sticky-cross-clip-end: calc(
-          var(--layout-areas-size-bottom) - var(--layout-scroll-end)
+        --sticky-cross-clip-end: calc(
+          var(--areas-size-bottom) - var(--scroll-end)
         );
       }
 
       &[data-layout-area~="start"] {
-        --layout-sticky-start-current: 0px;
+        --sticky-start-actual: 0px;
       }
 
       &[data-layout-area~="end"] {
-        --layout-sticky-end-current: 0px;
+        --sticky-end-actual: 0px;
       }
     }
 
     &[data-scroll-direction~="horizontal"]
       > .layout-sticky[data-layout-area~="y"] {
       &:not([data-layout-area~="start"]) {
-        --layout-sticky-cross-clip-start: calc(
-          var(--layout-areas-size-left) - var(--layout-scroll-start)
+        --sticky-cross-clip-start: calc(
+          var(--areas-size-left) - var(--scroll-start)
         );
       }
 
       &:not([data-layout-area~="end"]) {
-        --layout-sticky-cross-clip-end: calc(
-          var(--layout-areas-size-right) - var(--layout-scroll-end)
+        --sticky-cross-clip-end: calc(
+          var(--areas-size-right) - var(--scroll-end)
         );
       }
 
       &[data-layout-area~="start"] {
-        --layout-sticky-start-current: 0px;
+        --sticky-start-actual: 0px;
       }
 
       &[data-layout-area~="end"] {
-        --layout-sticky-end-current: 0px;
+        --sticky-end-actual: 0px;
       }
     }
   }

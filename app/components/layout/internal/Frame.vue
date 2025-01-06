@@ -35,27 +35,27 @@ function frameStyles(
   const output = {} as Record<string, string>;
 
   if (hasTop) {
-    Object.assign(output, frameEdgeStyles("--layout-frame-top", top));
+    Object.assign(output, frameEdgeStyles("--frame-top", top));
   }
   if (hasRight) {
-    Object.assign(output, frameEdgeStyles("--layout-frame-right", right));
+    Object.assign(output, frameEdgeStyles("--frame-right", right));
   }
   if (hasBottom) {
-    Object.assign(output, frameEdgeStyles("--layout-frame-bottom", bottom));
+    Object.assign(output, frameEdgeStyles("--frame-bottom", bottom));
   }
   if (hasLeft) {
-    Object.assign(output, frameEdgeStyles("--layout-frame-left", left));
+    Object.assign(output, frameEdgeStyles("--frame-left", left));
   }
 
   if (hasX && !hasXComponents) {
-    Object.assign(output, frameEdgeStyles("--layout-frame-x", x));
+    Object.assign(output, frameEdgeStyles("--frame-x", x));
   }
   if (hasY && !hasYComponents) {
-    Object.assign(output, frameEdgeStyles("--layout-frame-y", y));
+    Object.assign(output, frameEdgeStyles("--frame-y", y));
   }
 
   if (hasAll && hasUnassignedComponents) {
-    Object.assign(output, frameEdgeStyles("--layout-frame", all));
+    Object.assign(output, frameEdgeStyles("--frame", all));
   }
 
   return output;
@@ -92,408 +92,257 @@ const style = computed(() =>
 </script>
 
 <template>
-  <RadixSlot class="layout-frame" :style>
+  <RadixSlot :style data-framed>
     <slot />
   </RadixSlot>
 </template>
 
 <style>
-@property --layout-frame {
+@property --frame {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-frame-tablet {
+@property --frame-tablet {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-frame-laptop {
+@property --frame-laptop {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-frame-desktop {
+@property --frame-desktop {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-frame-current {
+@property --frame-actual {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-frame-x {
+@property --frame-x {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-frame-x-tablet {
+@property --frame-x-tablet {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-frame-x-laptop {
+@property --frame-x-laptop {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-frame-x-desktop {
+@property --frame-x-desktop {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-frame-x-current {
+@property --frame-x-actual {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-frame-y {
+@property --frame-y {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-frame-y-tablet {
+@property --frame-y-tablet {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-frame-y-laptop {
+@property --frame-y-laptop {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-frame-y-desktop {
+@property --frame-y-desktop {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-frame-y-current {
+@property --frame-y-actual {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-frame-top {
+@property --frame-top {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-frame-top-tablet {
+@property --frame-top-tablet {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-frame-top-laptop {
+@property --frame-top-laptop {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-frame-top-desktop {
+@property --frame-top-desktop {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-frame-top-current {
+@property --frame-top-actual {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-frame-right {
+@property --frame-right {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-frame-right-tablet {
+@property --frame-right-tablet {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-frame-right-laptop {
+@property --frame-right-laptop {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-frame-right-desktop {
+@property --frame-right-desktop {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-frame-right-current {
+@property --frame-right-actual {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-frame-bottom {
+@property --frame-bottom {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-frame-bottom-tablet {
+@property --frame-bottom-tablet {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-frame-bottom-laptop {
+@property --frame-bottom-laptop {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-frame-bottom-desktop {
+@property --frame-bottom-desktop {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-frame-bottom-current {
+@property --frame-bottom-actual {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-frame-left {
+@property --frame-left {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-frame-left-tablet {
+@property --frame-left-tablet {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-frame-left-laptop {
+@property --frame-left-laptop {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-frame-left-desktop {
+@property --frame-left-desktop {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-frame-left-current {
+@property --frame-left-actual {
   syntax: "*";
   inherits: false;
 }
 
 @layer layout.init {
-  .layout-frame {
-    --layout-frame: unset;
-    --layout-frame-tablet: unset;
-    --layout-frame-laptop: unset;
-    --layout-frame-desktop: unset;
-    --layout-frame-x: unset;
-    --layout-frame-x-tablet: unset;
-    --layout-frame-x-laptop: unset;
-    --layout-frame-x-desktop: unset;
-    --layout-frame-y: unset;
-    --layout-frame-y-tablet: unset;
-    --layout-frame-y-laptop: unset;
-    --layout-frame-y-desktop: unset;
-    --layout-frame-top: unset;
-    --layout-frame-top-tablet: unset;
-    --layout-frame-top-laptop: unset;
-    --layout-frame-top-desktop: unset;
-    --layout-frame-right: unset;
-    --layout-frame-right-tablet: unset;
-    --layout-frame-right-laptop: unset;
-    --layout-frame-right-desktop: unset;
-    --layout-frame-bottom: unset;
-    --layout-frame-bottom-tablet: unset;
-    --layout-frame-bottom-laptop: unset;
-    --layout-frame-bottom-desktop: unset;
-    --layout-frame-left: unset;
-    --layout-frame-left-tablet: unset;
-    --layout-frame-left-laptop: unset;
-    --layout-frame-left-desktop: unset;
-    --layout-frame-current: var(--layout-frame);
-    --layout-frame-x-current: var(
-      --layout-frame-x,
-      var(--layout-frame-current)
-    );
-    --layout-frame-y-current: var(
-      --layout-frame-y,
-      var(--layout-frame-current)
-    );
-    --layout-frame-top-current: var(
-      --layout-frame-top,
-      var(--layout-frame-y-current)
-    );
-    --layout-frame-right-current: var(
-      --layout-frame-right,
-      var(--layout-frame-x-current)
-    );
-    --layout-frame-bottom-current: var(
-      --layout-frame-bottom,
-      var(--layout-frame-y-current)
-    );
-    --layout-frame-left-current: var(
-      --layout-frame-left,
-      var(--layout-frame-x-current)
-    );
+  [data-framed] {
+    --frame-actual: var(--frame);
+    --frame-x-actual: var(--frame-x, var(--frame-actual));
+    --frame-y-actual: var(--frame-y, var(--frame-actual));
+    --frame-top-actual: var(--frame-top, var(--frame-y-actual));
+    --frame-right-actual: var(--frame-right, var(--frame-x-actual));
+    --frame-bottom-actual: var(--frame-bottom, var(--frame-y-actual));
+    --frame-left-actual: var(--frame-left, var(--frame-x-actual));
 
     @container style(--media-gte-tablet: true) {
-      --layout-frame-tablet: var(--layout-frame);
-      --layout-frame-x-tablet: var(
-        --layout-frame-x,
-        var(--layout-frame-tablet)
-      );
-      --layout-frame-y-tablet: var(
-        --layout-frame-y,
-        var(--layout-frame-tablet)
-      );
-      --layout-frame-top-tablet: var(
-        --layout-frame-top,
-        var(--layout-frame-y-tablet)
-      );
-      --layout-frame-right-tablet: var(
-        --layout-frame-right,
-        var(--layout-frame-x-tablet)
-      );
-      --layout-frame-bottom-tablet: var(
-        --layout-frame-bottom,
-        var(--layout-frame-y-tablet)
-      );
-      --layout-frame-left-tablet: var(
-        --layout-frame-left,
-        var(--layout-frame-x-tablet)
-      );
-      --layout-frame-current: var(--layout-frame-tablet);
-      --layout-frame-x-current: var(
-        --layout-frame-x-tablet,
-        var(--layout-frame-current)
-      );
-      --layout-frame-y-current: var(
-        --layout-frame-y-tablet,
-        var(--layout-frame-current)
-      );
-      --layout-frame-top-current: var(
-        --layout-frame-top-tablet,
-        var(--layout-frame-y-current)
-      );
-      --layout-frame-right-current: var(
-        --layout-frame-right-tablet,
-        var(--layout-frame-x-current)
-      );
-      --layout-frame-bottom-current: var(
-        --layout-frame-bottom-tablet,
-        var(--layout-frame-y-current)
-      );
-      --layout-frame-left-current: var(
-        --layout-frame-left-tablet,
-        var(--layout-frame-x-current)
-      );
+      --frame-tablet: var(--frame);
+      --frame-x-tablet: var(--frame-x, var(--frame-tablet));
+      --frame-y-tablet: var(--frame-y, var(--frame-tablet));
+      --frame-top-tablet: var(--frame-top, var(--frame-y-tablet));
+      --frame-right-tablet: var(--frame-right, var(--frame-x-tablet));
+      --frame-bottom-tablet: var(--frame-bottom, var(--frame-y-tablet));
+      --frame-left-tablet: var(--frame-left, var(--frame-x-tablet));
+      --frame-actual: var(--frame-tablet);
+      --frame-x-actual: var(--frame-x-tablet, var(--frame-actual));
+      --frame-y-actual: var(--frame-y-tablet, var(--frame-actual));
+      --frame-top-actual: var(--frame-top-tablet, var(--frame-y-actual));
+      --frame-right-actual: var(--frame-right-tablet, var(--frame-x-actual));
+      --frame-bottom-actual: var(--frame-bottom-tablet, var(--frame-y-actual));
+      --frame-left-actual: var(--frame-left-tablet, var(--frame-x-actual));
     }
 
     @container style(--media-gte-laptop: true) {
-      --layout-frame-laptop: var(--layout-frame-tablet);
-      --layout-frame-x-laptop: var(
-        --layout-frame-x-tablet,
-        var(--layout-frame-laptop)
-      );
-      --layout-frame-y-laptop: var(
-        --layout-frame-y-tablet,
-        var(--layout-frame-laptop)
-      );
-      --layout-frame-top-laptop: var(
-        --layout-frame-top-tablet,
-        var(--layout-frame-y-laptop)
-      );
-      --layout-frame-right-laptop: var(
-        --layout-frame-right-tablet,
-        var(--layout-frame-x-laptop)
-      );
-      --layout-frame-bottom-laptop: var(
-        --layout-frame-bottom-tablet,
-        var(--layout-frame-y-laptop)
-      );
-      --layout-frame-left-laptop: var(
-        --layout-frame-left-tablet,
-        var(--layout-frame-x-laptop)
-      );
-      --layout-frame-current: var(--layout-frame-laptop);
-      --layout-frame-x-current: var(
-        --layout-frame-x-laptop,
-        var(--layout-frame-current)
-      );
-      --layout-frame-y-current: var(
-        --layout-frame-y-laptop,
-        var(--layout-frame-current)
-      );
-      --layout-frame-top-current: var(
-        --layout-frame-top-laptop,
-        var(--layout-frame-y-current)
-      );
-      --layout-frame-right-current: var(
-        --layout-frame-right-laptop,
-        var(--layout-frame-x-current)
-      );
-      --layout-frame-bottom-current: var(
-        --layout-frame-bottom-laptop,
-        var(--layout-frame-y-current)
-      );
-      --layout-frame-left-current: var(
-        --layout-frame-left-laptop,
-        var(--layout-frame-x-current)
-      );
+      --frame-laptop: var(--frame-tablet);
+      --frame-x-laptop: var(--frame-x-tablet, var(--frame-laptop));
+      --frame-y-laptop: var(--frame-y-tablet, var(--frame-laptop));
+      --frame-top-laptop: var(--frame-top-tablet, var(--frame-y-laptop));
+      --frame-right-laptop: var(--frame-right-tablet, var(--frame-x-laptop));
+      --frame-bottom-laptop: var(--frame-bottom-tablet, var(--frame-y-laptop));
+      --frame-left-laptop: var(--frame-left-tablet, var(--frame-x-laptop));
+      --frame-actual: var(--frame-laptop);
+      --frame-x-actual: var(--frame-x-laptop, var(--frame-actual));
+      --frame-y-actual: var(--frame-y-laptop, var(--frame-actual));
+      --frame-top-actual: var(--frame-top-laptop, var(--frame-y-actual));
+      --frame-right-actual: var(--frame-right-laptop, var(--frame-x-actual));
+      --frame-bottom-actual: var(--frame-bottom-laptop, var(--frame-y-actual));
+      --frame-left-actual: var(--frame-left-laptop, var(--frame-x-actual));
     }
 
     @container style(--media-eq-desktop: true) {
-      --layout-frame-desktop: var(--layout-frame-laptop);
-      --layout-frame-x-desktop: var(
-        --layout-frame-x-laptop,
-        var(--layout-frame-desktop)
+      --frame-desktop: var(--frame-laptop);
+      --frame-x-desktop: var(--frame-x-laptop, var(--frame-desktop));
+      --frame-y-desktop: var(--frame-y-laptop, var(--frame-desktop));
+      --frame-top-desktop: var(--frame-top-laptop, var(--frame-y-desktop));
+      --frame-right-desktop: var(--frame-right-laptop, var(--frame-x-desktop));
+      --frame-bottom-desktop: var(
+        --frame-bottom-laptop,
+        var(--frame-y-desktop)
       );
-      --layout-frame-y-desktop: var(
-        --layout-frame-y-laptop,
-        var(--layout-frame-desktop)
-      );
-      --layout-frame-top-desktop: var(
-        --layout-frame-top-laptop,
-        var(--layout-frame-y-desktop)
-      );
-      --layout-frame-right-desktop: var(
-        --layout-frame-right-laptop,
-        var(--layout-frame-x-desktop)
-      );
-      --layout-frame-bottom-desktop: var(
-        --layout-frame-bottom-laptop,
-        var(--layout-frame-y-desktop)
-      );
-      --layout-frame-left-desktop: var(
-        --layout-frame-left-laptop,
-        var(--layout-frame-x-desktop)
-      );
-      --layout-frame-current: var(--layout-frame-desktop);
-      --layout-frame-x-current: var(
-        --layout-frame-x-desktop,
-        var(--layout-frame-current)
-      );
-      --layout-frame-y-current: var(
-        --layout-frame-y-desktop,
-        var(--layout-frame-current)
-      );
-      --layout-frame-top-current: var(
-        --layout-frame-top-desktop,
-        var(--layout-frame-y-current)
-      );
-      --layout-frame-right-current: var(
-        --layout-frame-right-desktop,
-        var(--layout-frame-x-current)
-      );
-      --layout-frame-bottom-current: var(
-        --layout-frame-bottom-desktop,
-        var(--layout-frame-y-current)
-      );
-      --layout-frame-left-current: var(
-        --layout-frame-left-desktop,
-        var(--layout-frame-x-current)
-      );
+      --frame-left-desktop: var(--frame-left-laptop, var(--frame-x-desktop));
+      --frame-actual: var(--frame-desktop);
+      --frame-x-actual: var(--frame-x-desktop, var(--frame-actual));
+      --frame-y-actual: var(--frame-y-desktop, var(--frame-actual));
+      --frame-top-actual: var(--frame-top-desktop, var(--frame-y-actual));
+      --frame-right-actual: var(--frame-right-desktop, var(--frame-x-actual));
+      --frame-bottom-actual: var(--frame-bottom-desktop, var(--frame-y-actual));
+      --frame-left-actual: var(--frame-left-desktop, var(--frame-x-actual));
     }
   }
 }
 
 @layer layout.trait {
-  .layout-frame {
-    padding: var(--layout-frame-top-current) var(--layout-frame-right-current)
-      var(--layout-frame-bottom-current) var(--layout-frame-left-current);
+  [data-framed] {
+    padding: var(--frame-top-actual) var(--frame-right-actual)
+      var(--frame-bottom-actual) var(--frame-left-actual);
   }
 }
 </style>

@@ -366,31 +366,31 @@ useChildren<StickyElementInput, StickyElement>("viewport", (children) => {
 </template>
 
 <style>
-@property --layout-scroll {
+@property --scroll {
   syntax: "<length>";
   inherits: true;
   initial-value: 0;
 }
 
-@property --layout-scroll-length {
+@property --scroll-length {
   syntax: "<length>";
   inherits: true;
   initial-value: 0;
 }
 
-@property --layout-scroll-start {
+@property --scroll-start {
   syntax: "<length>";
   inherits: true;
   initial-value: 0;
 }
 
-@property --layout-scroll-end {
+@property --scroll-end {
   syntax: "<length>";
   inherits: true;
   initial-value: 0;
 }
 
-@property --layout-scroll-viewport {
+@property --scroll-viewport {
   syntax: "<length-percentage>";
   inherits: true;
   initial-value: 0;
@@ -398,11 +398,10 @@ useChildren<StickyElementInput, StickyElement>("viewport", (children) => {
 
 @layer layout.init {
   .layout-viewport {
-    --layout-scroll-start: max(0px, var(--layout-scroll));
-    --layout-scroll-end: max(
+    --scroll-start: max(0px, var(--scroll));
+    --scroll-end: max(
       0px,
-      var(--layout-scroll-length) - var(--layout-scroll-viewport) -
-        var(--layout-scroll)
+      var(--scroll-length) - var(--scroll-viewport) - var(--scroll)
     );
   }
 }

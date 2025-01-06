@@ -17,7 +17,7 @@ defineSlots<LayerSlots>();
 
 const style = computed(() => ({
   ...responsiveToAttributes(
-    "--layout-layer",
+    "--layer",
     compactResponsive(
       mapResponsive(
         fillResponsive(normalizeResponsive(props.layer)),
@@ -42,27 +42,27 @@ const LayoutPrimitive = InternalLayoutPrimitive;
 </template>
 
 <style>
-@property --layout-layer {
+@property --layer {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-layer-tablet {
+@property --layer-tablet {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-layer-laptop {
+@property --layer-laptop {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-layer-desktop {
+@property --layer-desktop {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-layer-current {
+@property --layer-actual {
   syntax: "<integer> | auto";
   inherits: false;
   initial-value: auto;
@@ -70,21 +70,21 @@ const LayoutPrimitive = InternalLayoutPrimitive;
 
 @layer layout.init {
   .layout-layer {
-    --layout-layer-current: var(--layout-layer);
+    --layer-actual: var(--layer);
 
     @container style(--media-gte-tablet: true) {
-      --layout-layer-tablet: var(--layout-layer);
-      --layout-layer-current: var(--layout-layer-tablet);
+      --layer-tablet: var(--layer);
+      --layer-actual: var(--layer-tablet);
     }
 
     @container style(--media-gte-laptop: true) {
-      --layout-layer-laptop: var(--layout-layer-tablet);
-      --layout-layer-current: var(--layout-layer-laptop);
+      --layer-laptop: var(--layer-tablet);
+      --layer-actual: var(--layer-laptop);
     }
 
     @container style(--media-eq-desktop: true) {
-      --layout-layer-desktop: var(--layout-layer-laptop);
-      --layout-layer-current: var(--layout-layer-desktop);
+      --layer-desktop: var(--layer-laptop);
+      --layer-actual: var(--layer-desktop);
     }
   }
 }
@@ -92,7 +92,7 @@ const LayoutPrimitive = InternalLayoutPrimitive;
 @layer layout.component {
   .layout-layer {
     grid-area: main;
-    z-index: var(--layout-layer-current);
+    z-index: var(--layer-actual);
 
     :not(.layout-layers) > & {
       display: none;

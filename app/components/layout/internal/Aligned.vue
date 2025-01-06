@@ -124,7 +124,7 @@ const data = useDataString(() => ({
   inherits: false;
 }
 
-@property --layout-align-current {
+@property --layout-align-actual {
   syntax: "start | center | end | normal";
   inherits: false;
   initial-value: normal;
@@ -150,7 +150,7 @@ const data = useDataString(() => ({
   inherits: false;
 }
 
-@property --layout-align-y-current {
+@property --layout-align-y-actual {
   syntax: "start | center | end | normal";
   inherits: false;
   initial-value: normal;
@@ -158,44 +158,44 @@ const data = useDataString(() => ({
 
 @layer layout.init {
   [data-aligned] {
-    --layout-align-current: var(--layout-align);
-    --layout-align-y-current: var(--layout-align-y);
+    --layout-align-actual: var(--layout-align);
+    --layout-align-y-actual: var(--layout-align-y);
 
     @container style(--media-gte-tablet: true) {
       --layout-align-tablet: var(--layout-align);
-      --layout-align-current: var(--layout-align-tablet);
+      --layout-align-actual: var(--layout-align-tablet);
       --layout-align-y-tablet: var(--layout-align-y);
-      --layout-align-y-current: var(--layout-align-y-tablet);
+      --layout-align-y-actual: var(--layout-align-y-tablet);
     }
 
     @container style(--media-gte-laptop: true) {
       --layout-align-laptop: var(--layout-align-tablet);
-      --layout-align-current: var(--layout-align-laptop);
+      --layout-align-actual: var(--layout-align-laptop);
       --layout-align-y-laptop: var(--layout-align-y-tablet);
-      --layout-align-y-current: var(--layout-align-y-laptop);
+      --layout-align-y-actual: var(--layout-align-y-laptop);
     }
 
     @container style(--media-eq-desktop: true) {
       --layout-align-desktop: var(--layout-align-laptop);
-      --layout-align-current: var(--layout-align-desktop);
+      --layout-align-actual: var(--layout-align-desktop);
       --layout-align-y-desktop: var(--layout-align-y-laptop);
-      --layout-align-y-current: var(--layout-align-y-desktop);
+      --layout-align-y-actual: var(--layout-align-y-desktop);
     }
   }
 }
 
 @layer layout.trait {
   [data-aligned~="self"] {
-    place-self: var(--layout-align-y-current) var(--layout-align-current);
+    place-self: var(--layout-align-y-actual) var(--layout-align-actual);
   }
 
   [data-aligned~="column"] {
-    align-items: var(--layout-align-current);
-    justify-content: var(--layout-align-y-current);
+    align-items: var(--layout-align-actual);
+    justify-content: var(--layout-align-y-actual);
   }
 
   [data-aligned~="grid"] {
-    place-items: var(--layout-align-y-current) var(--layout-align-current);
+    place-items: var(--layout-align-y-actual) var(--layout-align-actual);
   }
 }
 </style>

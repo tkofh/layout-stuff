@@ -3,8 +3,8 @@ import type { PrimitiveSlots } from "~/components/layout/internal/Primitive.vue"
 
 function flexibleStyle(grow?: FlexRatio, shrink?: FlexRatio) {
   return {
-    ...responsiveToAttributes("--layout-grow", normalizeResponsive(grow)),
-    ...responsiveToAttributes("--layout-shrink", normalizeResponsive(shrink)),
+    ...responsiveToAttributes("--grow", normalizeResponsive(grow)),
+    ...responsiveToAttributes("--shrink", normalizeResponsive(shrink)),
   };
 }
 
@@ -32,53 +32,53 @@ const style = computed(() => flexibleStyle(grow, shrink));
 </template>
 
 <style>
-@property --layout-grow {
+@property --grow {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-grow-tablet {
+@property --grow-tablet {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-grow-laptop {
+@property --grow-laptop {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-grow-desktop {
+@property --grow-desktop {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-grow-current {
+@property --grow-actual {
   syntax: "<number>";
   inherits: false;
   initial-value: 0;
 }
 
-@property --layout-shrink {
+@property --shrink {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-shrink-tablet {
+@property --shrink-tablet {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-shrink-laptop {
+@property --shrink-laptop {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-shrink-desktop {
+@property --shrink-desktop {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-shrink-current {
+@property --shrink-actual {
   syntax: "<number>";
   inherits: false;
   initial-value: 1;
@@ -86,35 +86,35 @@ const style = computed(() => flexibleStyle(grow, shrink));
 
 @layer layout.init {
   .layout-flexible {
-    --layout-grow-current: var(--layout-grow);
-    --layout-shrink-current: var(--layout-shrink);
+    --grow-actual: var(--grow);
+    --shrink-actual: var(--shrink);
 
     @container style(--media-gte-tablet: true) {
-      --layout-grow-tablet: var(--layout-grow);
-      --layout-shrink-tablet: var(--layout-shrink);
-      --layout-grow-current: var(--layout-grow-tablet);
-      --layout-shrink-current: var(--layout-shrink-tablet);
+      --grow-tablet: var(--grow);
+      --shrink-tablet: var(--shrink);
+      --grow-actual: var(--grow-tablet);
+      --shrink-actual: var(--shrink-tablet);
     }
 
     @container style(--media-gte-laptop: true) {
-      --layout-grow-laptop: var(--layout-grow-tablet);
-      --layout-shrink-laptop: var(--layout-shrink-tablet);
-      --layout-grow-current: var(--layout-grow-laptop);
-      --layout-shrink-current: var(--layout-shrink-laptop);
+      --grow-laptop: var(--grow-tablet);
+      --shrink-laptop: var(--shrink-tablet);
+      --grow-actual: var(--grow-laptop);
+      --shrink-actual: var(--shrink-laptop);
     }
 
     @container style(--media-eq-desktop: true) {
-      --layout-grow-desktop: var(--layout-grow-laptop);
-      --layout-shrink-desktop: var(--layout-shrink-laptop);
-      --layout-grow-current: var(--layout-grow-desktop);
-      --layout-shrink-current: var(--layout-shrink-desktop);
+      --grow-desktop: var(--grow-laptop);
+      --shrink-desktop: var(--shrink-laptop);
+      --grow-actual: var(--grow-desktop);
+      --shrink-actual: var(--shrink-desktop);
     }
   }
 }
 
 @layer layout.trait {
   .layout-flexible {
-    flex: var(--layout-grow-current) var(--layout-shrink-current) auto;
+    flex: var(--grow-actual) var(--shrink-actual) auto;
   }
 }
 </style>

@@ -9,6 +9,9 @@ import InternalLayoutSized, {
 import InternalLayoutFrame, {
   type FrameProps,
 } from "~/components/layout/internal/Frame.vue";
+import InternalLayoutBleed, {
+  type BleedProps,
+} from "~/components/layout/internal/Bleed.vue";
 import InternalLayoutVisibility, {
   type VisibilityProps,
 } from "~/components/layout/internal/Visibility.vue";
@@ -17,6 +20,7 @@ export interface BoxProps
   extends PrimitiveProps,
     SizedProps,
     FrameProps,
+    BleedProps,
     VisibilityProps {}
 
 export type BoxSlots = PrimitiveSlots;
@@ -27,6 +31,7 @@ defineProps<BoxProps>();
 defineSlots<BoxSlots>();
 
 const LayoutFrame = InternalLayoutFrame;
+const LayoutBleed = InternalLayoutBleed;
 const LayoutSized = InternalLayoutSized;
 const LayoutPrimitive = InternalLayoutPrimitive;
 const LayoutVisibility = InternalLayoutVisibility;
@@ -51,11 +56,21 @@ const LayoutVisibility = InternalLayoutVisibility;
       :frame-bottom
       :frame-left
     >
-      <LayoutVisibility :hide-above :hide-below>
-        <LayoutPrimitive :as class="layout-box">
-          <slot />
-        </LayoutPrimitive>
-      </LayoutVisibility>
+      <LayoutBleed
+        :bleed
+        :bleed-y
+        :bleed-x
+        :bleed-top
+        :bleed-right
+        :bleed-bottom
+        :bleed-left
+      >
+        <LayoutVisibility :hide-above :hide-below>
+          <LayoutPrimitive :as class="layout-box">
+            <slot />
+          </LayoutPrimitive>
+        </LayoutVisibility>
+      </LayoutBleed>
     </LayoutFrame>
   </LayoutSized>
 </template>

@@ -108,7 +108,7 @@ const LayoutFrame = InternalLayoutFrame;
   inherits: false;
 }
 
-@property --layout-tiles-current {
+@property --layout-tiles-actual {
   syntax: "<integer>";
   inherits: false;
   initial-value: 1;
@@ -116,21 +116,21 @@ const LayoutFrame = InternalLayoutFrame;
 
 @layer layout.init {
   .layout-tiles {
-    --layout-tiles-current: var(--layout-tiles);
+    --layout-tiles-actual: var(--layout-tiles);
 
     @container style(--media-gte-tablet: true) {
       --layout-tiles-tablet: var(--layout-tiles);
-      --layout-tiles-current: var(--layout-tiles-tablet);
+      --layout-tiles-actual: var(--layout-tiles-tablet);
     }
 
     @container style(--media-gte-laptop: true) {
       --layout-tiles-laptop: var(--layout-tiles-tablet);
-      --layout-tiles-current: var(--layout-tiles-laptop);
+      --layout-tiles-actual: var(--layout-tiles-laptop);
     }
 
     @container style(--media-eq-desktop: true) {
       --layout-tiles-desktop: var(--layout-tiles-laptop);
-      --layout-tiles-current: var(--layout-tiles-desktop);
+      --layout-tiles-actual: var(--layout-tiles-desktop);
     }
   }
 }
@@ -140,7 +140,7 @@ const LayoutFrame = InternalLayoutFrame;
     /* this is just a guess, based on putting it in a stack */
     inline-size: 100%;
     display: block grid;
-    grid-template-columns: repeat(var(--layout-tiles-current), 1fr);
+    grid-template-columns: repeat(var(--layout-tiles-actual), 1fr);
     grid-auto-flow: row;
 
     &[data-tiles~="dense"] {

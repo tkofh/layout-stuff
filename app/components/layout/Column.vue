@@ -72,7 +72,7 @@ function columnStyle(
     Object.assign(
       result,
       responsiveToAttributes(
-        "--layout-column-collapsed-display",
+        "--column-collapsed-display",
         mapResponsive(
           normalizeResponsive(columnsAlign),
           (value, breakpoint) => {
@@ -219,22 +219,22 @@ const LayoutFlexible = InternalLayoutFlexible;
 </template>
 
 <style>
-@property --layout-column-collapsed-display {
+@property --column-collapsed-display {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-column-collapsed-display-tablet {
+@property --column-collapsed-display-tablet {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-column-collapsed-display-laptop {
+@property --column-collapsed-display-laptop {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-column-collapsed-display-current {
+@property --column-collapsed-display-actual {
   syntax: "flow-root | flex";
   inherits: false;
   initial-value: flow-root;
@@ -242,26 +242,16 @@ const LayoutFlexible = InternalLayoutFlexible;
 
 @layer layout.init {
   .layout-column {
-    --layout-column-collapsed-display-current: var(
-      --layout-column-collapsed-display
-    );
+    --column-collapsed-display-actual: var(--column-collapsed-display);
 
     @container style(--media-gte-tablet: true) {
-      --layout-column-collapsed-display-tablet: var(
-        --layout-column-collapsed-display
-      );
-      --layout-column-collapsed-display-current: var(
-        --layout-column-collapsed-display-tablet
-      );
+      --column-collapsed-display-tablet: var(--column-collapsed-display);
+      --column-collapsed-display-actual: var(--column-collapsed-display-tablet);
     }
 
     @container style(--media-gte-laptop: true) {
-      --layout-column-collapsed-display-laptop: var(
-        --layout-column-collapsed-display-tablet
-      );
-      --layout-column-collapsed-display-current: var(
-        --layout-column-collapsed-display-laptop
-      );
+      --column-collapsed-display-laptop: var(--column-collapsed-display-tablet);
+      --column-collapsed-display-actual: var(--column-collapsed-display-laptop);
     }
   }
 }
@@ -272,25 +262,25 @@ const LayoutFlexible = InternalLayoutFlexible;
 
     @container style(--media-lt-tablet: true) {
       .layout-columns[data-collapsible~="tablet"] > & {
-        display: block var(--layout-column-collapsed-display-current);
+        display: block var(--column-collapsed-display-actual);
         flex-flow: row nowrap;
-        justify-content: var(--layout-align-current, start);
+        justify-content: var(--layout-align-actual, start);
       }
     }
 
     @container style(--media-lt-laptop: true) {
       .layout-columns[data-collapsible~="laptop"] > & {
-        display: block var(--layout-column-collapsed-display-current);
+        display: block var(--column-collapsed-display-actual);
         flex-flow: row nowrap;
-        justify-content: var(--layout-align-current, start);
+        justify-content: var(--layout-align-actual, start);
       }
     }
 
     @container style(--media-lt-desktop: true) {
       .layout-columns[data-collapsible~="desktop"] > & {
-        display: block var(--layout-column-collapsed-display-current);
+        display: block var(--column-collapsed-display-actual);
         flex-flow: row nowrap;
-        justify-content: var(--layout-align-current, start);
+        justify-content: var(--layout-align-actual, start);
       }
     }
 

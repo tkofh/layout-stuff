@@ -21,7 +21,7 @@ function sizeStyles(
       Object.assign(
         output,
         responsiveToAttributes(
-          "--layout-size-width",
+          "--inline-size",
           mapResponsive(
             normalizeResponsive(width),
             (value) => SIZE_SCALE[value],
@@ -30,7 +30,7 @@ function sizeStyles(
       );
     }
   } else if (!hasHeight || !hasAspectRatio) {
-    Object.assign(output, { "--layout-size-width": "100%" });
+    Object.assign(output, { "--inline-size": "100%" });
   }
 
   if (hasHeight) {
@@ -38,7 +38,7 @@ function sizeStyles(
       Object.assign(
         output,
         responsiveToAttributes(
-          "--layout-size-height",
+          "--block-size",
           mapResponsive(
             normalizeResponsive(height),
             (value) => SIZE_SCALE[value],
@@ -47,16 +47,13 @@ function sizeStyles(
       );
     }
   } else if (!hasWidth || !hasAspectRatio) {
-    Object.assign(output, { "--layout-size-height": "100%" });
+    Object.assign(output, { "--block-size": "100%" });
   }
 
   if (hasAspectRatio) {
     Object.assign(
       output,
-      responsiveToAttributes(
-        "--layout-size-aspect",
-        normalizeResponsive(aspect),
-      ),
+      responsiveToAttributes("--aspect", normalizeResponsive(aspect)),
     );
   }
 
@@ -64,7 +61,7 @@ function sizeStyles(
     Object.assign(
       output,
       responsiveToAttributes(
-        "--layout-size-min-width",
+        "--min-inline-size",
         mapResponsive(
           normalizeResponsive(minWidth),
           (value) => SIZE_SCALE[value],
@@ -77,7 +74,7 @@ function sizeStyles(
     Object.assign(
       output,
       responsiveToAttributes(
-        "--layout-size-min-height",
+        "--min-block-size",
         mapResponsive(
           normalizeResponsive(minHeight),
           (value) => SIZE_SCALE[value],
@@ -90,7 +87,7 @@ function sizeStyles(
     Object.assign(
       output,
       responsiveToAttributes(
-        "--layout-size-max-width",
+        "--max-inline-size",
         mapResponsive(normalizeResponsive(maxWidth), (value) =>
           value === "none" ? "none" : SIZE_SCALE[value],
         ),
@@ -102,7 +99,7 @@ function sizeStyles(
     Object.assign(
       output,
       responsiveToAttributes(
-        "--layout-size-max-height",
+        "--max-block-size",
         mapResponsive(normalizeResponsive(maxHeight), (value) =>
           value === "none" ? "none" : SIZE_SCALE[value],
         ),
@@ -154,265 +151,327 @@ const style = computed(() =>
 </script>
 
 <template>
-  <RadixSlot :style class="layout-sized">
+  <RadixSlot :style data-sized>
     <slot />
   </RadixSlot>
 </template>
 
 <style>
-@property --layout-size-width {
+@property --inline-size {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-size-width-tablet {
+@property --inline-size-tablet {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-size-width-laptop {
+@property --inline-size-laptop {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-size-width-desktop {
+@property --inline-size-desktop {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-size-width-current {
+@property --inline-size-specified {
   syntax: "<length-percentage> | auto";
   inherits: false;
   initial-value: auto;
 }
 
-@property --layout-size-height {
-  syntax: "*";
-  inherits: false;
-}
-
-@property --layout-size-height-tablet {
-  syntax: "*";
-  inherits: false;
-}
-
-@property --layout-size-height-laptop {
-  syntax: "*";
-  inherits: false;
-}
-
-@property --layout-size-height-desktop {
-  syntax: "*";
-  inherits: false;
-}
-
-@property --layout-size-height-current {
+@property --inline-size-actual {
   syntax: "<length-percentage> | auto";
   inherits: false;
   initial-value: auto;
 }
 
-@property --layout-size-aspect {
+@property --block-size {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-size-aspect-tablet {
+@property --block-size-tablet {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-size-aspect-laptop {
+@property --block-size-laptop {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-size-aspect-desktop {
+@property --block-size-desktop {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-size-aspect-current {
+@property --block-size-specified {
+  syntax: "<length-percentage> | auto";
+  inherits: false;
+  initial-value: auto;
+}
+
+@property --block-size-actual {
+  syntax: "<length-percentage> | auto";
+  inherits: false;
+  initial-value: auto;
+}
+
+@property --aspect {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-size-min-width {
+@property --aspect-tablet {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-size-min-width-tablet {
+@property --aspect-laptop {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-size-min-width-laptop {
+@property --aspect-desktop {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-size-min-width-desktop {
+@property --aspect-actual {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-size-min-width-current {
+@property --min-inline-size {
+  syntax: "*";
+  inherits: false;
+}
+
+@property --min-inline-size-tablet {
+  syntax: "*";
+  inherits: false;
+}
+
+@property --min-inline-size-laptop {
+  syntax: "*";
+  inherits: false;
+}
+
+@property --min-inline-size-desktop {
+  syntax: "*";
+  inherits: false;
+}
+
+@property --min-inline-size-specified {
   syntax: "<length-percentage>";
   inherits: false;
   initial-value: 0;
 }
 
-@property --layout-size-min-height {
-  syntax: "*";
-  inherits: false;
-}
-
-@property --layout-size-min-height-tablet {
-  syntax: "*";
-  inherits: false;
-}
-
-@property --layout-size-min-height-laptop {
-  syntax: "*";
-  inherits: false;
-}
-
-@property --layout-size-min-height-desktop {
-  syntax: "*";
-  inherits: false;
-}
-
-@property --layout-size-min-height-current {
+@property --min-inline-size-actual {
   syntax: "<length-percentage>";
   inherits: false;
   initial-value: 0;
 }
 
-@property --layout-size-max-width {
+@property --min-block-size {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-size-max-width-tablet {
+@property --min-block-size-tablet {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-size-max-width-laptop {
+@property --min-block-size-laptop {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-size-max-width-desktop {
+@property --min-block-size-desktop {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-size-max-width-current {
+@property --min-block-size-specified {
+  syntax: "<length-percentage>";
+  inherits: false;
+  initial-value: 0;
+}
+
+@property --min-block-size-actual {
+  syntax: "<length-percentage>";
+  inherits: false;
+  initial-value: 0;
+}
+
+@property --max-inline-size {
+  syntax: "*";
+  inherits: false;
+}
+
+@property --max-inline-size-tablet {
+  syntax: "*";
+  inherits: false;
+}
+
+@property --max-inline-size-laptop {
+  syntax: "*";
+  inherits: false;
+}
+
+@property --max-inline-size-desktop {
+  syntax: "*";
+  inherits: false;
+}
+
+@property --max-inline-size-specified {
   syntax: "<length-percentage> | none";
   inherits: false;
   initial-value: none;
 }
 
-@property --layout-size-max-height {
-  syntax: "*";
-  inherits: false;
-}
-
-@property --layout-size-max-height-tablet {
-  syntax: "*";
-  inherits: false;
-}
-
-@property --layout-size-max-height-laptop {
-  syntax: "*";
-  inherits: false;
-}
-
-@property --layout-size-max-height-desktop {
-  syntax: "*";
-  inherits: false;
-}
-
-@property --layout-size-max-height-current {
+@property --max-inline-size-actual {
   syntax: "<length-percentage> | none";
   inherits: false;
   initial-value: none;
+}
+
+@property --max-block-size {
+  syntax: "*";
+  inherits: false;
+}
+
+@property --max-block-size-tablet {
+  syntax: "*";
+  inherits: false;
+}
+
+@property --max-block-size-laptop {
+  syntax: "*";
+  inherits: false;
+}
+
+@property --max-block-size-desktop {
+  syntax: "*";
+  inherits: false;
+}
+
+@property --max-block-size-specified {
+  syntax: "<length-percentage> | none";
+  inherits: false;
+  initial-value: none;
+}
+
+@property --max-block-size-actual {
+  syntax: "<length-percentage> | none";
+  inherits: false;
+  initial-value: none;
+}
+
+@property --inline-size-adjustment {
+  syntax: "<length-percentage>";
+  inherits: false;
+  initial-value: 0;
+}
+
+@property --block-size-adjustment {
+  syntax: "<length-percentage>";
+  inherits: false;
+  initial-value: 0;
 }
 
 @layer layout.init {
-  .layout-sized {
-    --layout-size-width-current: var(--layout-size-width);
-    --layout-size-height-current: var(--layout-size-height);
-    --layout-size-aspect-current: var(--layout-size-aspect);
-    --layout-size-min-width-current: var(--layout-size-min-width);
-    --layout-size-min-height-current: var(--layout-size-min-height);
-    --layout-size-max-width-current: var(--layout-size-max-width);
-    --layout-size-max-height-current: var(--layout-size-max-height);
+  [data-sized] {
+    --inline-size-specified: var(--inline-size);
+    --block-size-specified: var(--block-size);
+    --aspect-actual: var(--aspect);
+    --min-inline-size-specified: var(--min-inline-size);
+    --min-block-size-specified: var(--min-block-size);
+    --max-inline-size-specified: var(--max-inline-size);
+    --max-block-size-specified: var(--max-block-size);
+    --inline-size-actual: calc(
+      var(--inline-size-specified) + var(--inline-size-adjustment)
+    );
+    --block-size-actual: calc(
+      var(--block-size-specified) + var(--block-size-adjustment)
+    );
+    --min-inline-size-actual: calc(
+      var(--min-inline-size-specified) + var(--inline-size-adjustment)
+    );
+    --min-block-size-actual: calc(
+      var(--min-block-size-specified) + var(--block-size-adjustment)
+    );
+    --max-inline-size-actual: var(--max-inline-size-specified);
+    --max-block-size-actual: var(--max-block-size-specified);
 
     @container style(--media-gte-tablet: true) {
-      --layout-size-width-tablet: var(--layout-size-width);
-      --layout-size-height-tablet: var(--layout-size-height);
-      --layout-size-aspect-tablet: var(--layout-size-aspect);
-      --layout-size-min-width-tablet: var(--layout-size-min-width);
-      --layout-size-min-height-tablet: var(--layout-size-min-height);
-      --layout-size-max-width-tablet: var(--layout-size-max-width);
-      --layout-size-max-height-tablet: var(--layout-size-max-height);
-      --layout-size-width-current: var(--layout-size-width-tablet);
-      --layout-size-height-current: var(--layout-size-height-tablet);
-      --layout-size-aspect-current: var(--layout-size-aspect-tablet);
-      --layout-size-min-width-current: var(--layout-size-min-width-tablet);
-      --layout-size-min-height-current: var(--layout-size-min-height-tablet);
-      --layout-size-max-width-current: var(--layout-size-max-width-tablet);
-      --layout-size-max-height-current: var(--layout-size-max-height-tablet);
+      --inline-size-tablet: var(--inline-size);
+      --block-size-tablet: var(--block-size);
+      --aspect-tablet: var(--aspect);
+      --min-inline-size-tablet: var(--min-inline-size);
+      --min-block-size-tablet: var(--min-block-size);
+      --max-inline-size-tablet: var(--max-inline-size);
+      --max-block-size-tablet: var(--max-block-size);
+      --inline-size-specified: var(--inline-size-tablet);
+      --block-size-specified: var(--block-size-tablet);
+      --aspect-actual: var(--aspect-tablet);
+      --min-inline-size-specified: var(--min-inline-size-tablet);
+      --min-block-size-specified: var(--min-block-size-tablet);
+      --max-inline-size-specified: var(--max-inline-size-tablet);
+      --max-block-size-specified: var(--max-block-size-tablet);
     }
 
     @container style(--media-gte-laptop: true) {
-      --layout-size-width-laptop: var(--layout-size-width-tablet);
-      --layout-size-height-laptop: var(--layout-size-height-tablet);
-      --layout-size-aspect-laptop: var(--layout-size-aspect-tablet);
-      --layout-size-min-width-laptop: var(--layout-size-min-width-tablet);
-      --layout-size-min-height-laptop: var(--layout-size-min-height-tablet);
-      --layout-size-max-width-laptop: var(--layout-size-max-width-tablet);
-      --layout-size-max-height-laptop: var(--layout-size-max-height-tablet);
-      --layout-size-width-current: var(--layout-size-width-laptop);
-      --layout-size-height-current: var(--layout-size-height-laptop);
-      --layout-size-aspect-current: var(--layout-size-aspect-laptop);
-      --layout-size-min-width-current: var(--layout-size-min-width-laptop);
-      --layout-size-min-height-current: var(--layout-size-min-height-laptop);
-      --layout-size-max-width-current: var(--layout-size-max-width-laptop);
-      --layout-size-max-height-current: var(--layout-size-max-height-laptop);
+      --inline-size-laptop: var(--inline-size-tablet);
+      --block-size-laptop: var(--block-size-tablet);
+      --aspect-laptop: var(--aspect-tablet);
+      --min-inline-size-laptop: var(--min-inline-size-tablet);
+      --min-block-size-laptop: var(--min-block-size-tablet);
+      --max-inline-size-laptop: var(--max-inline-size-tablet);
+      --max-block-size-laptop: var(--max-block-size-tablet);
+      --inline-size-specified: var(--inline-size-laptop);
+      --block-size-specified: var(--block-size-laptop);
+      --aspect-actual: var(--aspect-laptop);
+      --min-inline-size-specified: var(--min-inline-size-laptop);
+      --min-block-size-specified: var(--min-block-size-laptop);
+      --max-inline-size-specified: var(--max-inline-size-laptop);
+      --max-block-size-specified: var(--max-block-size-laptop);
     }
 
     @container style(--media-eq-desktop: true) {
-      --layout-size-width-desktop: var(--layout-size-width-laptop);
-      --layout-size-height-desktop: var(--layout-size-height-laptop);
-      --layout-size-aspect-desktop: var(--layout-size-aspect-laptop);
-      --layout-size-min-width-desktop: var(--layout-size-min-width-laptop);
-      --layout-size-min-height-desktop: var(--layout-size-min-height-laptop);
-      --layout-size-max-width-desktop: var(--layout-size-max-width-laptop);
-      --layout-size-max-height-desktop: var(--layout-size-max-height-laptop);
-      --layout-size-width-current: var(--layout-size-width-desktop);
-      --layout-size-height-current: var(--layout-size-height-desktop);
-      --layout-size-aspect-current: var(--layout-size-aspect-desktop);
-      --layout-size-min-width-current: var(--layout-size-min-width-desktop);
-      --layout-size-min-height-current: var(--layout-size-min-height-desktop);
-      --layout-size-max-width-current: var(--layout-size-max-width-desktop);
-      --layout-size-max-height-current: var(--layout-size-max-height-desktop);
+      --inline-size-desktop: var(--inline-size-laptop);
+      --block-size-desktop: var(--block-size-laptop);
+      --aspect-desktop: var(--aspect-laptop);
+      --min-inline-size-desktop: var(--min-inline-size-laptop);
+      --min-block-size-desktop: var(--min-block-size-laptop);
+      --max-inline-size-desktop: var(--max-inline-size-laptop);
+      --max-block-size-desktop: var(--max-block-size-laptop);
+      --inline-size-specified: var(--inline-size-desktop);
+      --block-size-specified: var(--block-size-desktop);
+      --aspect-actual: var(--aspect-desktop);
+      --min-inline-size-specified: var(--min-inline-size-desktop);
+      --min-block-size-specified: var(--min-block-size-desktop);
+      --max-inline-size-specified: var(--max-inline-size-desktop);
+      --max-block-size-specified: var(--max-block-size-desktop);
     }
   }
 }
 
 @layer layout.trait {
-  .layout-sized {
-    block-size: var(--layout-size-height-current);
-    inline-size: var(--layout-size-width-current);
-    aspect-ratio: var(--layout-size-aspect-current);
-    min-block-size: var(--layout-size-min-height-current);
-    min-inline-size: var(--layout-size-min-width-current);
-    max-block-size: var(--layout-size-max-height-current);
-    max-inline-size: var(--layout-size-max-width-current);
+  [data-sized] {
+    block-size: var(--block-size-actual);
+    inline-size: var(--inline-size-actual);
+    aspect-ratio: var(--aspect-actual);
+    min-block-size: var(--min-block-size-actual);
+    min-inline-size: var(--min-inline-size-actual);
+    max-block-size: var(--max-block-size-actual);
+    max-inline-size: var(--max-inline-size-actual);
   }
 }
 </style>

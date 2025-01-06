@@ -67,13 +67,13 @@ const LayoutAligned = InternalLayoutAligned;
 </template>
 
 <style>
-@property --layout-collapsible-row {
+@property --collapsible-direction {
   syntax: "row | row-reverse";
   inherits: false;
   initial-value: row;
 }
 
-@property --layout-collapsible-wrap {
+@property --collapsible-wrap {
   syntax: "wrap | nowrap";
   inherits: false;
   initial-value: nowrap;
@@ -82,7 +82,7 @@ const LayoutAligned = InternalLayoutAligned;
 @layer layout.init {
   [data-collapsible~="reverse"] {
     @container style(--media-gte-tablet: true) {
-      --layout-collapsible-row: row-reverse;
+      --collapsible-direction: row-reverse;
     }
   }
 }
@@ -93,38 +93,38 @@ const LayoutAligned = InternalLayoutAligned;
     inline-size: 100%;
 
     &[data-collapsible~="none"] {
-      flex-flow: var(--layout-collapsible-row) var(--layout-collapsible-wrap);
-      justify-content: var(--layout-align-current, start);
-      align-items: var(--layout-align-y-current, start);
+      flex-flow: var(--collapsible-direction) var(--collapsible-wrap);
+      justify-content: var(--layout-align-actual, start);
+      align-items: var(--layout-align-y-actual, start);
     }
 
     &:not([data-collapsible~="none"]) {
       flex-flow: column nowrap;
-      align-items: var(--layout-align-current, start);
+      align-items: var(--layout-align-actual, start);
       justify-content: start;
     }
 
     @container style(--media-gte-tablet: true) {
       &[data-collapsible~="tablet"] {
-        flex-flow: var(--layout-collapsible-row) var(--layout-collapsible-wrap);
-        justify-content: var(--layout-align-current, start);
-        align-items: var(--layout-align-y-current, start);
+        flex-flow: var(--collapsible-direction) var(--collapsible-wrap);
+        justify-content: var(--layout-align-actual, start);
+        align-items: var(--layout-align-y-actual, start);
       }
     }
 
     @container style(--media-gte-laptop: true) {
       &[data-collapsible~="laptop"] {
-        flex-flow: var(--layout-collapsible-row) var(--layout-collapsible-wrap);
-        justify-content: var(--layout-align-current, start);
-        align-items: var(--layout-align-y-current, start);
+        flex-flow: var(--collapsible-direction) var(--collapsible-wrap);
+        justify-content: var(--layout-align-actual, start);
+        align-items: var(--layout-align-y-actual, start);
       }
     }
 
     @container style(--media-eq-desktop: true) {
       &[data-collapsible~="desktop"] {
-        flex-flow: var(--layout-collapsible-row) var(--layout-collapsible-wrap);
-        justify-content: var(--layout-align-current, start);
-        align-items: var(--layout-align-y-current, start);
+        flex-flow: var(--collapsible-direction) var(--collapsible-wrap);
+        justify-content: var(--layout-align-actual, start);
+        align-items: var(--layout-align-y-actual, start);
       }
     }
   }

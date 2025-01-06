@@ -11,30 +11,33 @@ import {
   type StickyElement,
   type ViewportEdge,
 } from "~/components/layout/internal/Viewport.vue";
-import { useDataString } from "~/composables/useDataString";
+import InternalLayoutVisibility, {
+  type VisibilityProps,
+} from "~/components/layout/internal/Visibility.vue";
 
 function stickyStyle(element: StickyElement) {
   return {
     ...responsiveToAttributes(
-      "--layout-sticky-start",
+      "--sticky-start",
       mapResponsive(compactResponsive(element.start), (value) =>
         value === "auto" ? "auto" : `${value}px`,
       ),
     ),
     ...responsiveToAttributes(
-      "--layout-sticky-end",
+      "--sticky-end",
       mapResponsive(compactResponsive(element.end), (value) =>
         value === "auto" ? "auto" : `${value}px`,
       ),
     ),
 
-    "--layout-sticky-start-layer": element.startLayer,
-    "--layout-sticky-end-layer": element.endLayer,
+    "--sticky-start-layer": element.startLayer,
+    "--sticky-end-layer": element.endLayer,
   };
 }
 
 export interface LayoutStickyProps
-  extends PrimitiveProps<ContentSectioningTag> {
+  extends PrimitiveProps<ContentSectioningTag>,
+    VisibilityProps {
   stick?: ViewportEdge;
 }
 
@@ -52,6 +55,7 @@ const props = defineProps<LayoutStickyProps>();
 defineSlots<LayoutStickySlots>();
 
 const LayoutPrimitive = InternalLayoutPrimitive;
+const LayoutVisibility = InternalLayoutVisibility;
 
 const attrs = useAttrs();
 
@@ -135,95 +139,95 @@ const style = computed(() => stickyStyle(offsets.value));
 </template>
 
 <style>
-@property --layout-sticky-start {
+@property --sticky-start {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-sticky-start-tablet {
+@property --sticky-start-tablet {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-sticky-start-laptop {
+@property --sticky-start-laptop {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-sticky-start-desktop {
+@property --sticky-start-desktop {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-sticky-start-current {
+@property --sticky-start-actual {
   syntax: "<length> | auto";
   inherits: false;
   initial-value: auto;
 }
 
-@property --layout-sticky-end {
+@property --sticky-end {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-sticky-end-tablet {
+@property --sticky-end-tablet {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-sticky-end-laptop {
+@property --sticky-end-laptop {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-sticky-end-desktop {
+@property --sticky-end-desktop {
   syntax: "*";
   inherits: false;
 }
 
-@property --layout-sticky-end-current {
+@property --sticky-end-actual {
   syntax: "<length> | auto";
   inherits: false;
   initial-value: auto;
 }
 
-@property --layout-sticky-start-offset {
+@property --sticky-start-offset {
   syntax: "<length>";
   inherits: false;
   initial-value: 0;
 }
 
-@property --layout-sticky-end-offset {
+@property --sticky-end-offset {
   syntax: "<length>";
   inherits: false;
   initial-value: 0;
 }
 
-@property --layout-sticky-start-layer {
+@property --sticky-start-layer {
   syntax: "<integer>";
   inherits: false;
   initial-value: 0;
 }
 
-@property --layout-sticky-end-layer {
+@property --sticky-end-layer {
   syntax: "<integer>";
   inherits: false;
   initial-value: 0;
 }
 
-@property --layout-sticky-cross-clip-start {
+@property --sticky-cross-clip-start {
   syntax: "<length>";
   inherits: false;
   initial-value: 0;
 }
 
-@property --layout-sticky-cross-clip-end {
+@property --sticky-cross-clip-end {
   syntax: "<length>";
   inherits: false;
   initial-value: 0;
 }
 
-@property --layout-sticky-cross-size {
+@property --sticky-cross-size {
   syntax: "<length>";
   inherits: false;
   initial-value: 0;
@@ -231,41 +235,35 @@ const style = computed(() => stickyStyle(offsets.value));
 
 @layer layout.init {
   .layout-sticky {
-    --layout-sticky-start-current: var(--layout-sticky-start);
-    --layout-sticky-end-current: var(--layout-sticky-end);
-    --layout-sticky-start-offset: var(--layout-sticky-start-current);
-    --layout-sticky-end-offset: var(--layout-sticky-end-current);
-    --layout-sticky-cross-size: calc(
-      var(--layout-scroll-viewport) -
-        max(
-          var(--layout-sticky-start-offset),
-          var(--layout-sticky-cross-clip-start)
-        ) -
-        max(
-          var(--layout-sticky-end-offset),
-          var(--layout-sticky-cross-clip-end)
-        )
+    --sticky-start-actual: var(--sticky-start);
+    --sticky-end-actual: var(--sticky-end);
+    --sticky-start-offset: var(--sticky-start-actual);
+    --sticky-end-offset: var(--sticky-end-actual);
+    --sticky-cross-size: calc(
+      var(--scroll-viewport) -
+        max(var(--sticky-start-offset), var(--sticky-cross-clip-start)) -
+        max(var(--sticky-end-offset), var(--sticky-cross-clip-end))
     );
 
     @container style(--media-gte-tablet: true) {
-      --layout-sticky-start-tablet: var(--layout-sticky-start);
-      --layout-sticky-end-tablet: var(--layout-sticky-end);
-      --layout-sticky-start-current: var(--layout-sticky-start-tablet);
-      --layout-sticky-end-current: var(--layout-sticky-end-tablet);
+      --sticky-start-tablet: var(--sticky-start);
+      --sticky-end-tablet: var(--sticky-end);
+      --sticky-start-actual: var(--sticky-start-tablet);
+      --sticky-end-actual: var(--sticky-end-tablet);
     }
 
     @container style(--media-gte-laptop: true) {
-      --layout-sticky-start-laptop: var(--layout-sticky-start-tablet);
-      --layout-sticky-end-laptop: var(--layout-sticky-end-tablet);
-      --layout-sticky-start-current: var(--layout-sticky-start-laptop);
-      --layout-sticky-end-current: var(--layout-sticky-end-laptop);
+      --sticky-start-laptop: var(--sticky-start-tablet);
+      --sticky-end-laptop: var(--sticky-end-tablet);
+      --sticky-start-actual: var(--sticky-start-laptop);
+      --sticky-end-actual: var(--sticky-end-laptop);
     }
 
     @container style(--media-gte-desktop: true) {
-      --layout-sticky-start-desktop: var(--layout-sticky-start-laptop);
-      --layout-sticky-end-desktop: var(--layout-sticky-end-laptop);
-      --layout-sticky-start-current: var(--layout-sticky-start-desktop);
-      --layout-sticky-end-current: var(--layout-sticky-end-desktop);
+      --sticky-start-desktop: var(--sticky-start-laptop);
+      --sticky-end-desktop: var(--sticky-end-laptop);
+      --sticky-start-actual: var(--sticky-start-desktop);
+      --sticky-end-actual: var(--sticky-end-desktop);
     }
   }
 }
@@ -276,46 +274,44 @@ const style = computed(() => stickyStyle(offsets.value));
     z-index: 1;
 
     &[data-sticky~="start"] {
-      z-index: var(--layout-sticky-start-layer);
+      z-index: var(--sticky-start-layer);
     }
 
     &[data-sticky~="end"] {
-      z-index: var(--layout-sticky-end-layer);
+      z-index: var(--sticky-end-layer);
     }
 
     [data-layout-mounted="false"] &[data-sticky~="inline"] {
       z-index: -1;
 
-      --layout-sticky-start-current: auto;
-      --layout-sticky-end-current: auto;
+      --sticky-start-actual: auto;
+      --sticky-end-actual: auto;
     }
 
     &[data-scroll-direction~="vertical"] {
       inline-size: 100%;
-      inset-block: var(--layout-sticky-start-current)
-        var(--layout-sticky-end-current);
+      inset-block: var(--sticky-start-actual) var(--sticky-end-actual);
 
       &[data-sticky~="cross"] {
-        block-size: var(--layout-sticky-cross-size);
-        margin-block-end: calc(-1 * var(--layout-sticky-cross-size));
+        block-size: var(--sticky-cross-size);
+        margin-block-end: calc(-1 * var(--sticky-cross-size));
       }
     }
 
     &[data-scroll-direction~="horizontal"] {
       block-size: 100%;
-      inset-inline: var(--layout-sticky-start-current)
-        var(--layout-sticky-end-current);
+      inset-inline: var(--sticky-start-actual) var(--sticky-end-actual);
 
       &[data-sticky~="cross"] {
-        inline-size: var(--layout-sticky-cross-size);
-        margin-inline-end: calc(-1 * var(--layout-sticky-cross-size));
+        inline-size: var(--sticky-cross-size);
+        margin-inline-end: calc(-1 * var(--sticky-cross-size));
       }
     }
   }
 
   .layout-sticky-edge {
-    --layout-sticky-start-offset: inherit;
-    --layout-sticky-end-offset: inherit;
+    --sticky-start-offset: inherit;
+    --sticky-end-offset: inherit;
 
     position: absolute;
     pointer-events: none;
@@ -327,11 +323,11 @@ const style = computed(() => stickyStyle(offsets.value));
       inset-inline: 0;
 
       &[data-edge="start"] {
-        inset-block: calc(-1 * var(--layout-sticky-start-offset)) auto;
+        inset-block: calc(-1 * var(--sticky-start-offset)) auto;
       }
 
       &[data-edge="end"]:not([data-edge~="start"]) {
-        inset-block: auto calc(-1 * var(--layout-sticky-end-offset));
+        inset-block: auto calc(-1 * var(--sticky-end-offset));
       }
     }
 
@@ -341,11 +337,11 @@ const style = computed(() => stickyStyle(offsets.value));
       inset-block: 0;
 
       &[data-edge="start"] {
-        inset-inline: calc(-1 * var(--layout-sticky-start-offset)) auto;
+        inset-inline: calc(-1 * var(--sticky-start-offset)) auto;
       }
 
       &[data-edge="end"]:not([data-edge~="start"]) {
-        inset-inline: auto calc(-1 * var(--layout-sticky-end-offset));
+        inset-inline: auto calc(-1 * var(--sticky-end-offset));
       }
     }
   }
