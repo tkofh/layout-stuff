@@ -28,6 +28,17 @@
     --thickness-right: 10;
     --thickness-bottom: 10;
     --thickness-left: 10;
+    --hue: 146;
+    --chroma: 48;
+    --lightness: 60;
+    --contrast: 10;
+    --lightness-invert: var(--c-lightness-invert-force-darker);
+    --app-lightness-min: 5;
+    --app-lightness-max: 90;
+    --lightness-p0: var(--app-lightness-min);
+    --lightness-p1: calc(var(--app-lightness-min) / 3 + var(--app-lightness-max) * 2 / 3);
+    --lightness-p2: calc(var(--app-lightness-min) * 2 / 3 + var(--app-lightness-max) / 3);
+    --lightness-p3: var(--app-lightness-max);
 
     block-size: 30rem;
     aspect-ratio: 1;
