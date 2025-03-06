@@ -1,45 +1,45 @@
 @property --radius {
-  inherits: false;
+  inherits: true;
   syntax: '*';
 }
 @property --radius-tl {
-  inherits: false;
+  inherits: true;
   syntax: '*';
 }
 @property --radius-tr {
-  inherits: false;
+  inherits: true;
   syntax: '*';
 }
 @property --radius-br {
-  inherits: false;
+  inherits: true;
   syntax: '*';
 }
 @property --radius-bl {
-  inherits: false;
+  inherits: true;
   syntax: '*';
 }
 @property --o-radius-tl {
-  inherits: false;
+  inherits: true;
   initial-value: 0;
   syntax: '<number>';
 }
 @property --o-radius-tr {
-  inherits: false;
+  inherits: true;
   initial-value: 0;
   syntax: '<number>';
 }
 @property --o-radius-br {
-  inherits: false;
+  inherits: true;
   initial-value: 0;
   syntax: '<number>';
 }
 @property --o-radius-bl {
-  inherits: false;
+  inherits: true;
   initial-value: 0;
   syntax: '<number>';
 }
 
-.surface {
+.corner {
   --o-radius-tl: max(var(--radius-tl, var(--radius)), 0);
   --o-radius-tr: max(var(--radius-tr, var(--radius)), 0);
   --o-radius-br: max(var(--radius-br, var(--radius)), 0);

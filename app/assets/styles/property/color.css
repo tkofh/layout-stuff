@@ -1,26 +1,26 @@
-@property --c-lightness-invert-force-lighter {
+@property --c-contrast-direction-force-lighter {
   inherits: false;
-  initial-value: 2;
+  initial-value: -2;
   syntax: '<number>';
 }
-@property --c-lightness-invert-prefer-lighter {
-  inherits: false;
-  initial-value: 1;
-  syntax: '<number>';
-}
-@property --c-lightness-invert-auto {
-  inherits: false;
-  initial-value: 0;
-  syntax: '<number>';
-}
-@property --c-lightness-invert-prefer-darker {
+@property --c-contrast-direction-prefer-lighter {
   inherits: false;
   initial-value: -1;
   syntax: '<number>';
 }
-@property --c-lightness-invert-force-darker {
+@property --c-contrast-direction-auto {
   inherits: false;
-  initial-value: -2;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --c-contrast-direction-prefer-darker {
+  inherits: false;
+  initial-value: 1;
+  syntax: '<number>';
+}
+@property --c-contrast-direction-force-darker {
+  inherits: false;
+  initial-value: 2;
   syntax: '<number>';
 }
 @property --hue {
@@ -78,7 +78,7 @@
   initial-value: 0;
   syntax: '<number>';
 }
-@property --lightness-invert {
+@property --lightness-fallback {
   inherits: true;
   initial-value: 0;
   syntax: '<number>';
@@ -106,6 +106,11 @@
 @property --contrast {
   inherits: false;
   syntax: '*';
+}
+@property --contrast-direction {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
 }
 @property --i-hue {
   inherits: true;
@@ -157,19 +162,14 @@
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-lightness-force-invert {
-  inherits: true;
-  initial-value: 0;
-  syntax: '<number>';
-}
-@property --i-lightness-prefer-invert {
-  inherits: true;
-  initial-value: 0;
-  syntax: '<number>';
-}
 @property --i-lightness-normalized {
   inherits: true;
   initial-value: 0;
+  syntax: '<number>';
+}
+@property --i-lightness-fallback {
+  inherits: true;
+  initial-value: 1;
   syntax: '<number>';
 }
 @property --i-lightness-p0 {
@@ -192,38 +192,58 @@
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-lightness-a {
+@property --i-lightness-lighter {
   inherits: false;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-lightness-b {
+@property --i-lightness-darker {
   inherits: false;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-lightness-c {
-  inherits: false;
+@property --i-lightness-lighter-exists {
+  inherits: true;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-lightness-d {
-  inherits: false;
-  initial-value: 0;
-  syntax: '<number>';
-}
-@property --i-lightness-lower {
-  inherits: false;
-  initial-value: 0;
-  syntax: '<number>';
-}
-@property --i-lightness-higher {
-  inherits: false;
+@property --i-lightness-darker-exists {
+  inherits: true;
   initial-value: 0;
   syntax: '<number>';
 }
 @property --i-lightness {
   inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --i-contrast-direction {
+  inherits: false;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --i-contrast-direction-force-darker {
+  inherits: false;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --i-contrast-direction-prefer-darker {
+  inherits: false;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --i-contrast-direction-auto {
+  inherits: false;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --i-contrast-direction-prefer-lighter {
+  inherits: false;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --i-contrast-direction-force-lighter {
+  inherits: false;
   initial-value: 0;
   syntax: '<number>';
 }
@@ -237,45 +257,23 @@
   initial-value: 0;
   syntax: '<number>';
 }
+@property --o-color {
+  inherits: false;
+  initial-value: transparent;
+  syntax: '<color>';
+}
+@property --o-color-base {
+  inherits: false;
+  initial-value: transparent;
+  syntax: '<color>';
+}
 
 @layer property {
   .color {
-    --i-hue: clamp(
-      0,
-      clamp(
-        0,
-        var(--hue) + var(--i-hue-shift-p0) +
-          (-3 * var(--i-hue-shift-p0) + 3 * var(--i-hue-shift-p1)) * var(--i-lightness) +
-          (3 * var(--i-hue-shift-p0) - 6 * var(--i-hue-shift-p1) + 3 * var(--i-hue-shift-p2)) *
-          pow(var(--i-lightness), 2) +
-          (
-            -1 * var(--i-hue-shift-p0) + 3 * var(---hue-shift-p1) - 3 * var(---hue-shift-p2) +
-              var(--i-hue-shift-p3)
-          ) *
-          pow(var(--i-lightness), 3),
-        360
-      ),
-      100
-    );
     --i-hue-shift-p0: clamp(0, var(--hue-shift-p0), 100);
     --i-hue-shift-p1: clamp(0, var(--hue-shift-p1), 100);
     --i-hue-shift-p2: clamp(0, var(--hue-shift-p2), 100);
     --i-hue-shift-p3: clamp(0, var(--hue-shift-p3), 100);
-    --i-chroma: clamp(
-      0,
-      clamp(0, var(--chroma), 100) + var(--i-chroma-shift-p0) +
-        (-3 * var(--i-chroma-shift-p0) + 3 * var(--i-chroma-shift-p1)) * var(--i-lightness) +
-        (
-          3 * var(--i-chroma-shift-p0) - 6 * var(--i-chroma-shift-p1) + 3 * var(--i-chroma-shift-p2)
-        ) *
-        pow(var(--i-lightness), 2) +
-        (
-          -1 * var(--i-chroma-shift-p0) + 3 * var(--i-chroma-shift-p1) - 3 *
-            var(--i-chroma-shift-p2) + var(--i-chroma-shift-p3)
-        ) *
-        pow(var(--i-lightness), 3),
-      100
-    );
     --i-chroma-shift-p0: clamp(0, var(--chroma-shift-p0), 100);
     --i-chroma-shift-p1: clamp(0, var(--chroma-shift-p1), 100);
     --i-chroma-shift-p2: clamp(0, var(--chroma-shift-p2), 100);
@@ -297,53 +295,29 @@
     --i-lightness-p1: clamp(0, var(--lightness-p1) / 100, 1);
     --i-lightness-p2: clamp(0, var(--lightness-p2) / 100, 1);
     --i-lightness-p3: clamp(0, var(--lightness-p3) / 100, 1);
-    --i-lightness-invert: clamp(-2, round(var(--i-lightness-invert)), 2);
-    --i-lightness-force-invert: clamp(
-      -1,
-      round(round(pow(var(--lightness-invert), 2)) / 4) * 2 *
-        (var(--lightness-invert) / max(var(--lightness-invert), -1 * var(--lightness-invert))),
-      1
-    );
-    --i-lightness-prefer-invert: clamp(-1, round(sin(pi * round(var(--lightness-invert)) / 2)), 1);
+    --i-contrast-direction: clamp(-2, round(var(--contrast-direction)), 2);
     --i-contrast-scaled: calc(
       max(var(--contrast), 0) / (114)
     ); /* 1.14 is the common scale factor */
-    /* bg >= text ∴ contrast <= 0 ∴ not inverted */
-    --i-lightness-a: pow(
-      pow(var(--i-lightness-normalized), 0.56) - var(--i-contrast-scaled),
-      1 / 0.57
+    --i-contrast-direction-force-darker: round(
+      to-zero,
+      calc(1 - min(max(var(--i-contrast-direction) - 2, -1 * (var(--i-contrast-direction) - 2)), 1))
     );
-    /* bg < text ∴ contrast > 0 */
-    --i-lightness-b: pow(
-      pow(var(--i-lightness-normalized), 0.65) - var(--i-contrast-scaled),
-      1 / 0.62
+    --i-contrast-direction-prefer-darker: round(
+      to-zero,
+      calc(1 - min(max(var(--i-contrast-direction) - 1, -1 * (var(--i-contrast-direction) - 1)), 1))
     );
-    /* bg >= text ∴ contrast <= 0 */
-    --i-lightness-c: pow(
-      pow(var(--i-lightness-normalized), 0.56) + var(--i-contrast-scaled),
-      1 / 0.57
-    );
-    /* bg < text ∴ contrast > 0 */
-    --i-lightness-d: pow(
-      pow(var(--i-lightness-normalized), 0.65) + var(--i-contrast-scaled),
-      1 / 0.62
-    );
-    --i-lightness-lower: clamp(
+    --i-contrast-direction-auto: max(
       0,
-      min(var(--i-lightness-a), var(--i-lightness-b), var(--i-lightness-c), var(--i-lightness-d)) *
-        0.5 +
-        max(
-          min(
-            max(var(--i-lightness-a), var(--i-lightness-b)),
-            min(var(--i-lightness-c), var(--i-lightness-d))
-          ),
-          min(
-            max(var(--i-lightness-c), var(--i-lightness-d)),
-            min(var(--i-lightness-a), var(--i-lightness-b))
-          )
-        ) *
-        0.5,
-      1
+      round(to-zero, calc(1 - pow(var(--i-contrast-direction), 2)))
+    );
+    --i-contrast-direction-prefer-lighter: round(
+      to-zero,
+      calc(1 - min(max(var(--i-contrast-direction) + 1, -1 * (var(--i-contrast-direction) + 1)), 1))
+    );
+    --i-contrast-direction-force-lighter: round(
+      to-zero,
+      calc(1 - min(max(var(--i-contrast-direction) + 2, -1 * (var(--i-contrast-direction) + 2)), 1))
     );
     --i-lightness-darker: pow(
       pow(var(--i-lightness-normalized), 0.65) + var(--i-contrast-scaled),
@@ -353,37 +327,151 @@
       pow(var(--i-lightness-normalized), 0.56) - var(--i-contrast-scaled),
       1 / 0.57
     );
-    --i-lightness-force-darker: max(
-      0,
-      1 - max(var(--i-lightness-invert) - 2, 2 - var(--i-lightness-invert))
+    --i-lightness-darker-exists: round(
+      to-zero,
+      calc(
+        1 -
+          max(
+            var(--i-lightness-darker) - clamp(0, var(--i-lightness-darker), 1),
+            clamp(0, var(--i-lightness-darker), 1) - var(--i-lightness-darker)
+          )
+      )
     );
-    --i-lightness-prefer-darker: max(
-      0,
-      1 - max(var(--i-lightness-invert) - 1, 1 - var(--i-lightness-invert))
+    --i-lightness-lighter-exists: round(
+      to-zero,
+      calc(
+        1 -
+          max(
+            var(--i-lightness-lighter) - clamp(0, var(--i-lightness-lighter), 1),
+            clamp(0, var(--i-lightness-lighter), 1) - var(--i-lightness-lighter)
+          )
+      )
     );
-    --i-lightness-auto: max(
-      0,
-      1 - max(var(--i-lightness-invert) - 0, 0 - var(--i-lightness-invert))
-    );
-    --i-lightness-prefer-lighter: max(
-      0,
-      1 - max(var(--i-lightness-invert) - (-1), (-1) - var(--i-lightness-invert))
-    );
-    --i-lightness-force-lighter: max(
-      0,
-      1 - max(var(--i-lightness-invert) - (-2), (-2) - var(--i-lightness-invert))
-    );
-    --i-contrast-sign: clamp(
-      -1,
-      var(--i-lightness-force-darker) + var(--i-lightness-prefer-darker) *
-        (max(0, 1 - max(pow(var(--i-lightness-))))),
-      1
+    --i-lightness-fallback: calc(
+      var(--lightness-fallback) / max(var(--lightness-fallback), -var(--lightness-fallback))
     );
     --i-lightness: clamp(
       0,
-      var(--i-lightness-force-darker) * var(--i-lightness-darker) +
-        var(--i-lightness-prefer-darker) * pow(1 - var(--i-lightness-darker), 2),
+      var(--i-contrast-direction-force-darker) * var(--i-lightness-darker) +
+        var(--i-contrast-direction-prefer-darker) *
+        (
+          var(--i-lightness-darker-exists) * var(--i-lightness-darker) +
+            (1 - var(--i-lightness-darker-exists)) * var(--i-lightness-lighter)
+        ) +
+        var(--i-contrast-direction-auto) *
+        (
+          max(var(--i-lightness-fallback), 0) *
+            (
+              var(--i-lightness-lighter-exists) + var(--i-lightness-fallback) *
+                (1 - var(--i-lightness-darker-exists))
+            ) *
+            var(--i-lightness-lighter) + -1 * min(var(--i-lightness-fallback), 0) *
+            (
+              var(--i-lightness-darker-exists) + (1 - var(--i-lightness-fallback)) *
+                (1 - var(--i-lightness-lighter-exists))
+            ) *
+            var(--i-lightness-darker)
+        ) +
+        var(--i-contrast-direction-prefer-lighter) *
+        (
+          var(--i-lightness-lighter-exists) * var(--i-lightness-lighter) +
+            (1 - var(--i-lightness-lighter-exists)) * var(--i-lightness-darker)
+        ) +
+        var(--i-contrast-direction-force-lighter) * var(--i-lightness-lighter),
       1
+    );
+    --o-color-base: oklch(
+      calc(var(--i-lightness-normalized) * 100%)
+        calc(
+          clamp(
+              0,
+              clamp(0, var(--chroma), 100) + var(--i-chroma-shift-p0) +
+                (-3 * var(--i-chroma-shift-p0) + 3 * var(--i-chroma-shift-p1)) *
+                var(--i-lightness-normalized) +
+                (
+                  3 * var(--i-chroma-shift-p0) - 6 * var(--i-chroma-shift-p1) + 3 *
+                    var(--i-chroma-shift-p2)
+                ) *
+                pow(var(--i-lightness-normalized), 2) +
+                (
+                  -1 * var(--i-chroma-shift-p0) + 3 * var(--i-chroma-shift-p1) - 3 *
+                    var(--i-chroma-shift-p2) + var(--i-chroma-shift-p3)
+                ) *
+                pow(var(--i-lightness-normalized), 3),
+              100
+            ) *
+            1%
+        )
+        calc(
+          max(
+              0,
+              mod(
+                calc(
+                  var(--hue) + var(--i-hue-shift-p0) +
+                    (-3 * var(--i-hue-shift-p0) + 3 * var(--i-hue-shift-p1)) *
+                    var(--i-lightness-normalized) +
+                    (
+                      3 * var(--i-hue-shift-p0) - 6 * var(--i-hue-shift-p1) + 3 *
+                        var(--i-hue-shift-p2)
+                    ) *
+                    pow(var(--i-lightness-normalized), 2) +
+                    (
+                      -1 * var(--i-hue-shift-p0) + 3 * var(--i-hue-shift-p1) - 3 *
+                        var(--i-hue-shift-p2) + var(--i-hue-shift-p3)
+                    ) *
+                    pow(var(--i-lightness-normalized), 3)
+                ),
+                360
+              )
+            ) *
+            1deg
+        )
+    );
+    --o-color: oklch(
+      calc(var(--i-lightness) * 100%)
+        calc(
+          clamp(
+              0,
+              clamp(0, var(--chroma), 100) + var(--i-chroma-shift-p0) +
+                (-3 * var(--i-chroma-shift-p0) + 3 * var(--i-chroma-shift-p1)) *
+                var(--i-lightness) +
+                (
+                  3 * var(--i-chroma-shift-p0) - 6 * var(--i-chroma-shift-p1) + 3 *
+                    var(--i-chroma-shift-p2)
+                ) *
+                pow(var(--i-lightness), 2) +
+                (
+                  -1 * var(--i-chroma-shift-p0) + 3 * var(--i-chroma-shift-p1) - 3 *
+                    var(--i-chroma-shift-p2) + var(--i-chroma-shift-p3)
+                ) *
+                pow(var(--i-lightness), 3),
+              100
+            ) *
+            1%
+        )
+        calc(
+          max(
+              0,
+              mod(
+                calc(
+                  var(--hue) + var(--i-hue-shift-p0) +
+                    (-3 * var(--i-hue-shift-p0) + 3 * var(--i-hue-shift-p1)) * var(--i-lightness) +
+                    (
+                      3 * var(--i-hue-shift-p0) - 6 * var(--i-hue-shift-p1) + 3 *
+                        var(--i-hue-shift-p2)
+                    ) *
+                    pow(var(--i-lightness), 2) +
+                    (
+                      -1 * var(--i-hue-shift-p0) + 3 * var(--i-hue-shift-p1) - 3 *
+                        var(--i-hue-shift-p2) + var(--i-hue-shift-p3)
+                    ) *
+                    pow(var(--i-lightness), 3)
+                ),
+                360
+              )
+            ) *
+            1deg
+        )
     );
   }
 }
