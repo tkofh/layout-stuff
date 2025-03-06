@@ -2,68 +2,74 @@
   <LayoutRoot>
     <LayoutAreas>
       <template #left>
-        <LayoutStack>
-          <label>
-            Contrast Direction
-            <input v-model="state.direction" type="number" min="-2" max="2" step="1" >
-          </label>
-          <label>
-            Contrast
-            <input v-model="state.contrast" type="number" min="0" max="100" step="1" >
-          </label>
-          <label>
-            Hue
-            <input v-model="state.hue" type="number" min="0" max="360" step="1" >
-          </label>
-          <label>
-            Chroma
-            <input v-model="state.chroma" type="number" min="0" max="100" step="1" >
-          </label>
-          <label>
-            Lightness
-            <input v-model="state.lightness" type="number" min="0" max="100" step="1" >
-          </label>
-          <p>
-            Lighter:
-            <output>{{ otherState.lighter }}</output>
-          </p>
-          <p>
-            Darker:
-            <output>{{ otherState.darker }}</output>
-          </p>
-          <p>
-            Lighter Exists:
-            <output>{{ otherState.lighterExists }}</output>
-          </p>
-          <p>
-            Darker Exists:
-            <output>{{ otherState.darkerExists }}</output>
-          </p>
-          <p>
-            Lightness:
-            <output>{{ otherState.lightness }}</output>
-          </p>
-          <p>
-            Force Darker:
-            <output>{{ otherState.forceDarker }}</output>
-          </p>
-          <p>
-            Prefer Darker:
-            <output>{{ otherState.preferDarker }}</output>
-          </p>
-          <p>
-            Auto:
-            <output>{{ otherState.auto }}</output>
-          </p>
-          <p>
-            Prefer Lighter:
-            <output>{{ otherState.preferLighter }}</output>
-          </p>
-          <p>
-            Force Lighter:
-            <output>{{ otherState.forceLighter }}</output>
-          </p>
-        </LayoutStack>
+        <LayoutBox width="96">
+          <LayoutStack>
+            <label>
+              Contrast Direction
+              <input v-model="state.direction" type="number" min="-2" max="2" step="1" >
+            </label>
+            <label>
+              Contrast
+              <input v-model="state.contrast" type="number" min="0" max="100" step="1" >
+            </label>
+            <label>
+              Hue
+              <input v-model="state.hue" type="number" min="0" max="360" step="1" >
+            </label>
+            <label>
+              Chroma
+              <input v-model="state.chroma" type="number" min="0" max="100" step="1" >
+            </label>
+            <label>
+              Lightness
+              <input v-model="state.lightness" type="number" min="0" max="100" step="1" >
+            </label>
+            <p>
+              Normalized Lightness:
+              <output>{{ otherState.normalized }}</output>
+            </p>
+            <p>
+              Lightness:
+              <output>{{ otherState.lightness }}</output>
+            </p>
+            <p>
+              Lighter:
+              <output>{{ otherState.lighter }}</output>
+            </p>
+            <p>
+              Darker:
+              <output>{{ otherState.darker }}</output>
+            </p>
+            <p>
+              Lighter Exists:
+              <output>{{ otherState.lighterExists }}</output>
+            </p>
+            <p>
+              Darker Exists:
+              <output>{{ otherState.darkerExists }}</output>
+            </p>
+            <p>
+              Force Darker:
+              <output>{{ otherState.forceDarker }}</output>
+            </p>
+            <p>
+              Prefer Darker:
+              <output>{{ otherState.preferDarker }}</output>
+            </p>
+            <p>
+              Auto:
+              <output>{{ otherState.auto }}</output>
+            </p>
+            <p>
+              Prefer Lighter:
+              <output>{{ otherState.preferLighter }}</output>
+            </p>
+            <p>
+              Force Lighter:
+              <output>{{ otherState.forceLighter }}</output>
+            </p>
+          </LayoutStack>
+        </LayoutBox>
       </template>
       <template #main>
         <LayoutLayers align="center" align-y="center" style="block-size: 100%">
@@ -93,11 +99,12 @@ const state = reactive({
   direction: 0,
 })
 const otherState = reactive({
+  normalized: 0,
+  lightness: 0,
   lighter: 0,
   darker: 0,
   lighterExists: 0,
   darkerExists: 0,
-  lightness: 0,
   forceDarker: 0,
   preferDarker: 0,
   auto: 0,
@@ -113,11 +120,12 @@ watch(
     if (el.value) {
       console.log('going')
       const style = getComputedStyle(el.value.$el)
+      otherState.normalized = Number(style.getPropertyValue('--i-lightness-normalized'))
+      otherState.lightness = Number(style.getPropertyValue('--i-lightness'))
       otherState.lighter = Number(style.getPropertyValue('--i-lightness-lighter'))
       otherState.darker = Number(style.getPropertyValue('--i-lightness-darker'))
       otherState.lighterExists = Number(style.getPropertyValue('--i-lightness-lighter-exists'))
       otherState.darkerExists = Number(style.getPropertyValue('--i-lightness-darker-exists'))
-      otherState.lightness = Number(style.getPropertyValue('--i-lightness'))
       otherState.forceDarker = Number(style.getPropertyValue('--i-contrast-direction-force-darker'))
       otherState.preferDarker = Number(
         style.getPropertyValue('--i-contrast-direction-prefer-darker'),
