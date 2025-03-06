@@ -1,0 +1,299 @@
+@property --diffusion {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --bevel {
+  inherits: true;
+  initial-value: 1;
+  syntax: '<number>';
+}
+@property --fill-color {
+  inherits: true;
+  initial-value: transparent;
+  syntax: '<color>';
+}
+@property --shape-rect {
+  inherits: false;
+  initial-value: linear-gradient(#000, #000);
+  syntax: '<image>';
+}
+@property --shape-circle {
+  inherits: false;
+  initial-value: url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%202%202%22%20preserveAspectRatio%3D%22none%22%3E%3Ccircle%20cx%3D%221%22%20cy%3D%221%22%20r%3D%221%22%20fill%3D%22black%22%20%2F%3E%3C%2Fsvg%3E');
+  syntax: '<image>';
+}
+@property --shape-corner-top-left {
+  inherits: false;
+  initial-value: url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%202%202%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20d%3D%22M0%2C0%20L2%2C0%20L2%2C1%20A1%2C1%200%200%2C0%201%2C2%20L0%2C2%20Z%22%20fill%3D%22black%22%20%2F%3E%3C%2Fsvg%3E');
+  syntax: '<image>';
+}
+@property --shape-corner-bottom-left {
+  inherits: false;
+  initial-value: url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%202%202%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20d%3D%22M0%2C2%20L0%2C0%20L1%2C0%20A1%2C1%200%200%2C0%202%2C1%20L2%2C2%20Z%22%20fill%3D%22black%22%20%2F%3E%3C%2Fsvg%3E');
+  syntax: '<image>';
+}
+@property --shape-corner-top-right {
+  inherits: false;
+  initial-value: url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%202%202%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20d%3D%22M2%2C0%20L2%2C2%20L1%2C2%20A1%2C1%200%200%2C0%200%2C1%20L0%2C0%20Z%22%20fill%3D%22black%22%20%2F%3E%3C%2Fsvg%3E');
+  syntax: '<image>';
+}
+@property --shape-corner-bottom-right {
+  inherits: false;
+  initial-value: url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%202%202%22%20preserveAspectRatio%3D%22none%22%3E%3Cpath%20d%3D%22M2%2C2%20L2%2C0%20L1%2C0%20A1%2C1%200%200%2C1%200%2C1%20L0%2C2%20Z%22%20fill%3D%22black%22%20%2F%3E%3C%2Fsvg%3E');
+  syntax: '<image>';
+}
+@property --i-diffusion {
+  inherits: false;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --i-bevel {
+  inherits: false;
+  initial-value: 0;
+  syntax: '<number>';
+}
+
+@layer primitive {
+  .diffuse {
+    isolation: isolate;
+    position: relative;
+    border-color: transparent;
+    border-width: calc(1px * var(--o-thickness-top)) calc(1px * var(--o-thickness-right))
+      calc(1px * var(--o-thickness-bottom)) calc(1px * var(--o-thickness-left));
+    border-style: solid;
+    border-radius: calc(var(--o-radius-tl) * 1px) calc(var(--o-radius-tr) * 1px)
+      calc(var(--o-radius-br) * 1px) calc(var(--o-radius-bl) * 1px);
+
+    opacity: 1 !important;
+
+    &,
+    &::before,
+    &::after {
+      --o-radius-tl: max(var(--radius-tl), 0);
+      --o-radius-tr: max(var(--radius-tr), 0);
+      --o-radius-br: max(var(--radius-br), 0);
+      --o-radius-bl: max(var(--radius-bl), 0);
+    }
+
+    &::before,
+    &::after {
+      --o-thickness-top: inherit;
+      --o-thickness-right: inherit;
+      --o-thickness-bottom: inherit;
+      --o-thickness-left: inherit;
+      --i-stroke-color-top: inherit;
+      --i-stroke-color-right: inherit;
+      --i-stroke-color-bottom: inherit;
+      --i-stroke-color-left: inherit;
+      --i-bevel: max(var(--bevel), 1);
+
+      pointer-events: none;
+      content: '';
+
+      position: absolute;
+      z-index: -1;
+
+      inset-block-start: calc(-1px * (var(--i-diffusion) + var(--o-thickness-top)));
+      inset-inline-start: calc(-1px * (var(--i-diffusion) + var(--o-thickness-left)));
+      inline-size: calc(
+        100% + (var(--i-diffusion) * 2 + var(--o-thickness-left) + var(--o-thickness-right)) * 1px
+      );
+      block-size: calc(
+        100% + (var(--i-diffusion) * 2 + var(--o-thickness-top) + var(--o-thickness-bottom)) * 1px
+      );
+      padding: calc(var(--i-diffusion) * 1px);
+    }
+
+    &::after {
+      --i-diffusion: max(var(--diffusion) * var(--i-bevel), 0);
+
+      background-image: conic-gradient(
+        from 0.125turn,
+        var(--i-stroke-color-right) 0.25turn,
+        var(--i-stroke-color-bottom) 0.25turn,
+        var(--i-stroke-color-bottom) 0.5turn,
+        var(--i-stroke-color-left) 0.5turn,
+        var(--i-stroke-color-left) 0.75turn,
+        var(--i-stroke-color-top) 0.75turn
+      );
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      background-clip: content-box;
+
+      -webkit-backdrop-filter: blur(12px);
+      /* autoprefixer: ignore next */
+      backdrop-filter: blur(calc(var(--i-diffusion) * 1px));
+
+      mask:
+        var(--shape-rect) subtract center / 100% 100%,
+        var(--shape-corner-top-left) top calc(var(--o-radius-tl) * -1px) left
+          calc(var(--o-radius-tl) * -1px) / calc(var(--o-radius-tl) * 2px)
+          calc(var(--o-radius-tl) * 2px),
+        var(--shape-corner-top-right) top calc(var(--o-radius-tr) * -1px) right
+          calc(var(--o-radius-tr) * -1px) / calc(var(--o-radius-tr) * 2px)
+          calc(var(--o-radius-tr) * 2px),
+        var(--shape-corner-bottom-right) bottom calc(var(--o-radius-br) * -1px) right
+          calc(var(--o-radius-br) * -1px) / calc(var(--o-radius-br) * 2px)
+          calc(var(--o-radius-br) * 2px),
+        var(--shape-corner-bottom-left) bottom calc(var(--o-radius-bl) * -1px) left
+          calc(var(--o-radius-bl) * -1px) / calc(var(--o-radius-bl) * 2px)
+          calc(var(--o-radius-bl) * 2px),
+        var(--shape-circle) left calc(var(--o-thickness-left) * 1px) top
+          calc(var(--o-thickness-top) * 1px) /
+          calc(var(--o-radius-tl) * 2px - var(--o-thickness-left) * 2px)
+          calc(var(--o-radius-tl) * 2px - var(--o-thickness-top) * 2px),
+        var(--shape-circle) right calc(var(--o-thickness-right) * 1px) top
+          calc(var(--o-thickness-top) * 1px) /
+          calc(var(--o-radius-tr) * 2px - var(--o-thickness-right) * 2px)
+          calc(var(--o-radius-tr) * 2px - var(--o-thickness-top) * 2px),
+        var(--shape-circle) right calc(var(--o-thickness-right) * 1px) bottom
+          calc(var(--o-thickness-bottom) * 1px) /
+          calc(var(--o-radius-br) * 2px - var(--o-thickness-right) * 2px)
+          calc(var(--o-radius-br) * 2px - var(--o-thickness-bottom) * 2px),
+        var(--shape-circle) left calc(var(--o-thickness-left) * 1px) bottom
+          calc(var(--o-thickness-bottom) * 1px) /
+          calc(var(--o-radius-bl) * 2px - var(--o-thickness-left) * 2px)
+          calc(var(--o-radius-bl) * 2px - var(--o-thickness-bottom) * 2px),
+        var(--shape-rect) left max(var(--o-radius-tl) * 1px, var(--o-thickness-left) * 1px) top
+          calc(var(--o-thickness-top) * 1px) /
+          calc(
+            100% - max(var(--o-radius-tl) * 1px, var(--o-thickness-left) * 1px) -
+              max(var(--o-radius-tr) * 1px, var(--o-thickness-right) * 1px)
+          )
+          calc(
+            100% - var(--o-thickness-top) * 1px -
+              max(
+                var(--o-radius-bl) * 1px,
+                var(--o-radius-br) * 1px,
+                var(--o-thickness-bottom) * 1px
+              )
+          ),
+        var(--shape-rect) top max(var(--o-radius-tr) * 1px, var(--o-thickness-top) * 1px) right
+          calc(var(--o-thickness-right) * 1px) /
+          calc(
+            100% - var(--o-thickness-right) * 1px -
+              max(var(--o-radius-tl) * 1px, var(--o-radius-bl) * 1px, var(--o-thickness-left) * 1px)
+          )
+          calc(
+            100% - max(var(--o-radius-tr) * 1px, var(--o-thickness-top) * 1px) -
+              max(var(--o-radius-br) * 1px, var(--o-thickness-bottom) * 1px)
+          ),
+        var(--shape-rect) right max(var(--o-radius-br) * 1px, var(--o-thickness-right) * 1px) bottom
+          calc(var(--o-thickness-bottom) * 1px) /
+          calc(
+            100% - max(var(--o-radius-bl) * 1px, var(--o-thickness-left) * 1px) -
+              max(var(--o-radius-br) * 1px, var(--o-thickness-right) * 1px)
+          )
+          calc(
+            100% - var(--o-thickness-bottom) * 1px -
+              max(var(--o-radius-tl) * 1px, var(--o-radius-tr) * 1px, var(--o-thickness-top) * 1px)
+          ),
+        var(--shape-rect) bottom max(var(--o-radius-bl) * 1px, var(--o-thickness-bottom) * 1px) left
+          calc(var(--o-thickness-left) * 1px) /
+          calc(
+            100% - var(--o-thickness-left) * 1px -
+              max(
+                var(--o-radius-tr) * 1px,
+                var(--o-radius-br) * 1px,
+                var(--o-thickness-right) * 1px
+              )
+          )
+          calc(
+            100% - max(var(--o-radius-tl) * 1px, var(--o-thickness-top) * 1px) -
+              max(var(--o-radius-bl) * 1px, var(--o-thickness-bottom) * 1px)
+          );
+      mask-type: alpha;
+      mask-clip: content-box;
+      mask-mode: alpha;
+      mask-origin: content-box;
+      mask-repeat: no-repeat;
+    }
+
+    &::before {
+      --i-diffusion: max(var(--diffusion), 0);
+
+      background-image: linear-gradient(var(--fill-color), var(--fill-color));
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      background-clip: content-box;
+
+      -webkit-backdrop-filter: blur(12px);
+      /* autoprefixer: ignore next */
+      backdrop-filter: blur(calc(var(--i-diffusion) * 1px));
+
+      mask:
+        var(--shape-circle) left calc(var(--o-thickness-left) * 1px) top
+          calc(var(--o-thickness-top) * 1px) /
+          calc(var(--o-radius-tl) * 2px - var(--o-thickness-left) * 2px)
+          calc(var(--o-radius-tl) * 2px - var(--o-thickness-top) * 2px),
+        var(--shape-circle) right calc(var(--o-thickness-right) * 1px) top
+          calc(var(--o-thickness-top) * 1px) /
+          calc(var(--o-radius-tr) * 2px - var(--o-thickness-right) * 2px)
+          calc(var(--o-radius-tr) * 2px - var(--o-thickness-top) * 2px),
+        var(--shape-circle) right calc(var(--o-thickness-right) * 1px) bottom
+          calc(var(--o-thickness-bottom) * 1px) /
+          calc(var(--o-radius-br) * 2px - var(--o-thickness-right) * 2px)
+          calc(var(--o-radius-br) * 2px - var(--o-thickness-bottom) * 2px),
+        var(--shape-circle) left calc(var(--o-thickness-left) * 1px) bottom
+          calc(var(--o-thickness-bottom) * 1px) /
+          calc(var(--o-radius-bl) * 2px - var(--o-thickness-left) * 2px)
+          calc(var(--o-radius-bl) * 2px - var(--o-thickness-bottom) * 2px),
+        var(--shape-rect) left max(var(--o-radius-tl) * 1px, var(--o-thickness-left) * 1px) top
+          calc(var(--o-thickness-top) * 1px) /
+          calc(
+            100% - max(var(--o-radius-tl) * 1px, var(--o-thickness-left) * 1px) -
+              max(var(--o-radius-tr) * 1px, var(--o-thickness-right) * 1px)
+          )
+          calc(
+            100% - var(--o-thickness-top) * 1px -
+              max(
+                var(--o-radius-bl) * 1px,
+                var(--o-radius-br) * 1px,
+                var(--o-thickness-bottom) * 1px
+              )
+          ),
+        var(--shape-rect) top max(var(--o-radius-tr) * 1px, var(--o-thickness-top) * 1px) right
+          calc(var(--o-thickness-right) * 1px) /
+          calc(
+            100% - var(--o-thickness-right) * 1px -
+              max(var(--o-radius-tl) * 1px, var(--o-radius-bl) * 1px, var(--o-thickness-left) * 1px)
+          )
+          calc(
+            100% - max(var(--o-radius-tr) * 1px, var(--o-thickness-top) * 1px) -
+              max(var(--o-radius-br) * 1px, var(--o-thickness-bottom) * 1px)
+          ),
+        var(--shape-rect) right max(var(--o-radius-br) * 1px, var(--o-thickness-right) * 1px) bottom
+          calc(var(--o-thickness-bottom) * 1px) /
+          calc(
+            100% - max(var(--o-radius-bl) * 1px, var(--o-thickness-left) * 1px) -
+              max(var(--o-radius-br) * 1px, var(--o-thickness-right) * 1px)
+          )
+          calc(
+            100% - var(--o-thickness-bottom) * 1px -
+              max(var(--o-radius-tl) * 1px, var(--o-radius-tr) * 1px, var(--o-thickness-top) * 1px)
+          ),
+        var(--shape-rect) bottom max(var(--o-radius-bl) * 1px, var(--o-thickness-bottom) * 1px) left
+          calc(var(--o-thickness-left) * 1px) /
+          calc(
+            100% - var(--o-thickness-left) * 1px -
+              max(
+                var(--o-radius-tr) * 1px,
+                var(--o-radius-br) * 1px,
+                var(--o-thickness-right) * 1px
+              )
+          )
+          calc(
+            100% - max(var(--o-radius-tl) * 1px, var(--o-thickness-top) * 1px) -
+              max(var(--o-radius-bl) * 1px, var(--o-thickness-bottom) * 1px)
+          );
+      mask-type: alpha;
+      mask-clip: content-box;
+      mask-mode: alpha;
+      mask-origin: content-box;
+      mask-repeat: no-repeat;
+    }
+  }
+}

@@ -1,5 +1,5 @@
 <script lang="ts">
-import type { PrimitiveSlots } from "~/components/layout/internal/Primitive.vue";
+import type { PrimitiveSlots } from '~/components/layout/internal/Primitive.vue'
 
 function sizeStyles(
   width: Size | undefined | false,
@@ -7,30 +7,27 @@ function sizeStyles(
   aspect: AspectRatio | undefined,
   minWidth: Size | undefined,
   minHeight: Size | undefined,
-  maxWidth: ResponsiveValue<SizeKey | "none"> | undefined,
-  maxHeight: ResponsiveValue<SizeKey | "none"> | undefined,
+  maxWidth: ResponsiveValue<SizeKey | 'none'> | undefined,
+  maxHeight: ResponsiveValue<SizeKey | 'none'> | undefined,
 ): Record<string, string> {
-  const hasWidth = width !== undefined;
-  const hasHeight = height !== undefined;
-  const hasAspectRatio = aspect !== undefined;
+  const hasWidth = width !== undefined
+  const hasHeight = height !== undefined
+  const hasAspectRatio = aspect !== undefined
 
-  const output = {} as Record<string, string>;
+  const output = {} as Record<string, string>
 
   if (hasWidth) {
     if (width !== false) {
       Object.assign(
         output,
         responsiveToAttributes(
-          "--inline-size",
-          mapResponsive(
-            normalizeResponsive(width),
-            (value) => SIZE_SCALE[value],
-          ),
+          '--inline-size',
+          mapResponsive(normalizeResponsive(width), (value) => SIZE_SCALE[value]),
         ),
-      );
+      )
     }
   } else if (!hasHeight || !hasAspectRatio) {
-    Object.assign(output, { "--inline-size": "100%" });
+    Object.assign(output, { '--inline-size': '100%' })
   }
 
   if (hasHeight) {
@@ -38,104 +35,89 @@ function sizeStyles(
       Object.assign(
         output,
         responsiveToAttributes(
-          "--block-size",
-          mapResponsive(
-            normalizeResponsive(height),
-            (value) => SIZE_SCALE[value],
-          ),
+          '--block-size',
+          mapResponsive(normalizeResponsive(height), (value) => SIZE_SCALE[value]),
         ),
-      );
+      )
     }
   } else if (!hasWidth || !hasAspectRatio) {
-    Object.assign(output, { "--block-size": "100%" });
+    Object.assign(output, { '--block-size': '100%' })
   }
 
   if (hasAspectRatio) {
-    Object.assign(
-      output,
-      responsiveToAttributes("--aspect", normalizeResponsive(aspect)),
-    );
+    Object.assign(output, responsiveToAttributes('--aspect', normalizeResponsive(aspect)))
   }
 
   if (minWidth !== undefined) {
     Object.assign(
       output,
       responsiveToAttributes(
-        "--min-inline-size",
-        mapResponsive(
-          normalizeResponsive(minWidth),
-          (value) => SIZE_SCALE[value],
-        ),
+        '--min-inline-size',
+        mapResponsive(normalizeResponsive(minWidth), (value) => SIZE_SCALE[value]),
       ),
-    );
+    )
   }
 
   if (minHeight !== undefined) {
     Object.assign(
       output,
       responsiveToAttributes(
-        "--min-block-size",
-        mapResponsive(
-          normalizeResponsive(minHeight),
-          (value) => SIZE_SCALE[value],
-        ),
+        '--min-block-size',
+        mapResponsive(normalizeResponsive(minHeight), (value) => SIZE_SCALE[value]),
       ),
-    );
+    )
   }
 
   if (maxWidth !== undefined) {
     Object.assign(
       output,
       responsiveToAttributes(
-        "--max-inline-size",
+        '--max-inline-size',
         mapResponsive(normalizeResponsive(maxWidth), (value) =>
-          value === "none" ? "none" : SIZE_SCALE[value],
+          value === 'none' ? 'none' : SIZE_SCALE[value],
         ),
       ),
-    );
+    )
   }
 
   if (maxHeight !== undefined) {
     Object.assign(
       output,
       responsiveToAttributes(
-        "--max-block-size",
+        '--max-block-size',
         mapResponsive(normalizeResponsive(maxHeight), (value) =>
-          value === "none" ? "none" : SIZE_SCALE[value],
+          value === 'none' ? 'none' : SIZE_SCALE[value],
         ),
       ),
-    );
+    )
   }
 
-  return output;
+  return output
 }
 
-export type AspectRatio = ResponsiveValue<
-  number | `${number}` | `${number} / ${number}`
->;
+export type AspectRatio = ResponsiveValue<number | `${number}` | `${number} / ${number}`>
 
 export interface SizedProps {
-  width?: Size;
-  height?: Size;
-  aspect?: AspectRatio;
-  minWidth?: Size;
-  minHeight?: Size;
-  maxWidth?: ResponsiveValue<SizeKey | "none">;
-  maxHeight?: ResponsiveValue<SizeKey | "none">;
+  width?: Size
+  height?: Size
+  aspect?: AspectRatio
+  minWidth?: Size
+  minHeight?: Size
+  maxWidth?: ResponsiveValue<SizeKey | 'none'>
+  maxHeight?: ResponsiveValue<SizeKey | 'none'>
 }
 
-export interface DisableableSizedProps
-  extends Omit<SizedProps, "width" | "height"> {
-  width?: Size | false;
-  height?: Size | false;
+export interface DisableableSizedProps extends Omit<SizedProps, 'width' | 'height'> {
+  width?: Size | false
+  height?: Size | false
 }
 
-export type SizedSlots = PrimitiveSlots;
+export type SizedSlots = PrimitiveSlots
 </script>
 
 <script setup lang="ts">
-const props = defineProps<DisableableSizedProps>();
-defineSlots<SizedSlots>();
+const props = defineProps<DisableableSizedProps>()
+defineSlots<SizedSlots>()
 
 const style = computed(() =>
   sizeStyles(
@@ -147,7 +129,7 @@ const style = computed(() =>
     props.maxWidth,
     props.maxHeight,
   ),
-);
+)
 </script>
 
 <template>
@@ -158,230 +140,230 @@ const style = computed(() =>
 
 <style>
 @property --inline-size {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --inline-size-tablet {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --inline-size-laptop {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --inline-size-desktop {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --inline-size-specified {
-  syntax: "<length-percentage> | auto";
+  syntax: '<length-percentage> | auto';
   inherits: false;
   initial-value: auto;
 }
 
 @property --inline-size-actual {
-  syntax: "<length-percentage> | auto";
+  syntax: '<length-percentage> | auto';
   inherits: false;
   initial-value: auto;
 }
 
 @property --block-size {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --block-size-tablet {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --block-size-laptop {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --block-size-desktop {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --block-size-specified {
-  syntax: "<length-percentage> | auto";
+  syntax: '<length-percentage> | auto';
   inherits: false;
   initial-value: auto;
 }
 
 @property --block-size-actual {
-  syntax: "<length-percentage> | auto";
+  syntax: '<length-percentage> | auto';
   inherits: false;
   initial-value: auto;
 }
 
 @property --aspect {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --aspect-tablet {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --aspect-laptop {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --aspect-desktop {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --aspect-actual {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --min-inline-size {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --min-inline-size-tablet {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --min-inline-size-laptop {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --min-inline-size-desktop {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --min-inline-size-specified {
-  syntax: "<length-percentage>";
+  syntax: '<length-percentage>';
   inherits: false;
   initial-value: 0;
 }
 
 @property --min-inline-size-actual {
-  syntax: "<length-percentage>";
+  syntax: '<length-percentage>';
   inherits: false;
   initial-value: 0;
 }
 
 @property --min-block-size {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --min-block-size-tablet {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --min-block-size-laptop {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --min-block-size-desktop {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --min-block-size-specified {
-  syntax: "<length-percentage>";
+  syntax: '<length-percentage>';
   inherits: false;
   initial-value: 0;
 }
 
 @property --min-block-size-actual {
-  syntax: "<length-percentage>";
+  syntax: '<length-percentage>';
   inherits: false;
   initial-value: 0;
 }
 
 @property --max-inline-size {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --max-inline-size-tablet {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --max-inline-size-laptop {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --max-inline-size-desktop {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --max-inline-size-specified {
-  syntax: "<length-percentage> | none";
+  syntax: '<length-percentage> | none';
   inherits: false;
   initial-value: none;
 }
 
 @property --max-inline-size-actual {
-  syntax: "<length-percentage> | none";
+  syntax: '<length-percentage> | none';
   inherits: false;
   initial-value: none;
 }
 
 @property --max-block-size {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --max-block-size-tablet {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --max-block-size-laptop {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --max-block-size-desktop {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --max-block-size-specified {
-  syntax: "<length-percentage> | none";
+  syntax: '<length-percentage> | none';
   inherits: false;
   initial-value: none;
 }
 
 @property --max-block-size-actual {
-  syntax: "<length-percentage> | none";
+  syntax: '<length-percentage> | none';
   inherits: false;
   initial-value: none;
 }
 
 @property --inline-size-adjustment {
-  syntax: "<length-percentage>";
+  syntax: '<length-percentage>';
   inherits: false;
   initial-value: 0;
 }
 
 @property --block-size-adjustment {
-  syntax: "<length-percentage>";
+  syntax: '<length-percentage>';
   inherits: false;
   initial-value: 0;
 }
@@ -395,22 +377,16 @@ const style = computed(() =>
     --min-block-size-specified: var(--min-block-size);
     --max-inline-size-specified: var(--max-inline-size);
     --max-block-size-specified: var(--max-block-size);
-    --inline-size-actual: calc(
-      var(--inline-size-specified) + var(--inline-size-adjustment)
-    );
-    --block-size-actual: calc(
-      var(--block-size-specified) + var(--block-size-adjustment)
-    );
+    --inline-size-actual: calc(var(--inline-size-specified) + var(--inline-size-adjustment));
+    --block-size-actual: calc(var(--block-size-specified) + var(--block-size-adjustment));
     --min-inline-size-actual: calc(
       var(--min-inline-size-specified) + var(--inline-size-adjustment)
     );
-    --min-block-size-actual: calc(
-      var(--min-block-size-specified) + var(--block-size-adjustment)
-    );
+    --min-block-size-actual: calc(var(--min-block-size-specified) + var(--block-size-adjustment));
     --max-inline-size-actual: var(--max-inline-size-specified);
     --max-block-size-actual: var(--max-block-size-specified);
 
-    @container style(--media-gte-tablet: true) {
+    @container style(--screen-gte-tablet: true) {
       --inline-size-tablet: var(--inline-size);
       --block-size-tablet: var(--block-size);
       --aspect-tablet: var(--aspect);
@@ -427,7 +403,7 @@ const style = computed(() =>
       --max-block-size-specified: var(--max-block-size-tablet);
     }
 
-    @container style(--media-gte-laptop: true) {
+    @container style(--screen-gte-laptop: true) {
       --inline-size-laptop: var(--inline-size-tablet);
       --block-size-laptop: var(--block-size-tablet);
       --aspect-laptop: var(--aspect-tablet);
@@ -444,7 +420,7 @@ const style = computed(() =>
       --max-block-size-specified: var(--max-block-size-laptop);
     }
 
-    @container style(--media-eq-desktop: true) {
+    @container style(--screen-eq-desktop: true) {
       --inline-size-desktop: var(--inline-size-laptop);
       --block-size-desktop: var(--block-size-laptop);
       --aspect-desktop: var(--aspect-laptop);

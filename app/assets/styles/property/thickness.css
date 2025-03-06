@@ -1,0 +1,48 @@
+@property --thickness {
+  inherits: false;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --thickness-top {
+  inherits: false;
+  syntax: '*';
+}
+@property --thickness-right {
+  inherits: false;
+  syntax: '*';
+}
+@property --thickness-bottom {
+  inherits: false;
+  syntax: '*';
+}
+@property --thickness-left {
+  inherits: false;
+  syntax: '*';
+}
+@property --o-thickness-top {
+  inherits: false;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --o-thickness-right {
+  inherits: false;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --o-thickness-bottom {
+  inherits: false;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --o-thickness-left {
+  inherits: false;
+  initial-value: 0;
+  syntax: '<number>';
+}
+
+.surface {
+  --o-thickness-top: max(var(--thickness-top, var(--thickness)), 0);
+  --o-thickness-right: max(var(--thickness-right, var(--thickness)), 0);
+  --o-thickness-bottom: max(var(--thickness-bottom, var(--thickness)), 0);
+  --o-thickness-left: max(var(--thickness-left, var(--thickness)), 0);
+}

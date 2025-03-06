@@ -1,0 +1,227 @@
+@property --hue {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --hue-shift-p0 {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --hue-shift-p1 {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --hue-shift-p2 {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --hue-shift-p3 {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --chroma {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --chroma-shift-p0 {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --chroma-shift-p1 {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --chroma-shift-p2 {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --chroma-shift-p3 {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --lightness {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --lightness-p0 {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --lightness-p1 {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --lightness-p2 {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --lightness-p3 {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --contrast {
+  inherits: false;
+  syntax: '*';
+}
+@property --i-lightness {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --o-hue {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --o-hue-shift-p0 {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --o-hue-shift-p1 {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --o-hue-shift-p2 {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --o-hue-shift-p3 {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --o-chroma {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --o-chroma-shift-p0 {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --o-chroma-shift-p1 {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --o-chroma-shift-p2 {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --o-chroma-shift-p3 {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --o-lightness {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --o-lightness-p0 {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --o-lightness-p1 {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --o-lightness-p2 {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --o-lightness-p3 {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --o-contrast {
+  inherits: false;
+  initial-value: 0;
+  syntax: '<number>';
+}
+
+@layer property {
+  .color {
+    --i-lightness: clamp(0, var(--lightness), 1);
+    --o-hue: clamp(
+      0,
+      clamp(
+        0,
+        var(--hue) + var(--o-hue-shift-p0) +
+          (-3 * var(--o-hue-shift-p0) + 3 * var(--o-hue-shift-p1)) * var(--i-lightness) +
+          (3 * var(--o-hue-shift-p0) - 6 * var(--o-hue-shift-p1) + 3 * var(--o-hue-shift-p2)) *
+          pow(var(--i-lightness), 2) +
+          (
+            -1 * var(--o-hue-shift-p0) + 3 * var(--o-hue-shift-p1) - 3 * var(--o-hue-shift-p2) +
+              var(--o-hue-shift-p3)
+          ) *
+          pow(var(--i-lightness), 3),
+        360
+      ),
+      100
+    );
+    --o-hue-shift-p0: clamp(0, var(--hue-shift-p0), 100);
+    --o-hue-shift-p1: clamp(0, var(--hue-shift-p1), 100);
+    --o-hue-shift-p2: clamp(0, var(--hue-shift-p2), 100);
+    --o-hue-shift-p3: clamp(0, var(--hue-shift-p3), 100);
+    --o-chroma: clamp(
+      0,
+      clamp(0, var(--chroma), 100) + var(--o-chroma-shift-p0) +
+        (-3 * var(--o-chroma-shift-p0) + 3 * var(--o-chroma-shift-p1)) * var(--i-lightness) +
+        (
+          3 * var(--o-chroma-shift-p0) - 6 * var(--o-chroma-shift-p1) + 3 * var(--o-chroma-shift-p2)
+        ) *
+        pow(var(--i-lightness), 2) +
+        (
+          -1 * var(--o-chroma-shift-p0) + 3 * var(--o-chroma-shift-p1) - 3 *
+            var(--o-chroma-shift-p2) + var(--o-chroma-shift-p3)
+        ) *
+        pow(var(--i-lightness), 3),
+      100
+    );
+    --o-chroma-shift-p0: clamp(0, var(--chroma-shift-p0), 100);
+    --o-chroma-shift-p1: clamp(0, var(--chroma-shift-p1), 100);
+    --o-chroma-shift-p2: clamp(0, var(--chroma-shift-p2), 100);
+    --o-chroma-shift-p3: clamp(0, var(--chroma-shift-p3), 100);
+    --o-lightness: clamp(
+      0,
+      var(--o-lightness-p0) + (-3 * var(--o-lightness-p0) + 3 * var(--o-lightness-p1)) *
+        var(--i-lightness) +
+        (3 * var(--o-lightness-p0) - 6 * var(--o-lightness-p1) + 3 * var(--o-lightness-p2)) *
+        pow(var(--i-lightness), 2) +
+        (
+          -1 * var(--o-lightness-p0) + 3 * var(--o-lightness-p1) - 3 * var(--o-lightness-p2) +
+            var(--o-lightness-p3)
+        ) *
+        pow(var(--i-lightness), 3),
+      100
+    );
+    --o-lightness-p1: clamp(0, var(--lightness-p1), 100);
+    --o-lightness-p2: clamp(0, var(--lightness-p2), 100);
+    --o-lightness-p3: clamp(0, var(--lightness-p3), 100);
+    --o-contrast: clamp(0, var(--contrast), 100);
+  }
+}

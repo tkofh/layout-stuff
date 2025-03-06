@@ -2,37 +2,35 @@
 import InternalLayoutPrimitive, {
   type PrimitiveProps,
   type PrimitiveSlots,
-} from "~/components/layout/internal/Primitive.vue";
+} from '~/components/layout/internal/Primitive.vue'
 
 export interface LayerProps extends PrimitiveProps {
-  layer?: ResponsiveValue<number | `${number}` | "auto">;
+  layer?: ResponsiveValue<number | `${number}` | 'auto'>
 }
 
-export type LayerSlots = PrimitiveSlots;
+export type LayerSlots = PrimitiveSlots
 </script>
 
 <script setup lang="ts">
-const props = defineProps<LayerProps>();
-defineSlots<LayerSlots>();
+const props = defineProps<LayerProps>()
+defineSlots<LayerSlots>()
 
 const style = computed(() => ({
   ...responsiveToAttributes(
-    "--layer",
+    '--layer',
     compactResponsive(
-      mapResponsive(
-        fillResponsive(normalizeResponsive(props.layer)),
-        (value) =>
-          value === "auto"
-            ? "auto"
-            : Number.isFinite(Number(value))
-              ? Math.round(Number(value))
-              : "auto",
+      mapResponsive(fillResponsive(normalizeResponsive(props.layer)), (value) =>
+        value === 'auto'
+          ? 'auto'
+          : Number.isFinite(Number(value))
+            ? Math.round(Number(value))
+            : 'auto',
       ),
     ),
   ),
-}));
+}))
 
-const LayoutPrimitive = InternalLayoutPrimitive;
+const LayoutPrimitive = InternalLayoutPrimitive
 </script>
 
 <template>
@@ -43,27 +41,27 @@ const LayoutPrimitive = InternalLayoutPrimitive;
 
 <style>
 @property --layer {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --layer-tablet {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --layer-laptop {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --layer-desktop {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --layer-actual {
-  syntax: "<integer> | auto";
+  syntax: '<integer> | auto';
   inherits: false;
   initial-value: auto;
 }
@@ -72,17 +70,17 @@ const LayoutPrimitive = InternalLayoutPrimitive;
   .layout-layer {
     --layer-actual: var(--layer);
 
-    @container style(--media-gte-tablet: true) {
+    @container style(--screen-gte-tablet: true) {
       --layer-tablet: var(--layer);
       --layer-actual: var(--layer-tablet);
     }
 
-    @container style(--media-gte-laptop: true) {
+    @container style(--screen-gte-laptop: true) {
       --layer-laptop: var(--layer-tablet);
       --layer-actual: var(--layer-laptop);
     }
 
-    @container style(--media-eq-desktop: true) {
+    @container style(--screen-eq-desktop: true) {
       --layer-desktop: var(--layer-laptop);
       --layer-actual: var(--layer-desktop);
     }

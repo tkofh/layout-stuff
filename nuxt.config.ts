@@ -1,18 +1,18 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   modules: [
-    "@nuxt/eslint",
-    "radix-vue/nuxt",
-    "@nuxtjs/color-mode",
-    "@vueuse/nuxt",
-    "nuxt-security",
+    '@nuxt/eslint',
+    'radix-vue/nuxt',
+    '@nuxtjs/color-mode',
+    '@vueuse/nuxt',
+    'nuxt-security',
   ],
 
   components: {
     dirs: [
       {
-        path: "~/components",
-        ignore: ["**/internal/**"],
+        path: '~/components',
+        ignore: ['**/internal/**'],
       },
     ],
   },
@@ -25,21 +25,17 @@ export default defineNuxtConfig({
     },
   },
 
-  css: [
-    "~/assets/styles/index.css",
-    "@radix-ui/colors/gray.css",
-    "@radix-ui/colors/gray-dark.css",
-  ],
+  css: ['~/assets/styles/index.css', '@radix-ui/colors/gray.css', '@radix-ui/colors/gray-dark.css'],
 
   colorMode: {
-    classSuffix: "-theme",
+    classSuffix: '-theme',
   },
 
   future: {
     compatibilityVersion: 4,
   },
 
-  compatibilityDate: "2024-11-01",
+  compatibilityDate: '2024-11-01',
 
   nitro: {
     compressPublicAssets: true,
@@ -48,7 +44,7 @@ export default defineNuxtConfig({
 
   vite: {
     build: {
-      target: ["esnext"],
+      target: ['esnext'],
     },
   },
 
@@ -65,11 +61,11 @@ export default defineNuxtConfig({
   },
 
   radix: {
-    prefix: "Radix",
+    prefix: 'Radix',
   },
 
   security: {
     nonce: true,
     sri: true,
   },
-});
+})

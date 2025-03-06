@@ -2,49 +2,41 @@
 import InternalLayoutPrimitive, {
   type PrimitiveProps,
   type PrimitiveSlots,
-} from "~/components/layout/internal/Primitive.vue";
-import { useTileCount } from "~/components/layout/Tiles.vue";
+} from '~/components/layout/internal/Primitive.vue'
+import { useTileCount } from '~/components/layout/Tiles.vue'
 
 function normalizeCount(count: ResponsiveValue<number | `${number}`>) {
   return mapResponsive(fillResponsive(normalizeResponsive(count)), (value) =>
     Math.max(1, Number.isFinite(Number(value)) ? Number(value) : 1),
-  );
+  )
 }
 
 export interface TileProps extends PrimitiveProps {
-  rows?: ResponsiveValue<number | `${number}`>;
-  columns?: ResponsiveValue<number | `${number}`>;
+  rows?: ResponsiveValue<number | `${number}`>
+  columns?: ResponsiveValue<number | `${number}`>
 }
 
-export type TileSlots = PrimitiveSlots;
+export type TileSlots = PrimitiveSlots
 </script>
 
 <script setup lang="ts">
-const props = defineProps<TileProps>();
-defineSlots<TileSlots>();
+const props = defineProps<TileProps>()
+defineSlots<TileSlots>()
 
-const rows = computed(() => normalizeCount(props.rows ?? 1));
-const columns = computed(() => normalizeCount(props.columns ?? 1));
-const count = useTileCount();
+const rows = computed(() => normalizeCount(props.rows ?? 1))
+const columns = computed(() => normalizeCount(props.columns ?? 1))
+const count = useTileCount()
 
 const effectiveColumns = computed(() =>
-  mapResponsive(columns.value, (value, breakpoint) =>
-    Math.min(value, toValue(count)[breakpoint]),
-  ),
-);
+  mapResponsive(columns.value, (value, breakpoint) => Math.min(value, toValue(count)[breakpoint])),
+)
 
 const style = computed(() => ({
-  ...responsiveToAttributes(
-    "--layout-tile-rows",
-    compactResponsive(rows.value),
-  ),
-  ...responsiveToAttributes(
-    "--layout-tile-columns",
-    compactResponsive(effectiveColumns.value),
-  ),
-}));
+  ...responsiveToAttributes('--layout-tile-rows', compactResponsive(rows.value)),
+  ...responsiveToAttributes('--layout-tile-columns', compactResponsive(effectiveColumns.value)),
+}))
 
-const LayoutPrimitive = InternalLayoutPrimitive;
+const LayoutPrimitive = InternalLayoutPrimitive
 </script>
 
 <template>
@@ -55,53 +47,53 @@ const LayoutPrimitive = InternalLayoutPrimitive;
 
 <style>
 @property --layout-tile-rows {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --layout-tile-rows-tablet {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --layout-tile-rows-laptop {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --layout-tile-rows-desktop {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --layout-tile-rows-actual {
-  syntax: "<integer>";
+  syntax: '<integer>';
   inherits: false;
   initial-value: 1;
 }
 
 @property --layout-tile-columns {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --layout-tile-columns-tablet {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --layout-tile-columns-laptop {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --layout-tile-columns-desktop {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --layout-tile-columns-actual {
-  syntax: "<integer>";
+  syntax: '<integer>';
   inherits: false;
   initial-value: 1;
 }
@@ -111,21 +103,21 @@ const LayoutPrimitive = InternalLayoutPrimitive;
     --layout-tile-rows-actual: var(--layout-tile-rows);
     --layout-tile-columns-actual: var(--layout-tile-columns);
 
-    @container style(--media-gte-tablet: true) {
+    @container style(--screen-gte-tablet: true) {
       --layout-tile-rows-tablet: var(--layout-tile-rows);
       --layout-tile-columns-tablet: var(--layout-tile-columns);
       --layout-tile-rows-actual: var(--layout-tile-rows-tablet);
       --layout-tile-columns-actual: var(--layout-tile-columns-tablet);
     }
 
-    @container style(--media-gte-laptop: true) {
+    @container style(--screen-gte-laptop: true) {
       --layout-tile-rows-laptop: var(--layout-tile-rows-tablet);
       --layout-tile-columns-laptop: var(--layout-tile-columns-tablet);
       --layout-tile-rows-actual: var(--layout-tile-rows-laptop);
       --layout-tile-columns-actual: var(--layout-tile-columns-laptop);
     }
 
-    @container style(--media-eq-desktop: true) {
+    @container style(--screen-eq-desktop: true) {
       --layout-tile-rows-desktop: var(--layout-tile-rows-laptop);
       --layout-tile-columns-desktop: var(--layout-tile-columns-laptop);
       --layout-tile-rows-actual: var(--layout-tile-rows-desktop);

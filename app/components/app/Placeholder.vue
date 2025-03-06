@@ -10,15 +10,15 @@
 
 <script setup lang="ts">
 defineProps<{
-  label?: string | number;
-}>();
+  label?: string | number
+}>()
 </script>
 
 <style>
 @layer app.component {
   .app-placeholder {
     display: grid;
-    grid: "main" 1fr / 1fr;
+    grid: 'main' 1fr / 1fr;
     block-size: 100%;
     inline-size: 100%;
     min-block-size: 0;

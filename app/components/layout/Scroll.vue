@@ -1,25 +1,14 @@
 <template>
   <RadixScrollAreaRoot class="layout-scroll" as-child>
     <LayoutViewport :direction>
-      <LayoutSized
-        :width
-        :min-width
-        :max-width
-        :height
-        :min-height
-        :max-height
-        :aspect
-      >
+      <LayoutSized :width :min-width :max-width :height :min-height :max-height :aspect>
         <RadixScrollAreaViewport ref="viewport" as-child :style>
           <LayoutPrimitive ref="area" :as class="layout-scroll-area">
             <LayoutWrap role="should-unwrap">
               <slot />
             </LayoutWrap>
           </LayoutPrimitive>
-          <RadixScrollAreaScrollbar
-            :orientation="direction"
-            class="layout-scroll-bar"
-          >
+          <RadixScrollAreaScrollbar :orientation="direction" class="layout-scroll-bar">
             <RadixScrollAreaThumb class="layout-scroll-thumb" />
           </RadixScrollAreaScrollbar>
           <slot name="indicators" />
@@ -30,77 +19,67 @@
 </template>
 
 <script lang="ts">
-import { RadixScrollAreaViewport } from "#components";
+import { RadixScrollAreaViewport } from '#components'
 import InternalLayoutViewport, {
   provideViewport,
   provideScrollDirection,
   type ViewportProps,
-} from "~/components/layout/internal/Viewport.vue";
-import InternalLayoutSized, {
-  type SizedProps,
-} from "~/components/layout/internal/Sized.vue";
+} from '~/components/layout/internal/Viewport.vue'
+import InternalLayoutSized, { type SizedProps } from '~/components/layout/internal/Sized.vue'
 import InternalLayoutPrimitive, {
   type PrimitiveProps,
   type PrimitiveSlots,
-} from "~/components/layout/internal/Primitive.vue";
-import InternalLayoutWrap from "~/components/layout/internal/Wrap.vue";
+} from '~/components/layout/internal/Primitive.vue'
+import InternalLayoutWrap from '~/components/layout/internal/Wrap.vue'
 
-export interface LayoutScrollProps
-  extends PrimitiveProps,
-    SizedProps,
-    ViewportProps {}
+export interface LayoutScrollProps extends PrimitiveProps, SizedProps, ViewportProps {}
 
 export interface LayoutScrollSlots extends PrimitiveSlots {
-  indicators?: () => unknown;
+  indicators?: () => unknown
 }
 </script>
 
 <script setup lang="ts">
-const { direction = "vertical" } = defineProps<LayoutScrollProps>();
-defineSlots<LayoutScrollSlots>();
+const { direction = 'vertical' } = defineProps<LayoutScrollProps>()
+defineSlots<LayoutScrollSlots>()
 
-const LayoutViewport = InternalLayoutViewport;
-const LayoutSized = InternalLayoutSized;
-const LayoutPrimitive = InternalLayoutPrimitive;
-const LayoutWrap = InternalLayoutWrap;
+const LayoutViewport = InternalLayoutViewport
+const LayoutSized = InternalLayoutSized
+const LayoutPrimitive = InternalLayoutPrimitive
+const LayoutWrap = InternalLayoutWrap
 
-const area = useTemplateRef<HTMLElement>("area");
-const viewport =
-  useTemplateRef<InstanceType<typeof RadixScrollAreaViewport>>("viewport");
+const area = useTemplateRef<HTMLElement>('area')
+const viewport = useTemplateRef<InstanceType<typeof RadixScrollAreaViewport>>('viewport')
 
-const viewportElement = computed(() => viewport.value?.viewportElement);
+const viewportElement = computed(() => viewport.value?.viewportElement)
 
-provideViewport(viewportElement);
+provideViewport(viewportElement)
 
-const defaultSize = { width: 0, height: 0 } as const;
-const options = { box: "border-box" } as const;
+const defaultSize = { width: 0, height: 0 } as const
+const options = { box: 'border-box' } as const
 
 const { width: scrollInlineLength, height: scrollBlockLength } = useElementSize(
   area,
   defaultSize,
   options,
-);
+)
 const { width: viewportInlineSize, height: viewportBlockSize } = useElementSize(
   viewportElement,
   defaultSize,
   options,
-);
+)
 
-const { x, y } = useScroll(viewportElement);
+const { x, y } = useScroll(viewportElement)
 
-provideScrollDirection(direction);
+provideScrollDirection(direction)
 
 const style = computed(() => ({
-  "--scroll-length":
-    direction === "vertical"
-      ? `${scrollBlockLength.value}px`
-      : `${scrollInlineLength.value}px`,
-  "--scroll-viewport":
-    direction === "vertical"
-      ? `${viewportBlockSize.value}px`
-      : `${viewportInlineSize.value}px`,
-  "--scroll": direction === "vertical" ? `${y.value}px` : `${x.value}px`,
-}));
+  '--scroll-length':
+    direction === 'vertical' ? `${scrollBlockLength.value}px` : `${scrollInlineLength.value}px`,
+  '--scroll-viewport':
+    direction === 'vertical' ? `${viewportBlockSize.value}px` : `${viewportInlineSize.value}px`,
+  '--scroll': direction === 'vertical' ? `${y.value}px` : `${x.value}px`,
+}))
 </script>
 
 <style>
@@ -117,7 +96,7 @@ const style = computed(() => ({
     isolation: isolate;
     contain: content;
 
-    &[data-viewport~="horizontal"] {
+    &[data-viewport~='horizontal'] {
       container-type: inline-size;
 
       & > .layout-scroll-area {
@@ -126,7 +105,7 @@ const style = computed(() => ({
       }
     }
 
-    &[data-viewport~="vertical"] {
+    &[data-viewport~='vertical'] {
       container-type: size;
     }
   }

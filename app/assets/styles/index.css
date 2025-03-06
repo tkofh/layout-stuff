@@ -1,12 +1,8 @@
-@layer reset media layout app;
-@import url("sanitize.css") layer(reset);
-@import url("sanitize.css/assets.css") layer(reset);
-@import url("sanitize.css/typography.css") layer(reset);
-@import url("sanitize.css/forms.css") layer(reset);
-@import url("sanitize.css/system-ui.css") layer(reset);
-@import url("sanitize.css/ui-monospace.css") layer(reset);
-@import url("./media.css");
-
+@layer reset, env, property, primitive, layout, app;
+@import './reset.css';
+@import url('env.css');
+@import url('property.css');
+@import url('primitive.css');
 
 @layer layout {
   @layer init {
@@ -23,4 +19,3 @@
   @layer component {
   }
 }
-

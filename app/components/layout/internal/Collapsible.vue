@@ -1,61 +1,59 @@
 <script lang="ts">
-import type { PrimitiveSlots } from "~/components/layout/internal/Primitive.vue";
+import type { PrimitiveSlots } from '~/components/layout/internal/Primitive.vue'
 import InternalLayoutAligned, {
   type Align2dProps,
   reverseAlign,
-} from "~/components/layout/internal/Aligned.vue";
+} from '~/components/layout/internal/Aligned.vue'
 
-export type CollapseBelow = BreakpointsExcept<"mobile"> | "none";
+export type CollapseBelow = BreakpointsExcept<'mobile'> | 'none'
 
-const COLLAPSE_BELOW = Symbol.for("layout.collapse-below") as InjectionKey<
+const COLLAPSE_BELOW = Symbol.for('layout.collapse-below') as InjectionKey<
   MaybeRefOrGetter<CollapseBelow>
->;
+>
 
 function provideCollapseBelow(collapseBelow: MaybeRefOrGetter<CollapseBelow>) {
-  provide(COLLAPSE_BELOW, collapseBelow);
+  provide(COLLAPSE_BELOW, collapseBelow)
 }
 
 export function useCollapseBelow() {
-  return inject(COLLAPSE_BELOW, "none");
+  return inject(COLLAPSE_BELOW, 'none')
 }
 
 export interface CollapsibleProps extends Align2dProps {
-  collapseBelow?: CollapseBelow;
-  reverse?: boolean;
-  wrap?: boolean;
+  collapseBelow?: CollapseBelow
+  reverse?: boolean
+  wrap?: boolean
 }
 
-export type CollapsibleSlots = PrimitiveSlots;
+export type CollapsibleSlots = PrimitiveSlots
 </script>
 
 <script setup lang="ts">
 const {
-  collapseBelow = "none",
+  collapseBelow = 'none',
   reverse,
-  align = "left",
+  align = 'left',
   wrap = false,
-} = defineProps<CollapsibleProps>();
-defineSlots<CollapsibleSlots>();
+} = defineProps<CollapsibleProps>()
+defineSlots<CollapsibleSlots>()
 
 const effectiveAlign = computed(() =>
   compactResponsive(
-    mapResponsive(
-      fillResponsive(normalizeResponsive(align)),
-      (value, breakpoint) =>
-        breakpoint !== "mobile" && reverse ? reverseAlign(value) : value,
+    mapResponsive(fillResponsive(normalizeResponsive(align)), (value, breakpoint) =>
+      breakpoint !== 'mobile' && reverse ? reverseAlign(value) : value,
     ),
   ),
-);
+)
 
-provideCollapseBelow(collapseBelow);
+provideCollapseBelow(collapseBelow)
 
 const data = useDataString(() => ({
   reverse,
   wrap,
   [collapseBelow]: true,
-}));
+}))
 
-const LayoutAligned = InternalLayoutAligned;
+const LayoutAligned = InternalLayoutAligned
 </script>
 
 <template>
@@ -68,20 +66,20 @@ const LayoutAligned = InternalLayoutAligned;
 
 <style>
 @property --collapsible-direction {
-  syntax: "row | row-reverse";
+  syntax: 'row | row-reverse';
   inherits: false;
   initial-value: row;
 }
 
 @property --collapsible-wrap {
-  syntax: "wrap | nowrap";
+  syntax: 'wrap | nowrap';
   inherits: false;
   initial-value: nowrap;
 }
 
 @layer layout.init {
-  [data-collapsible~="reverse"] {
-    @container style(--media-gte-tablet: true) {
+  [data-collapsible~='reverse'] {
+    @container style(--screen-gte-tablet: true) {
       --collapsible-direction: row-reverse;
     }
   }
@@ -92,36 +90,36 @@ const LayoutAligned = InternalLayoutAligned;
     display: block flex;
     inline-size: 100%;
 
-    &[data-collapsible~="none"] {
+    &[data-collapsible~='none'] {
       flex-flow: var(--collapsible-direction) var(--collapsible-wrap);
       justify-content: var(--layout-align-actual, start);
       align-items: var(--layout-align-y-actual, start);
     }
 
-    &:not([data-collapsible~="none"]) {
+    &:not([data-collapsible~='none']) {
       flex-flow: column nowrap;
       align-items: var(--layout-align-actual, start);
       justify-content: start;
     }
 
-    @container style(--media-gte-tablet: true) {
-      &[data-collapsible~="tablet"] {
+    @container style(--screen-gte-tablet: true) {
+      &[data-collapsible~='tablet'] {
         flex-flow: var(--collapsible-direction) var(--collapsible-wrap);
         justify-content: var(--layout-align-actual, start);
         align-items: var(--layout-align-y-actual, start);
       }
     }
 
-    @container style(--media-gte-laptop: true) {
-      &[data-collapsible~="laptop"] {
+    @container style(--screen-gte-laptop: true) {
+      &[data-collapsible~='laptop'] {
         flex-flow: var(--collapsible-direction) var(--collapsible-wrap);
         justify-content: var(--layout-align-actual, start);
         align-items: var(--layout-align-y-actual, start);
       }
     }
 
-    @container style(--media-eq-desktop: true) {
-      &[data-collapsible~="desktop"] {
+    @container style(--screen-eq-desktop: true) {
+      &[data-collapsible~='desktop'] {
         flex-flow: var(--collapsible-direction) var(--collapsible-wrap);
         justify-content: var(--layout-align-actual, start);
         align-items: var(--layout-align-y-actual, start);

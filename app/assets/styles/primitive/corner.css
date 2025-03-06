@@ -1,0 +1,5 @@
+@layer primitive {
+  .corner {
+    border-radius: var(--o-radius-tl) var(--o-radius-tr) var(--o-radius-br) var(--o-radius-bl);
+  }
+}

@@ -1,0 +1,21 @@
+@property --elevation {
+  inherits: true;
+  syntax: '*';
+}
+@property --o-elevation {
+  inherits: false;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --o-elevation-auto {
+  inherits: false;
+  initial-value: 0;
+  syntax: '<number>';
+}
+
+@layer property {
+  .elevation {
+    --o-elevation: clamp(0, var(--elevation), 1);
+    --o-elevation-auto: clamp(0, var(--elevation), 1);
+  }
+}

@@ -3,21 +3,17 @@ import InternalLayoutPrimitive, {
   type PrimitiveSlots,
   type PrimitiveProps,
   type ContentSectioningTag,
-} from "~/components/layout/internal/Primitive.vue";
+} from '~/components/layout/internal/Primitive.vue'
 import InternalLayoutAligned, {
   type AlignedHorizontalAlignment,
-} from "~/components/layout/internal/Aligned.vue";
+} from '~/components/layout/internal/Aligned.vue'
 import InternalLayoutCollapsible, {
   type CollapsibleProps,
-} from "~/components/layout/internal/Collapsible.vue";
-import InternalLayoutSpaced, {
-  type SpaceProps,
-} from "~/components/layout/internal/Spaced.vue";
-import InternalLayoutFrame, {
-  type FrameProps,
-} from "~/components/layout/internal/Frame.vue";
-import InternalLayoutWrap from "~/components/layout/internal/Wrap.vue";
-import type { MaybeRefOrGetter } from "vue";
+} from '~/components/layout/internal/Collapsible.vue'
+import InternalLayoutSpaced, { type SpaceProps } from '~/components/layout/internal/Spaced.vue'
+import InternalLayoutFrame, { type FrameProps } from '~/components/layout/internal/Frame.vue'
+import InternalLayoutWrap from '~/components/layout/internal/Wrap.vue'
+import type { MaybeRefOrGetter } from 'vue'
 
 export interface ColumnsProps
   extends PrimitiveProps<ContentSectioningTag>,
@@ -25,49 +21,38 @@ export interface ColumnsProps
     CollapsibleProps,
     SpaceProps {}
 
-const COLUMNS_ALIGN = Symbol.for("layout.columns.align") as InjectionKey<
+const COLUMNS_ALIGN = Symbol.for('layout.columns.align') as InjectionKey<
   MaybeRefOrGetter<AlignedHorizontalAlignment>
->;
+>
 
-const defaultColumnsAlign = "left" as const;
+const defaultColumnsAlign = 'left' as const
 
-function provideColumnsAlign(
-  align: MaybeRefOrGetter<AlignedHorizontalAlignment>,
-) {
-  provide(COLUMNS_ALIGN, align);
+function provideColumnsAlign(align: MaybeRefOrGetter<AlignedHorizontalAlignment>) {
+  provide(COLUMNS_ALIGN, align)
 }
 
 export function useColumnsAlign() {
-  return inject(COLUMNS_ALIGN, defaultColumnsAlign);
+  return inject(COLUMNS_ALIGN, defaultColumnsAlign)
 }
 
-export type ColumnsSlots = PrimitiveSlots;
+export type ColumnsSlots = PrimitiveSlots
 </script>
 
 <script setup lang="ts">
-const { align = defaultColumnsAlign } = defineProps<ColumnsProps>();
-defineSlots<ColumnsSlots>();
+const { align = defaultColumnsAlign } = defineProps<ColumnsProps>()
+defineSlots<ColumnsSlots>()
 
-const LayoutPrimitive = InternalLayoutPrimitive;
-const LayoutCollapsible = InternalLayoutCollapsible;
-const LayoutFrame = InternalLayoutFrame;
-const LayoutWrap = InternalLayoutWrap;
-const LayoutSpaced = InternalLayoutSpaced;
+const LayoutPrimitive = InternalLayoutPrimitive
+const LayoutCollapsible = InternalLayoutCollapsible
+const LayoutFrame = InternalLayoutFrame
+const LayoutWrap = InternalLayoutWrap
+const LayoutSpaced = InternalLayoutSpaced
 
-provideColumnsAlign(() => align);
+provideColumnsAlign(() => align)
 </script>
 
 <template>
-  <LayoutFrame
-    as="slot"
-    :frame
-    :frame-y
-    :frame-x
-    :frame-top
-    :frame-right
-    :frame-bottom
-    :frame-left
-  >
+  <LayoutFrame as="slot" :frame :frame-y :frame-x :frame-top :frame-right :frame-bottom :frame-left>
     <LayoutCollapsible :wrap="false" :reverse :align :align-y :collapse-below>
       <LayoutWrap role="unwrappable">
         <LayoutSpaced :space mode="gap">

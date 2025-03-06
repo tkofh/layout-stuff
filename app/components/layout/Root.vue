@@ -17,80 +17,73 @@
 import InternalLayoutPrimitive, {
   type PrimitiveProps,
   type PrimitiveSlots,
-} from "~/components/layout/internal/Primitive.vue";
-import InternalLayoutViewport from "~/components/layout/internal/Viewport.vue";
-import type { MaybeRefOrGetter } from "vue";
+} from '~/components/layout/internal/Primitive.vue'
+import InternalLayoutViewport from '~/components/layout/internal/Viewport.vue'
+import type { MaybeRefOrGetter } from 'vue'
 
-const BREAKPOINT = Symbol.for("layout.breakpoint") as InjectionKey<
-  MaybeRefOrGetter<BreakpointName>
->;
+const BREAKPOINT = Symbol.for('layout.breakpoint') as InjectionKey<MaybeRefOrGetter<BreakpointName>>
 
 function provideBreakpoint(breakpoint: MaybeRefOrGetter) {
-  provide(BREAKPOINT, breakpoint);
+  provide(BREAKPOINT, breakpoint)
 }
 
 export function useBreakpoint() {
-  return inject(BREAKPOINT, "mobile");
+  return inject(BREAKPOINT, 'mobile')
 }
 
-export function useResponsiveValue<T>(
-  value: MaybeRefOrGetter<ResponsiveValue<T>>,
-) {
-  const breakpoint = useBreakpoint();
+export function useResponsiveValue<T>(value: MaybeRefOrGetter<ResponsiveValue<T>>) {
+  const breakpoint = useBreakpoint()
   return computed<T>(() => {
-    const resolved = normalizeResponsive(toValue(value));
-    return fillResponsive(resolved)[toValue(breakpoint)];
-  });
+    const resolved = normalizeResponsive(toValue(value))
+    return fillResponsive(resolved)[toValue(breakpoint)]
+  })
 }
 </script>
 
 <script setup lang="ts">
-defineProps<PrimitiveProps>();
-defineSlots<PrimitiveSlots>();
+defineProps<PrimitiveProps>()
+defineSlots<PrimitiveSlots>()
 
-const LayoutPrimitive = InternalLayoutPrimitive;
-const LayoutViewport = InternalLayoutViewport;
+const LayoutPrimitive = InternalLayoutPrimitive
+const LayoutViewport = InternalLayoutViewport
 
-const root = templateRef<HTMLElement>("root");
+const root = templateRef<HTMLElement>('root')
 
-const { height } = useElementSize(root);
-const { y } = useWindowScroll();
-const { width: windowWidth } = useWindowSize();
+const { height } = useElementSize(root)
+const { y } = useWindowScroll()
+const { width: windowWidth } = useWindowSize()
 
 provideBreakpoint(
   computed(() =>
     windowWidth.value >= 1440
-      ? "desktop"
+      ? 'desktop'
       : windowWidth.value >= 1024
-        ? "laptop"
+        ? 'laptop'
         : windowWidth.value >= 768
-          ? "tablet"
-          : "mobile",
+          ? 'tablet'
+          : 'mobile',
   ),
-);
+)
 
 const style = computed(() => ({
-  "--scroll": `${y.value}px`,
-  "--scroll-length": `${height.value}px`,
-}));
+  '--scroll': `${y.value}px`,
+  '--scroll-length': `${height.value}px`,
+}))
 
-const isMounted = ref(false);
+const isMounted = ref(false)
 onMounted(() => {
-  isMounted.value = true;
-});
+  isMounted.value = true
+})
 
 onPrehydrate(() => {
-  document.addEventListener("DOMContentLoaded", () => {
-    const root = document.querySelector<HTMLElement>(".layout-root");
+  document.addEventListener('DOMContentLoaded', () => {
+    const root = document.querySelector<HTMLElement>('.layout-root')
     if (root) {
-      root.style.setProperty("--scroll", `${window.scrollY}px`);
-      root.style.setProperty(
-        "--scroll-length",
-        `${document.documentElement.scrollHeight}px`,
-      );
+      root.style.setProperty('--scroll', `${window.scrollY}px`)
+      root.style.setProperty('--scroll-length', `${document.documentElement.scrollHeight}px`)
     }
-  });
-});
+  })
+})
 </script>
 
 <style>

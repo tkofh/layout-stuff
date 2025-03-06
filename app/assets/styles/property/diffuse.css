@@ -1,0 +1,63 @@
+@property --diffuse {
+  inherits: true;
+  syntax: '*';
+}
+@property --diffuse-p0 {
+  inherits: true;
+  initial-value: 2;
+  syntax: '<number>';
+}
+@property --diffuse-p1 {
+  inherits: true;
+  initial-value: 8;
+  syntax: '<number>';
+}
+@property --diffuse-p2 {
+  inherits: true;
+  initial-value: 20;
+  syntax: '<number>';
+}
+@property --diffuse-p3 {
+  inherits: true;
+  initial-value: 24;
+  syntax: '<number>';
+}
+@property --o-diffuse-auto {
+  inherits: false;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --o-diffuse {
+  inherits: false;
+  initial-value: 0;
+  syntax: '<number>';
+}
+
+@layer property {
+  :where(.diffuse, .elevate) {
+    --diffuse: unset;
+  }
+
+  .diffuse {
+    --o-diffuse: max(var(--diffuse), 0);
+    --o-diffuse-auto: var(--o-diffuse);
+  }
+
+  .elevate {
+    --o-diffuse-auto: calc(
+      max(var(--diffuse-p0), 0) + (-3 * max(var(--diffuse-p0), 0) + 3 * max(var(--diffuse-p1), 0)) *
+        var(--i-elevation) +
+        (
+          3 * max(var(--diffuse-p0), 0) - 6 * max(var(--diffuse-p1), 0) + 3 *
+            max(var(--diffuse-p2), 0)
+        ) *
+        pow(var(--i-elevation), 2) +
+        (
+          -3 * max(var(--diffuse-p0), 0) + 3 * max(var(--diffuse-p1), 0) + 3 *
+            max(var(--diffuse-p2), 0) - 3 * max(var(--diffuse-p3), 0)
+        ) *
+        pow(var(--i-elevation), 3)
+    );
+    --o-diffuse: max(var(--diffuse, var(--o-diffuse-auto)), 0);
+  }
+}

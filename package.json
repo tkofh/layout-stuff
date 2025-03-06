@@ -1,13 +1,13 @@
 {
   "name": "nuxt-app",
-  "packageManager": "pnpm@9.15.1",
+  "packageManager": "pnpm@10.5.1+sha512.c424c076bd25c1a5b188c37bb1ca56cc1e136fbf530d98bcb3289982a08fd25527b8c9c4ec113be5e3393c39af04521dd647bcf1d0801eaf8ac6a7b14da313af",
   "private": true,
   "type": "module",
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
     "format": "prettier --write .",
-    "lint:ts": "eslint --ext .js,.mjs,.ts,.vue --ignore-path .gitignore .",
+    "lint:ts": "eslint --fix .",
     "lint:css": "stylelint --ignore-path .gitignore --fix \"**/*.{css,scss,vue}\"",
     "lint": "pnpm lint:ts && pnpm lint:css",
     "generate": "nuxt generate",
@@ -15,23 +15,35 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
-    "@nuxt/eslint": "0.7.4",
+    "@coily/vue": "^0.10.2",
+    "@nuxt/eslint": "1.1.0",
+    "@nuxt/fonts": "^0.10.3",
+    "@nuxt/kit": "^3.15.4",
     "@nuxtjs/color-mode": "^3.5.2",
     "@radix-ui/colors": "^3.0.0",
-    "@vue/language-server": "^2.2.0",
-    "@vueuse/core": "^12.3.0",
-    "@vueuse/nuxt": "^12.3.0",
-    "eslint": "^9.17.0",
-    "nuxt": "^3.15.0",
-    "nuxt-security": "2.1.5",
-    "postcss-html": "^1.7.0",
-    "prettier": "^3.4.2",
-    "radix-vue": "^1.9.12",
+    "@vue/language-server": "^2.2.8",
+    "@vueuse/core": "^12.8.2",
+    "@vueuse/nuxt": "^12.8.2",
+    "coily": "^0.10.1",
+    "curvy": "^1.0.4",
+    "eslint": "^9.21.0",
+    "glob": "^11.0.1",
+    "magic-string": "^0.30.17",
+    "minimatch": "^10.0.1",
+    "motion": "^12.4.10",
+    "nuxt": "^3.15.4",
+    "nuxt-security": "2.2.0",
+    "postcss-html": "^1.8.0",
+    "prettier": "^3.5.3",
+    "radix-vue": "^1.9.17",
+    "reka-ui": "^2.0.2",
     "sanitize.css": "^13.0.0",
-    "stylelint": "^16.12.0",
+    "stylelint": "^16.15.0",
     "stylelint-config-standard-vue": "^1.0.0",
     "stylelint-plugin-logical-css": "^1.2.1",
-    "typescript": "^5.7.2",
+    "typescript": "^5.8.2",
+    "ufo": "^1.5.4",
+    "unplugin": "^2.2.0",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0"
   },
@@ -39,6 +51,9 @@
     "allowedDeprecatedVersions": {
       "glob": "7.2.3",
       "inflight": "1.0.6"
-    }
+    },
+    "onlyBuiltDependencies": [
+      "vue-demi"
+    ]
   }
 }

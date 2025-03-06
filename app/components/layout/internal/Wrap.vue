@@ -1,16 +1,16 @@
 <script lang="ts">
-import type { PrimitiveSlots } from "~/components/layout/internal/Primitive.vue";
+import type { PrimitiveSlots } from '~/components/layout/internal/Primitive.vue'
 
 export interface WrapProps {
-  role: "should-unwrap" | "unwrappable";
+  role: 'should-unwrap' | 'unwrappable'
 }
 
-export type WrapSlots = PrimitiveSlots;
+export type WrapSlots = PrimitiveSlots
 </script>
 
 <script setup lang="ts">
-const { role } = defineProps<WrapProps>();
-defineSlots<WrapSlots>();
+const { role } = defineProps<WrapProps>()
+defineSlots<WrapSlots>()
 </script>
 
 <template>

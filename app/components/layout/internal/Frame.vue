@@ -1,11 +1,11 @@
 <script lang="ts">
-import type { PrimitiveSlots } from "~/components/layout/internal/Primitive.vue";
+import type { PrimitiveSlots } from '~/components/layout/internal/Primitive.vue'
 
 function frameEdgeStyles(key: string, value: Space) {
   return responsiveToAttributes(
     key,
     mapResponsive(normalizeResponsive(value), (value) => SPACE_SCALE[value]),
-  );
+  )
 }
 
 function frameStyles(
@@ -17,66 +17,66 @@ function frameStyles(
   bottom: Space | undefined,
   left: Space | undefined,
 ): Record<string, string> {
-  const hasAll = all !== undefined;
-  const hasX = x !== undefined;
-  const hasY = y !== undefined;
-  const hasTop = top !== undefined;
-  const hasRight = right !== undefined;
-  const hasBottom = bottom !== undefined;
-  const hasLeft = left !== undefined;
+  const hasAll = all !== undefined
+  const hasX = x !== undefined
+  const hasY = y !== undefined
+  const hasTop = top !== undefined
+  const hasRight = right !== undefined
+  const hasBottom = bottom !== undefined
+  const hasLeft = left !== undefined
 
-  const hasXComponents = hasLeft && hasRight;
-  const hasYComponents = hasTop && hasBottom;
-  const hasAnyX = hasX || hasXComponents;
-  const hasAnyY = hasY || hasYComponents;
+  const hasXComponents = hasLeft && hasRight
+  const hasYComponents = hasTop && hasBottom
+  const hasAnyX = hasX || hasXComponents
+  const hasAnyY = hasY || hasYComponents
 
-  const hasUnassignedComponents = !hasAnyX || !hasAnyY;
+  const hasUnassignedComponents = !hasAnyX || !hasAnyY
 
-  const output = {} as Record<string, string>;
+  const output = {} as Record<string, string>
 
   if (hasTop) {
-    Object.assign(output, frameEdgeStyles("--frame-top", top));
+    Object.assign(output, frameEdgeStyles('--frame-top', top))
   }
   if (hasRight) {
-    Object.assign(output, frameEdgeStyles("--frame-right", right));
+    Object.assign(output, frameEdgeStyles('--frame-right', right))
   }
   if (hasBottom) {
-    Object.assign(output, frameEdgeStyles("--frame-bottom", bottom));
+    Object.assign(output, frameEdgeStyles('--frame-bottom', bottom))
   }
   if (hasLeft) {
-    Object.assign(output, frameEdgeStyles("--frame-left", left));
+    Object.assign(output, frameEdgeStyles('--frame-left', left))
   }
 
   if (hasX && !hasXComponents) {
-    Object.assign(output, frameEdgeStyles("--frame-x", x));
+    Object.assign(output, frameEdgeStyles('--frame-x', x))
   }
   if (hasY && !hasYComponents) {
-    Object.assign(output, frameEdgeStyles("--frame-y", y));
+    Object.assign(output, frameEdgeStyles('--frame-y', y))
   }
 
   if (hasAll && hasUnassignedComponents) {
-    Object.assign(output, frameEdgeStyles("--frame", all));
+    Object.assign(output, frameEdgeStyles('--frame', all))
   }
 
-  return output;
+  return output
 }
 
 export interface FrameProps {
-  frame?: Space;
-  frameX?: Space;
-  frameY?: Space;
-  frameTop?: Space;
-  frameRight?: Space;
-  frameBottom?: Space;
-  frameLeft?: Space;
+  frame?: Space
+  frameX?: Space
+  frameY?: Space
+  frameTop?: Space
+  frameRight?: Space
+  frameBottom?: Space
+  frameLeft?: Space
 }
 
-export type FrameSlots = PrimitiveSlots;
+export type FrameSlots = PrimitiveSlots
 </script>
 
 <script setup lang="ts">
-const props = defineProps<FrameProps>();
-defineSlots<FrameSlots>();
+const props = defineProps<FrameProps>()
+defineSlots<FrameSlots>()
 
 const style = computed(() =>
   frameStyles(
@@ -88,7 +88,7 @@ const style = computed(() =>
     props.frameBottom,
     props.frameLeft,
   ),
-);
+)
 </script>
 
 <template>
@@ -99,183 +99,183 @@ const style = computed(() =>
 
 <style>
 @property --frame {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --frame-tablet {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --frame-laptop {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --frame-desktop {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --frame-actual {
-  syntax: "<length-percentage>";
+  syntax: '<length-percentage>';
   inherits: false;
   initial-value: 0;
 }
 
 @property --frame-x {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --frame-x-tablet {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --frame-x-laptop {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --frame-x-desktop {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --frame-x-actual {
-  syntax: "<length-percentage>";
+  syntax: '<length-percentage>';
   inherits: false;
   initial-value: 0;
 }
 
 @property --frame-y {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --frame-y-tablet {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --frame-y-laptop {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --frame-y-desktop {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --frame-y-actual {
-  syntax: "<length-percentage>";
+  syntax: '<length-percentage>';
   inherits: false;
   initial-value: 0;
 }
 
 @property --frame-top {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --frame-top-tablet {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --frame-top-laptop {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --frame-top-desktop {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --frame-top-actual {
-  syntax: "<length-percentage>";
+  syntax: '<length-percentage>';
   inherits: false;
   initial-value: 0;
 }
 
 @property --frame-right {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --frame-right-tablet {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --frame-right-laptop {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --frame-right-desktop {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --frame-right-actual {
-  syntax: "<length-percentage>";
+  syntax: '<length-percentage>';
   inherits: false;
   initial-value: 0;
 }
 
 @property --frame-bottom {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --frame-bottom-tablet {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --frame-bottom-laptop {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --frame-bottom-desktop {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --frame-bottom-actual {
-  syntax: "<length-percentage>";
+  syntax: '<length-percentage>';
   inherits: false;
   initial-value: 0;
 }
 
 @property --frame-left {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --frame-left-tablet {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --frame-left-laptop {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --frame-left-desktop {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --frame-left-actual {
-  syntax: "<length-percentage>";
+  syntax: '<length-percentage>';
   inherits: false;
   initial-value: 0;
 }
@@ -290,7 +290,7 @@ const style = computed(() =>
     --frame-bottom-actual: var(--frame-bottom, var(--frame-y-actual));
     --frame-left-actual: var(--frame-left, var(--frame-x-actual));
 
-    @container style(--media-gte-tablet: true) {
+    @container style(--screen-gte-tablet: true) {
       --frame-tablet: var(--frame);
       --frame-x-tablet: var(--frame-x, var(--frame-tablet));
       --frame-y-tablet: var(--frame-y, var(--frame-tablet));
@@ -307,7 +307,7 @@ const style = computed(() =>
       --frame-left-actual: var(--frame-left-tablet, var(--frame-x-actual));
     }
 
-    @container style(--media-gte-laptop: true) {
+    @container style(--screen-gte-laptop: true) {
       --frame-laptop: var(--frame-tablet);
       --frame-x-laptop: var(--frame-x-tablet, var(--frame-laptop));
       --frame-y-laptop: var(--frame-y-tablet, var(--frame-laptop));
@@ -324,16 +324,13 @@ const style = computed(() =>
       --frame-left-actual: var(--frame-left-laptop, var(--frame-x-actual));
     }
 
-    @container style(--media-eq-desktop: true) {
+    @container style(--screen-eq-desktop: true) {
       --frame-desktop: var(--frame-laptop);
       --frame-x-desktop: var(--frame-x-laptop, var(--frame-desktop));
       --frame-y-desktop: var(--frame-y-laptop, var(--frame-desktop));
       --frame-top-desktop: var(--frame-top-laptop, var(--frame-y-desktop));
       --frame-right-desktop: var(--frame-right-laptop, var(--frame-x-desktop));
-      --frame-bottom-desktop: var(
-        --frame-bottom-laptop,
-        var(--frame-y-desktop)
-      );
+      --frame-bottom-desktop: var(--frame-bottom-laptop, var(--frame-y-desktop));
       --frame-left-desktop: var(--frame-left-laptop, var(--frame-x-desktop));
       --frame-actual: var(--frame-desktop);
       --frame-x-actual: var(--frame-x-desktop, var(--frame-actual));
@@ -348,8 +345,8 @@ const style = computed(() =>
 
 @layer layout.trait {
   [data-framed] {
-    padding: var(--frame-top-actual) var(--frame-right-actual)
-      var(--frame-bottom-actual) var(--frame-left-actual);
+    padding: var(--frame-top-actual) var(--frame-right-actual) var(--frame-bottom-actual)
+      var(--frame-left-actual);
   }
 }
 </style>

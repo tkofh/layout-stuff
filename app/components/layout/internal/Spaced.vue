@@ -1,38 +1,35 @@
 <script lang="ts">
-import type { PrimitiveSlots } from "~/components/layout/internal/Primitive.vue";
+import type { PrimitiveSlots } from '~/components/layout/internal/Primitive.vue'
 
 export interface SpaceProps {
-  space?: Space;
+  space?: Space
 }
 
 export interface DisableableSpaceProps {
-  space?: Space | false;
-  mode?: "gap" | "margin";
+  space?: Space | false
+  mode?: 'gap' | 'margin'
 }
 
-export type SpacedSlots = PrimitiveSlots;
+export type SpacedSlots = PrimitiveSlots
 </script>
 
 <script setup lang="ts">
-const { space, mode } = defineProps<DisableableSpaceProps>();
-defineSlots<SpacedSlots>();
+const { space, mode } = defineProps<DisableableSpaceProps>()
+defineSlots<SpacedSlots>()
 
 const style = computed(() =>
   space === false
     ? {}
     : responsiveToAttributes(
-        "--space",
-        mapResponsive(
-          normalizeResponsive(space ?? "none"),
-          (value) => SPACE_SCALE[value],
-        ),
+        '--space',
+        mapResponsive(normalizeResponsive(space ?? 'none'), (value) => SPACE_SCALE[value]),
       ),
-);
+)
 
 const data = useDataString(() => ({
-  gap: mode === "gap",
-  margin: mode === "margin",
-}));
+  gap: mode === 'gap',
+  margin: mode === 'margin',
+}))
 </script>
 
 <template>
@@ -43,27 +40,27 @@ const data = useDataString(() => ({
 
 <style>
 @property --space {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --space-tablet {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --space-laptop {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --space-desktop {
-  syntax: "*";
+  syntax: '*';
   inherits: false;
 }
 
 @property --space-actual {
-  syntax: "<length>";
+  syntax: '<length>';
   inherits: false;
   initial-value: 0;
 }
@@ -72,17 +69,17 @@ const data = useDataString(() => ({
   [data-spaced] {
     --space-actual: var(--space);
 
-    @container style(--media-gte-tablet: true) {
+    @container style(--screen-gte-tablet: true) {
       --space-tablet: var(--space);
       --space-actual: var(--space-tablet);
     }
 
-    @container style(--media-gte-laptop: true) {
+    @container style(--screen-gte-laptop: true) {
       --space-laptop: var(--space-tablet);
       --space-actual: var(--space-laptop);
     }
 
-    @container style(--media-gte-desktop: true) {
+    @container style(--screen-gte-desktop: true) {
       --space-desktop: var(--space-laptop);
       --space-actual: var(--space-desktop);
     }
@@ -90,11 +87,11 @@ const data = useDataString(() => ({
 }
 
 @layer layout.trait {
-  [data-spaced~="gap"] {
+  [data-spaced~='gap'] {
     gap: var(--space-actual);
   }
 
-  [data-spaced~="margin"] {
+  [data-spaced~='margin'] {
     margin: var(--space-actual);
   }
 }
