@@ -1,7 +1,6 @@
 @property --thickness {
   inherits: false;
-  initial-value: 0;
-  syntax: '<number>';
+  syntax: '*';
 }
 @property --thickness-top {
   inherits: false;
@@ -40,9 +39,11 @@
   syntax: '<number>';
 }
 
-.surface {
-  --o-thickness-top: max(var(--thickness-top, var(--thickness)), 0);
-  --o-thickness-right: max(var(--thickness-right, var(--thickness)), 0);
-  --o-thickness-bottom: max(var(--thickness-bottom, var(--thickness)), 0);
-  --o-thickness-left: max(var(--thickness-left, var(--thickness)), 0);
+@layer property {
+  .stroke {
+    --o-thickness-top: max(var(--thickness-top, var(--thickness)), 0);
+    --o-thickness-right: max(var(--thickness-right, var(--thickness)), 0);
+    --o-thickness-bottom: max(var(--thickness-bottom, var(--thickness)), 0);
+    --o-thickness-left: max(var(--thickness-left, var(--thickness)), 0);
+  }
 }

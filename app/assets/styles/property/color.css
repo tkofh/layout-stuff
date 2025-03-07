@@ -87,37 +87,22 @@
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-lightness-fallback {
-  inherits: true;
-  initial-value: 1;
-  syntax: '<number>';
-}
-@property --i-lightness-p0 {
-  inherits: true;
-  initial-value: 0;
-  syntax: '<number>';
-}
-@property --i-lightness-p1 {
-  inherits: true;
-  initial-value: 0;
-  syntax: '<number>';
-}
-@property --i-lightness-p2 {
-  inherits: true;
-  initial-value: 0;
-  syntax: '<number>';
-}
-@property --i-lightness-p3 {
-  inherits: true;
-  initial-value: 0;
-  syntax: '<number>';
-}
 @property --i-lightness-lighter {
   inherits: false;
   initial-value: 0;
   syntax: '<number>';
 }
 @property --i-lightness-darker {
+  inherits: false;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --i-lightness-normal {
+  inherits: false;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --i-lightness-reverse {
   inherits: false;
   initial-value: 0;
   syntax: '<number>';
@@ -132,13 +117,33 @@
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-lightness {
-  inherits: true;
+@property --i-lightness-force-lighter {
+  inherits: false;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-contrast-direction {
+@property --i-lightness-prefer-lighter {
   inherits: false;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --i-lightness-auto {
+  inherits: false;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --i-lightness-prefer-darker {
+  inherits: false;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --i-lightness-force-darker {
+  inherits: false;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --i-lightness {
+  inherits: true;
   initial-value: 0;
   syntax: '<number>';
 }
@@ -167,14 +172,74 @@
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-contrast-scaled {
+@property --i-contrast-scaled-normal {
   inherits: false;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-contrast-sign {
+@property --i-contrast-scaled-reverse {
   inherits: false;
   initial-value: 0;
+  syntax: '<number>';
+}
+@property --i-contrast-normalized-normal {
+  inherits: false;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --i-contrast-normalized-reverse {
+  inherits: false;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --i-contrast-reverse-knee {
+  inherits: false;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --apca-c-min {
+  inherits: false;
+  initial-value: 0.06;
+  syntax: '<number>';
+}
+@property --apca-e-nt {
+  inherits: false;
+  initial-value: 0.55;
+  syntax: '<number>';
+}
+@property --apca-e-nb {
+  inherits: false;
+  initial-value: 0.62;
+  syntax: '<number>';
+}
+@property --apca-e-rt {
+  inherits: false;
+  initial-value: 0.57;
+  syntax: '<number>';
+}
+@property --apca-e-rb {
+  inherits: false;
+  initial-value: 0.65;
+  syntax: '<number>';
+}
+@property --apca-s-n {
+  inherits: false;
+  initial-value: 1.14;
+  syntax: '<number>';
+}
+@property --apca-s-r {
+  inherits: false;
+  initial-value: 1.2;
+  syntax: '<number>';
+}
+@property --apca-s-l {
+  inherits: false;
+  initial-value: 0.01;
+  syntax: '<number>';
+}
+@property --apca-s-c {
+  inherits: false;
+  initial-value: 1;
   syntax: '<number>';
 }
 @property --o-color {
@@ -192,54 +257,95 @@
   .color {
     --i-hue: max(0, mod(var(--hue), 360));
     --i-chroma: clamp(0, var(--chroma), 100);
-    --i-lightness-normalized: clamp(
-      0,
-      var(--i-lightness-p0) + (-3 * var(--i-lightness-p0) + 3 * var(--i-lightness-p1)) *
-        clamp(0, var(--lightness) / 100, 1) +
-        (3 * var(--i-lightness-p0) - 6 * var(--i-lightness-p1) + 3 * var(--i-lightness-p2)) *
-        pow(clamp(0, var(--lightness) / 100, 1), 2) +
-        (
-          -1 * var(--i-lightness-p0) + 3 * var(--i-lightness-p1) - 3 * var(--i-lightness-p2) +
-            var(--i-lightness-p3)
-        ) *
-        pow(clamp(0, var(--lightness) / 100, 1), 3),
-      1
-    );
-    --i-lightness-p0: clamp(0, var(--lightness-p0) / 100, 1);
-    --i-lightness-p1: clamp(0, var(--lightness-p1) / 100, 1);
-    --i-lightness-p2: clamp(0, var(--lightness-p2) / 100, 1);
-    --i-lightness-p3: clamp(0, var(--lightness-p3) / 100, 1);
-    --i-contrast-direction: clamp(-2, round(var(--contrast-direction)), 2);
+    --i-contrast: clamp(0, var(--contrast) * var(--apca-s-c), 1);
     --i-contrast-scaled: calc(
-      max(var(--contrast), 0) / (114)
+      max(var(--contrast) * var(--apca-s-c), 0) / var(--apca-s-n)
     ); /* 1.14 is the common scale factor */
     --i-contrast-direction-force-lighter: round(
       to-zero,
-      calc(1 - min(max(var(--i-contrast-direction) - 2, -1 * (var(--i-contrast-direction) - 2)), 1))
+      calc(1 - min(max(var(--contrast-direction) - 2, -1 * (var(--contrast-direction) - 2)), 1))
     );
     --i-contrast-direction-prefer-lighter: round(
       to-zero,
-      calc(1 - min(max(var(--i-contrast-direction) - 1, -1 * (var(--i-contrast-direction) - 1)), 1))
+      calc(1 - min(max(var(--contrast-direction) - 1, -1 * (var(--contrast-direction) - 1)), 1))
     );
     --i-contrast-direction-auto: max(
       0,
-      round(to-zero, calc(1 - pow(var(--i-contrast-direction), 2)))
+      round(to-zero, calc(1 - pow(var(--contrast-direction), 2)))
     );
     --i-contrast-direction-prefer-darker: round(
       to-zero,
-      calc(1 - min(max(var(--i-contrast-direction) + 1, -1 * (var(--i-contrast-direction) + 1)), 1))
+      calc(1 - min(max(var(--contrast-direction) + 1, -1 * (var(--contrast-direction) + 1)), 1))
     );
     --i-contrast-direction-force-darker: round(
       to-zero,
-      calc(1 - min(max(var(--i-contrast-direction) + 2, -1 * (var(--i-contrast-direction) + 2)), 1))
+      calc(1 - min(max(var(--contrast-direction) + 2, -1 * (var(--contrast-direction) + 2)), 1))
     );
-    --i-lightness-lighter: pow(
-      pow(var(--i-lightness-normalized), 0.65) + var(--i-contrast-scaled),
-      1 / 0.62
+    --i-contrast-scaled-normal: clamp(
+      0,
+      var(--contrast) * var(--apca-s-c) / (100 * var(--apca-s-n)),
+      1
     );
-    --i-lightness-darker: pow(
-      pow(var(--i-lightness-normalized), 0.56) - var(--i-contrast-scaled),
-      1 / 0.57
+    --i-contrast-scaled-reverse: clamp(
+      0,
+      var(--contrast) * var(--apca-s-c) / (100 * var(--apca-s-r)),
+      1
+    );
+    --i-contrast-normalized-normal: calc(
+      clamp(0, var(--i-contrast-scaled-normal), var(--apca-c-min)) / var(--apca-c-min)
+    );
+    --i-contrast-normalized-reverse: calc(
+      clamp(0, var(--i-contrast-scaled-reverse), var(--apca-c-min)) / var(--apca-c-min)
+    );
+    --i-contrast-reverse-knee: pow(var(--i-contrast-scaled-reverse), 1 / var(--apca-e-rb));
+    --i-lightness-normalized: clamp(
+      0,
+      var(--lightness-p0) * var(--apca-s-l) +
+        (-3 * var(--lightness-p0) * var(--apca-s-l) + 3 * var(--lightness-p1) * var(--apca-s-l)) *
+        clamp(0, var(--lightness) * var(--apca-s-l), 1) +
+        (
+          3 * var(--lightness-p0) * var(--apca-s-l) - 6 * var(--lightness-p1) * var(--apca-s-l) +
+            3 * var(--lightness-p2) * var(--apca-s-l)
+        ) *
+        pow(clamp(0, var(--lightness) * var(--apca-s-l), 1), 2) +
+        (
+          -1 * var(--lightness-p0) * var(--apca-s-l) + 3 * var(--lightness-p1) * var(--apca-s-l) -
+            3 * var(--lightness-p2) * var(--apca-s-l) + var(--lightness-p3) * var(--apca-s-l)
+        ) *
+        pow(clamp(0, var(--lightness) * var(--apca-s-l), 1), 3),
+      1
+    );
+    --i-lightness-normal: max(
+      var(--i-lightness-normalized),
+      var(--i-contrast-normalized-normal) *
+        pow(
+          var(--i-contrast-scaled-normal) + pow(var(--i-lightness-normalized), var(--apca-e-nb)),
+          1 / var(--apca-e-nt)
+        ) +
+        (1 - var(--i-contrast-normalized-normal)) *
+        (var(--i-lightness-normalized) + var(--i-contrast-scaled-normal))
+    );
+    --i-lightness-reverse: min(
+      var(--i-lightness-normalized),
+      var(--i-contrast-normalized-reverse) *
+        (
+          round(up, calc((var(--i-lightness-normalized) - var(--i-contrast-reverse-knee)) / 100)) *
+            pow(
+              pow(var(--i-lightness-normalized), var(--apca-e-rb)) -
+                var(--i-contrast-scaled-reverse),
+              1 / var(--apca-e-rt)
+            ) +
+            min(0, var(--i-lightness-normalized) - var(--i-contrast-reverse-knee))
+        ) +
+        (1 - var(--i-contrast-normalized-reverse)) * var(--i-lightness-normalized)
+    );
+    --i-lightness-lighter: max(
+      pow(pow(var(--i-lightness-normalized), 0.56) - var(--i-contrast-scaled), 1 / 0.57),
+      pow(pow(var(--i-lightness-normalized), 0.65) + var(--i-contrast-scaled), 1 / 0.62)
+    );
+    --i-lightness-darker: min(
+      pow(pow(var(--i-lightness-normalized), 0.56) + var(--i-contrast-scaled), 1 / 0.57),
+      pow(pow(var(--i-lightness-normalized), 0.65) - var(--i-contrast-scaled), 1 / 0.62)
     );
     --i-lightness-darker-exists: round(
       to-zero,
@@ -261,9 +367,6 @@
           )
       )
     );
-    --i-lightness-fallback: calc(
-      var(--lightness-fallback) / max(var(--lightness-fallback), -var(--lightness-fallback))
-    );
     --i-lightness: clamp(
       0,
       var(--i-contrast-direction-force-lighter) * var(--i-lightness-darker) +
@@ -274,14 +377,14 @@
         ) +
         var(--i-contrast-direction-auto) *
         (
-          max(var(--i-lightness-fallback), 0) *
+          max(var(--lightness-fallback), 0) *
             (
-              var(--i-lightness-lighter-exists) + var(--i-lightness-fallback) *
+              var(--i-lightness-lighter-exists) + var(--lightness-fallback) *
                 (1 - var(--i-lightness-darker-exists))
             ) *
-            var(--i-lightness-lighter) + -1 * min(var(--i-lightness-fallback), 0) *
+            var(--i-lightness-lighter) + -1 * min(var(--lightness-fallback), 0) *
             (
-              var(--i-lightness-darker-exists) + (1 - var(--i-lightness-fallback)) *
+              var(--i-lightness-darker-exists) + (1 - var(--lightness-fallback)) *
                 (1 - var(--i-lightness-lighter-exists))
             ) *
             var(--i-lightness-darker)

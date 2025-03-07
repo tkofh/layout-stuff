@@ -29,45 +29,49 @@
               <output>{{ otherState.normalized }}</output>
             </p>
             <p>
-              Lightness:
-              <output>{{ otherState.lightness }}</output>
+              Normal:
+              <output>{{ otherState.normal }}</output>
             </p>
             <p>
-              Lighter:
-              <output>{{ otherState.lighter }}</output>
+              Reverse:
+              <output>{{ otherState.reverse }}</output>
             </p>
-            <p>
-              Darker:
-              <output>{{ otherState.darker }}</output>
-            </p>
-            <p>
-              Lighter Exists:
-              <output>{{ otherState.lighterExists }}</output>
-            </p>
-            <p>
-              Darker Exists:
-              <output>{{ otherState.darkerExists }}</output>
-            </p>
-            <p>
-              Force Darker:
-              <output>{{ otherState.forceDarker }}</output>
-            </p>
-            <p>
-              Prefer Darker:
-              <output>{{ otherState.preferDarker }}</output>
-            </p>
-            <p>
-              Auto:
-              <output>{{ otherState.auto }}</output>
-            </p>
-            <p>
-              Prefer Lighter:
-              <output>{{ otherState.preferLighter }}</output>
-            </p>
-            <p>
-              Force Lighter:
-              <output>{{ otherState.forceLighter }}</output>
-            </p>
+            <!--            <p>-->
+            <!--              Lighter:-->
+            <!--              <output>{{ otherState.lighter }}</output>-->
+            <!--            </p>-->
+            <!--            <p>-->
+            <!--              Darker:-->
+            <!--              <output>{{ otherState.darker }}</output>-->
+            <!--            </p>-->
+            <!--            <p>-->
+            <!--              Lighter Exists:-->
+            <!--              <output>{{ otherState.lighterExists }}</output>-->
+            <!--            </p>-->
+            <!--            <p>-->
+            <!--              Darker Exists:-->
+            <!--              <output>{{ otherState.darkerExists }}</output>-->
+            <!--            </p>-->
+            <!--            <p>-->
+            <!--              Force Darker:-->
+            <!--              <output>{{ otherState.forceDarker }}</output>-->
+            <!--            </p>-->
+            <!--            <p>-->
+            <!--              Prefer Darker:-->
+            <!--              <output>{{ otherState.preferDarker }}</output>-->
+            <!--            </p>-->
+            <!--            <p>-->
+            <!--              Auto:-->
+            <!--              <output>{{ otherState.auto }}</output>-->
+            <!--            </p>-->
+            <!--            <p>-->
+            <!--              Prefer Lighter:-->
+            <!--              <output>{{ otherState.preferLighter }}</output>-->
+            <!--            </p>-->
+            <!--            <p>-->
+            <!--              Force Lighter:-->
+            <!--              <output>{{ otherState.forceLighter }}</output>-->
+            <!--            </p>-->
           </LayoutStack>
         </LayoutBox>
       </template>
@@ -75,7 +79,7 @@
         <LayoutLayers align="center" align-y="center" style="block-size: 100%">
           <LayoutLayer
             ref="el"
-            class="surface diffuse elevate test color corner"
+            class="surface elevate test color corner stroke"
             :style="{
               '--hue': state.hue,
               '--chroma': state.chroma,
@@ -92,14 +96,16 @@
 
 <script setup lang="ts">
 const state = reactive({
-  contrast: 5,
-  hue: 200,
-  chroma: 20,
-  lightness: 60,
+  contrast: 0,
+  hue: 250,
+  chroma: 50,
+  lightness: 50,
   direction: 0,
 })
 const otherState = reactive({
   normalized: 0,
+  normal: 0,
+  reverse: 0,
   lightness: 0,
   lighter: 0,
   darker: 0,
@@ -118,24 +124,39 @@ watch(
   [state, el],
   () => {
     if (el.value) {
-      console.log('going')
       const style = getComputedStyle(el.value.$el)
-      otherState.normalized = Number(style.getPropertyValue('--i-lightness-normalized'))
-      otherState.lightness = Number(style.getPropertyValue('--i-lightness'))
-      otherState.lighter = Number(style.getPropertyValue('--i-lightness-lighter'))
-      otherState.darker = Number(style.getPropertyValue('--i-lightness-darker'))
-      otherState.lighterExists = Number(style.getPropertyValue('--i-lightness-lighter-exists'))
-      otherState.darkerExists = Number(style.getPropertyValue('--i-lightness-darker-exists'))
-      otherState.forceDarker = Number(style.getPropertyValue('--i-contrast-direction-force-darker'))
-      otherState.preferDarker = Number(
-        style.getPropertyValue('--i-contrast-direction-prefer-darker'),
+      otherState.normalized = Number(
+        Number(style.getPropertyValue('--i-lightness-normalized')).toFixed(3),
       )
-      otherState.auto = Number(style.getPropertyValue('--i-contrast-direction-auto'))
+      otherState.normal = Number(Number(style.getPropertyValue('--i-lightness-normal')).toFixed(3))
+      otherState.reverse = Number(
+        Number(style.getPropertyValue('--i-lightness-reverse')).toFixed(3),
+      )
+      otherState.lightness = Number(Number(style.getPropertyValue('--i-lightness')).toFixed(3))
+      otherState.lighter = Number(
+        Number(style.getPropertyValue('--i-lightness-lighter')).toFixed(3),
+      )
+      otherState.darker = Number(Number(style.getPropertyValue('--i-lightness-darker')).toFixed(3))
+      otherState.lighterExists = Number(
+        Number(style.getPropertyValue('--i-lightness-lighter-exists')).toFixed(3),
+      )
+      otherState.darkerExists = Number(
+        Number(style.getPropertyValue('--i-lightness-darker-exists')).toFixed(3),
+      )
+      otherState.forceDarker = Number(
+        Number(style.getPropertyValue('--i-contrast-direction-force-darker')).toFixed(3),
+      )
+      otherState.preferDarker = Number(
+        Number(style.getPropertyValue('--i-contrast-direction-prefer-darker')).toFixed(3),
+      )
+      otherState.auto = Number(
+        Number(style.getPropertyValue('--i-contrast-direction-auto')).toFixed(3),
+      )
       otherState.preferLighter = Number(
-        style.getPropertyValue('--i-contrast-direction-prefer-lighter'),
+        Number(style.getPropertyValue('--i-contrast-direction-prefer-lighter')).toFixed(3),
       )
       otherState.forceLighter = Number(
-        style.getPropertyValue('--i-contrast-direction-force-lighter'),
+        Number(style.getPropertyValue('--i-contrast-direction-force-lighter')).toFixed(3),
       )
     }
   },
@@ -144,39 +165,13 @@ watch(
 </script>
 
 <style>
-@property --i-stroke-color-top {
-  inherits: true;
-  initial-value: transparent;
-  syntax: '<color>';
-}
-
-@property --i-stroke-color-right {
-  inherits: true;
-  initial-value: transparent;
-  syntax: '<color>';
-}
-
-@property --i-stroke-color-bottom {
-  inherits: true;
-  initial-value: transparent;
-  syntax: '<color>';
-}
-
-@property --i-stroke-color-left {
-  inherits: true;
-  initial-value: transparent;
-  syntax: '<color>';
-}
-
 @layer app {
   body {
     background-color: var(--gray-1);
     color: var(--gray-12);
   }
 
-  .diffuse.test {
-    --fill-color: var(--o-color-base);
-    --stroke-color: var(--o-color);
+  .test {
     --radius-tr: 48;
     --radius-br: 48;
     --radius-bl: 48;
@@ -199,11 +194,9 @@ watch(
     --lightness-p1: calc(var(--app-lightness-min) / 3 + var(--app-lightness-max) * 2 / 3);
     --lightness-p2: calc(var(--app-lightness-min) * 2 / 3 + var(--app-lightness-max) / 3);
     --lightness-p3: var(--app-lightness-max);
-    --i-stroke-color-top: var(--stroke-color);
-    --i-stroke-color-right: var(--stroke-color);
-    --i-stroke-color-bottom: var(--stroke-color);
-    --i-stroke-color-left: var(--stroke-color);
 
+    background-color: var(--o-color-base);
+    border-color: var(--o-color);
     block-size: 30rem;
     aspect-ratio: 1;
   }

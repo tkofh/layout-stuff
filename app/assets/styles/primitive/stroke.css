@@ -1,0 +1,7 @@
+@layer primitive {
+  .stroke {
+    border-style: solid;
+    border-color: transparent;
+    border-width: calc(var(--o-thickness-top) * 1px);
+  }
+}
