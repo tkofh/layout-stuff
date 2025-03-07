@@ -41,9 +41,9 @@
 
 @layer property {
   .stroke {
-    --o-thickness-top: max(var(--thickness-top, var(--thickness)), 0);
-    --o-thickness-right: max(var(--thickness-right, var(--thickness)), 0);
-    --o-thickness-bottom: max(var(--thickness-bottom, var(--thickness)), 0);
-    --o-thickness-left: max(var(--thickness-left, var(--thickness)), 0);
+    --o-thickness-top: abs(var(--thickness-top, var(--thickness)));
+    --o-thickness-right: abs(var(--thickness-right, var(--thickness)));
+    --o-thickness-bottom: abs(var(--thickness-bottom, var(--thickness)));
+    --o-thickness-left: abs(var(--thickness-left, var(--thickness)));
   }
 }

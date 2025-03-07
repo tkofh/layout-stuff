@@ -26,7 +26,7 @@
             </label>
             <p>
               Normalized Lightness:
-              <output>{{ otherState.normalized }}</output>
+              <output>{{ otherState.base }}</output>
             </p>
             <p>
               Normal:
@@ -83,9 +83,9 @@
             :style="{
               '--hue': state.hue,
               '--chroma': state.chroma,
-              '--lightness': state.lightness,
-              '--contrast': state.contrast,
-              '--contrast-direction': state.direction,
+              '--lightness': lightness,
+              '--contrast': contrast,
+              '--polarity': state.direction,
             }"
           />
         </LayoutLayers>
@@ -103,7 +103,7 @@ const state = reactive({
   direction: 0,
 })
 const otherState = reactive({
-  normalized: 0,
+  base: 0,
   normal: 0,
   reverse: 0,
   lightness: 0,
@@ -118,6 +118,9 @@ const otherState = reactive({
   forceLighter: 0,
 })
 
+const lightness = computed(() => Math.max(0, Math.min(1, state.lightness * 0.01)))
+const contrast = computed(() => Math.max(0, Math.min(1, state.contrast * 0.01)))
+
 const el = useTemplateRef('el')
 
 watch(
@@ -125,39 +128,19 @@ watch(
   () => {
     if (el.value) {
       const style = getComputedStyle(el.value.$el)
-      otherState.normalized = Number(
-        Number(style.getPropertyValue('--i-lightness-normalized')).toFixed(3),
-      )
+      otherState.base = Number(Number(style.getPropertyValue('--i-lightness-base')).toFixed(3))
       otherState.normal = Number(Number(style.getPropertyValue('--i-lightness-normal')).toFixed(3))
-      otherState.reverse = Number(
-        Number(style.getPropertyValue('--i-lightness-reverse')).toFixed(3),
-      )
+      otherState.reverse = Number(Number(style.getPropertyValue('--i-lightness-reverse')).toFixed(3))
       otherState.lightness = Number(Number(style.getPropertyValue('--i-lightness')).toFixed(3))
-      otherState.lighter = Number(
-        Number(style.getPropertyValue('--i-lightness-lighter')).toFixed(3),
-      )
+      otherState.lighter = Number(Number(style.getPropertyValue('--i-lightness-lighter')).toFixed(3))
       otherState.darker = Number(Number(style.getPropertyValue('--i-lightness-darker')).toFixed(3))
-      otherState.lighterExists = Number(
-        Number(style.getPropertyValue('--i-lightness-lighter-exists')).toFixed(3),
-      )
-      otherState.darkerExists = Number(
-        Number(style.getPropertyValue('--i-lightness-darker-exists')).toFixed(3),
-      )
-      otherState.forceDarker = Number(
-        Number(style.getPropertyValue('--i-contrast-direction-force-darker')).toFixed(3),
-      )
-      otherState.preferDarker = Number(
-        Number(style.getPropertyValue('--i-contrast-direction-prefer-darker')).toFixed(3),
-      )
-      otherState.auto = Number(
-        Number(style.getPropertyValue('--i-contrast-direction-auto')).toFixed(3),
-      )
-      otherState.preferLighter = Number(
-        Number(style.getPropertyValue('--i-contrast-direction-prefer-lighter')).toFixed(3),
-      )
-      otherState.forceLighter = Number(
-        Number(style.getPropertyValue('--i-contrast-direction-force-lighter')).toFixed(3),
-      )
+      otherState.lighterExists = Number(Number(style.getPropertyValue('--i-lightness-lighter-exists')).toFixed(3))
+      otherState.darkerExists = Number(Number(style.getPropertyValue('--i-lightness-darker-exists')).toFixed(3))
+      otherState.forceDarker = Number(Number(style.getPropertyValue('--i-polarity-force-darker')).toFixed(3))
+      otherState.preferDarker = Number(Number(style.getPropertyValue('--i-polarity-prefer-darker')).toFixed(3))
+      otherState.auto = Number(Number(style.getPropertyValue('--i-polarity-auto')).toFixed(3))
+      otherState.preferLighter = Number(Number(style.getPropertyValue('--i-polarity-prefer-lighter')).toFixed(3))
+      otherState.forceLighter = Number(Number(style.getPropertyValue('--i-polarity-force-lighter')).toFixed(3))
     }
   },
   { deep: true, flush: 'post' },
@@ -184,11 +167,11 @@ watch(
     --thickness-left: 10;
     --hue: 200;
     --chroma: 20;
-    --lightness: 60;
+    --lightness: 0;
     --contrast: 5;
-    --contrast-direction: var(--c-contrast-direction-force-lighter);
-    --app-lightness-min: 5;
-    --app-lightness-max: 90;
+    --polarity: var(--c-polarity-force-lighter);
+    --app-lightness-min: 0;
+    --app-lightness-max: 1;
     --lightness-fallback: 0;
     --lightness-p0: var(--app-lightness-min);
     --lightness-p1: calc(var(--app-lightness-min) / 3 + var(--app-lightness-max) * 2 / 3);

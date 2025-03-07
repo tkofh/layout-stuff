@@ -19,3 +19,9 @@
   @layer component {
   }
 }
+
+@property --debug-number {
+  inherits: false;
+  initial-value: 0;
+  syntax: '<number>';
+}

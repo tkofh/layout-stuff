@@ -40,8 +40,8 @@
 }
 
 .corner {
-  --o-radius-tl: max(var(--radius-tl, var(--radius)), 0);
-  --o-radius-tr: max(var(--radius-tr, var(--radius)), 0);
-  --o-radius-br: max(var(--radius-br, var(--radius)), 0);
-  --o-radius-bl: max(var(--radius-bl, var(--radius)), 0);
+  --o-radius-tl: abs(var(--radius-tl, var(--radius)));
+  --o-radius-tr: abs(var(--radius-tr, var(--radius)));
+  --o-radius-br: abs(var(--radius-br, var(--radius)));
+  --o-radius-bl: abs(var(--radius-bl, var(--radius)));
 }

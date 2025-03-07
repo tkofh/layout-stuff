@@ -45,17 +45,9 @@
 
   .elevate {
     --o-diffuse-auto: calc(
-      max(var(--diffuse-p0), 0) + (-3 * max(var(--diffuse-p0), 0) + 3 * max(var(--diffuse-p1), 0)) *
-        var(--i-elevation) +
-        (
-          3 * max(var(--diffuse-p0), 0) - 6 * max(var(--diffuse-p1), 0) + 3 *
-            max(var(--diffuse-p2), 0)
-        ) *
-        pow(var(--i-elevation), 2) +
-        (
-          -3 * max(var(--diffuse-p0), 0) + 3 * max(var(--diffuse-p1), 0) + 3 *
-            max(var(--diffuse-p2), 0) - 3 * max(var(--diffuse-p3), 0)
-        ) *
+      var(--diffuse-p0) + (-3 * var(--diffuse-p0) + 3 * var(--diffuse-p1)) * var(--i-elevation) +
+        (3 * var(--diffuse-p0) - 6 * var(--diffuse-p1) + 3 * var(--diffuse-p2)) * pow(var(--i-elevation), 2) +
+        (-3 * var(--diffuse-p0) + 3 * var(--diffuse-p1) + 3 * var(--diffuse-p2) - 3 * var(--diffuse-p3)) *
         pow(var(--i-elevation), 3)
     );
     --o-diffuse: max(var(--diffuse, var(--o-diffuse-auto)), 0);
