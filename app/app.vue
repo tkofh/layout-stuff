@@ -5,8 +5,8 @@
         <LayoutBox width="96">
           <LayoutStack>
             <label>
-              Contrast Direction
-              <input v-model="state.direction" type="number" min="-2" max="2" step="1" >
+              Polarity
+              <input v-model="state.polarity" type="number" min="0" step="1" >
             </label>
             <label>
               Contrast
@@ -85,7 +85,7 @@
               '--chroma': state.chroma,
               '--lightness': lightness,
               '--contrast': contrast,
-              '--polarity': state.direction,
+              '--polarity': state.polarity,
             }"
           />
         </LayoutLayers>
@@ -100,7 +100,7 @@ const state = reactive({
   hue: 250,
   chroma: 50,
   lightness: 50,
-  direction: 0,
+  polarity: 0,
 })
 const otherState = reactive({
   base: 0,
@@ -169,10 +169,10 @@ watch(
     --chroma: 20;
     --lightness: 0;
     --contrast: 5;
-    --polarity: var(--c-polarity-force-lighter);
+    --polarity: var(--c-polarity-force-dark);
     --app-lightness-min: 0;
     --app-lightness-max: 1;
-    --lightness-fallback: 0;
+    --polarity-phase: -1;
     --lightness-p0: var(--app-lightness-min);
     --lightness-p1: calc(var(--app-lightness-min) / 3 + var(--app-lightness-max) * 2 / 3);
     --lightness-p2: calc(var(--app-lightness-min) * 2 / 3 + var(--app-lightness-max) / 3);
