@@ -1,24 +1,24 @@
-@property --c-polarity-auto {
+@property --polarity-auto {
   inherits: false;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --c-polarity-force-light {
+@property --polarity-force-light {
   inherits: false;
   initial-value: 1;
   syntax: '<number>';
 }
-@property --c-polarity-prefer-light {
+@property --polarity-prefer-light {
   inherits: false;
   initial-value: 2;
   syntax: '<number>';
 }
-@property --c-polarity-force-dark {
+@property --polarity-force-dark {
   inherits: false;
   initial-value: 3;
   syntax: '<number>';
 }
-@property --c-polarity-prefer-dark {
+@property --polarity-prefer-dark {
   inherits: false;
   initial-value: 4;
   syntax: '<number>';
@@ -67,7 +67,7 @@
   initial-value: 0;
   syntax: '<number>';
 }
-@property --polarity-phase {
+@property --i-polarity-phase {
   inherits: true;
   initial-value: 0;
   syntax: '<number>';
@@ -82,47 +82,62 @@
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-lightness-c1 {
+@property --i-lightness {
   inherits: true;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-lightness-c2 {
-  inherits: true;
-  initial-value: 0;
-  syntax: '<number>';
-}
-@property --i-lightness-c3 {
-  inherits: true;
-  initial-value: 0;
-  syntax: '<number>';
-}
-@property --i-lightness-base {
-  inherits: true;
-  initial-value: 0;
-  syntax: '<number>';
-}
-@property --i-lightness-normal {
+@property --i-polarity-auto {
   inherits: false;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-lightness-reverse {
+@property --i-polarity-force-light {
+  inherits: false;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --i-polarity-prefer-light {
+  inherits: false;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --i-polarity-force-dark {
+  inherits: false;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --i-polarity-phase-dark {
+  inherits: false;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --i-polarity-prefer-dark {
+  inherits: false;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --i-contrast-normal {
+  inherits: false;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --i-contrast-reverse {
   inherits: false;
   initial-value: 30;
   syntax: '<number>';
 }
-@property --i-lightness-normal-exists {
+@property --i-contrast-normal-exists {
   inherits: true;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-lightness-reverse-exists {
+@property --i-contrast-reverse-exists {
   inherits: true;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-lightness {
+@property --i-contrast-lightness {
   inherits: true;
   initial-value: 0;
   syntax: '<number>';
@@ -162,93 +177,103 @@
   initial-value: 1.2;
   syntax: '<number>';
 }
+@property --o-color {
+  inherits: false;
+  initial-value: transparent;
+  syntax: '<color>';
+}
+@property --o-color-contrast {
+  inherits: false;
+  initial-value: transparent;
+  syntax: '<color>';
+}
 
 @layer property {
   .color {
     --i-hue: max(0, mod(var(--hue), 360));
     --i-chroma: clamp(0, var(--chroma), 100);
-    --i-lightness-c1: calc(-3 * var(--lightness-p0) + 3 * var(--lightness-p1));
-    --i-lightness-c2: calc(3 * var(--lightness-p0) - 6 * var(--lightness-p1) + 3 * var(--lightness-p2));
-    --i-lightness-c3: calc(
-      -1 * var(--lightness-p0) + 3 * var(--lightness-p1) - 3 * var(--lightness-p2) + var(--lightness-p3)
-    );
-    --i-lightness-base: clamp(
-      0,
-      var(--lightness-p0) + var(--i-lightness-c1) * var(--lightness) + var(--i-lightness-c2) *
-        pow(var(--lightness), 2) + var(--i-lightness-c3) * pow(var(--lightness), 3),
-      1
-    );
-    --i-lightness-normal: max(
-      var(--i-lightness-base),
-      min(var(--contrast) / var(--apca-s-n), var(--apca-t)) / var(--apca-t) *
-        pow(
-          max(0, var(--contrast) / var(--apca-s-n)) + pow(var(--i-lightness-base), var(--apca-e-nb)),
-          1 / var(--apca-e-nt)
-        ) +
-        (1 - min(var(--contrast) / var(--apca-s-n), var(--apca-t)) / var(--apca-t)) *
-        (var(--i-lightness-base) + var(--contrast) / var(--apca-s-n))
-    );
-    --i-lightness-reverse: calc(
-      min(1, round(up, calc(var(--apca-s-r) * pow(var(--i-lightness-base), var(--apca-e-rb)) - var(--contrast)))) *
-        (
-          min(var(--contrast) / var(--apca-s-r), var(--apca-t)) / var(--apca-t) *
-            pow(
-              max(pow(var(--i-lightness-base), var(--apca-e-rb)) - var(--contrast) / var(--apca-s-r), 0),
-              1 / var(--apca-e-rt)
-            ) +
-            (1 - min(var(--contrast) / var(--apca-s-r), var(--apca-t)) / var(--apca-t)) * var(--i-lightness-base)
-        ) +
-        (
-          1 -
-            min(1, round(up, calc(var(--apca-s-r) * pow(var(--i-lightness-base), var(--apca-e-rb)) - var(--contrast))))
-        ) *
-        (var(--apca-s-r) * pow(var(--i-lightness-base), var(--apca-e-rb)) - var(--contrast))
-    );
-    --i-lightness-normal-exists: calc(round(down, calc(exp(-100000 * max(var(--i-lightness-normal) - 1, 0)))));
-    --i-lightness-reverse-exists: calc(round(down, calc(exp(-100000 * max(var(--i-lightness-reverse) * -1, 0)))));
     --i-lightness: clamp(
       0,
-      (
-          /* force dark */ exp(-100000 * abs(calc(var(--c-polarity-force-dark) - var(--polarity)))) +
-            (
-              /* prefer dark */ exp(-100000 * abs(calc(var(--c-polarity-prefer-dark) - var(--polarity)))) + /* auto */
-                exp(-100000 * abs(calc(var(--c-polarity-auto) - var(--polarity)))) *
-                (
-                  /* phase is -1 */ exp(-100000 * abs(calc(var(--polarity-phase) + 1))) +
-                    /* phase is 1 but normal does not exist */ exp(-100000 * abs(calc(var(--polarity-phase) - 1))) *
-                    (1 - var(--i-lightness-normal-exists))
-                )
-            ) *
-            (
-              /* reverse exists */ var(--i-lightness-reverse-exists) + /* neither exist */
-                (1 - var(--i-lightness-reverse-exists)) * (1 - var(--i-lightness-normal-exists))
-            ) +
-            /* prefer light and normal does not exist, but reverse does */
-            exp(-100000 * abs(calc(var(--c-polarity-prefer-light) - var(--polarity)))) *
-            (1 - var(--i-lightness-normal-exists)) * var(--i-lightness-reverse-exists)
-        ) *
-        var(--i-lightness-reverse) +
-        (
-          /* force light */ exp(-100000 * abs(calc(var(--c-polarity-force-light) - var(--polarity)))) +
-            (
-              /* prefer light */ exp(-100000 * abs(calc(var(--c-polarity-prefer-light) - var(--polarity)))) + /* auto */
-                exp(-100000 * abs(calc(var(--c-polarity-auto) - var(--polarity)))) *
-                (
-                  /* phase is 1 */ exp(-100000 * abs(calc(var(--polarity-phase) - 1))) +
-                    /* phase is -1 but reverse does not exist */ exp(-100000 * abs(calc(var(--polarity-phase) + 1))) *
-                    (1 - var(--i-lightness-reverse-exists))
-                )
-            ) *
-            (
-              /* normal exists */ var(--i-lightness-normal-exists) + /* neither exist */
-                (1 - var(--i-lightness-reverse-exists)) * (1 - var(--i-lightness-normal-exists))
-            ) +
-            /* prefer dark and reverse does not exist, but normal does */
-            exp(-100000 * abs(calc(var(--c-polarity-prefer-dark) - var(--polarity)))) *
-            (1 - var(--i-lightness-reverse-exists)) * var(--i-lightness-normal-exists)
-        ) *
-        var(--i-lightness-normal),
+      var(--lightness-p0) + (-3 * var(--lightness-p0) + 3 * var(--lightness-p1)) * var(--lightness) +
+        (3 * var(--lightness-p0) - 6 * var(--lightness-p1) + 3 * var(--lightness-p2)) * pow(var(--lightness), 2) +
+        (-1 * var(--lightness-p0) + 3 * var(--lightness-p1) - 3 * var(--lightness-p2) + var(--lightness-p3)) *
+        pow(var(--lightness), 3),
       1
     );
+    --o-color: oklch(calc(var(--i-lightness) * 100%) calc(var(--i-chroma) * 1%) calc(var(--i-hue) * 1deg) / 1);
+
+    &.contrast {
+      --i-polarity-auto: exp(-100000 * abs(calc(var(--polarity-auto) - var(--polarity))));
+      --i-polarity-force-light: exp(-100000 * abs(calc(var(--polarity-force-light) - var(--polarity))));
+      --i-polarity-prefer-light: exp(-100000 * abs(calc(var(--polarity-prefer-light) - var(--polarity))));
+      --i-polarity-force-dark: exp(-100000 * abs(calc(var(--polarity-force-dark) - var(--polarity))));
+      --i-polarity-prefer-dark: exp(-100000 * abs(calc(var(--polarity-prefer-dark) - var(--polarity))));
+      --i-contrast-normal: max(
+        var(--i-lightness),
+        min(var(--contrast) / var(--apca-s-n), var(--apca-t)) / var(--apca-t) *
+          pow(
+            max(0, var(--contrast) / var(--apca-s-n)) + pow(var(--i-lightness), var(--apca-e-nb)),
+            1 / var(--apca-e-nt)
+          ) +
+          (1 - min(var(--contrast) / var(--apca-s-n), var(--apca-t)) / var(--apca-t)) *
+          (var(--i-lightness) + var(--contrast) / var(--apca-s-n))
+      );
+      --i-contrast-reverse: round(
+        calc(
+          min(1, round(up, calc(var(--apca-s-r) * pow(var(--i-lightness), var(--apca-e-rb)) - var(--contrast)))) *
+            (
+              min(var(--contrast) / var(--apca-s-r), var(--apca-t)) / var(--apca-t) *
+                pow(
+                  max(pow(var(--i-lightness), var(--apca-e-rb)) - var(--contrast) / var(--apca-s-r), 0),
+                  1 / var(--apca-e-rt)
+                ) +
+                (1 - min(var(--contrast) / var(--apca-s-r), var(--apca-t)) / var(--apca-t)) * var(--i-lightness)
+            ) +
+            (
+              1 - min(1, round(up, calc(var(--apca-s-r) * pow(var(--i-lightness), var(--apca-e-rb)) - var(--contrast))))
+            ) *
+            (var(--apca-s-r) * pow(var(--i-lightness), var(--apca-e-rb)) - var(--contrast))
+        ),
+        0.001
+      );
+      --i-contrast-normal-exists: calc(round(down, calc(exp(-100000 * max(var(--i-contrast-normal) - 1, 0)))));
+      --i-contrast-reverse-exists: calc(round(down, calc(exp(-100000 * max(var(--i-contrast-reverse) * -1, 0)))));
+      --i-contrast-lightness: clamp(
+        0,
+        (
+            var(--i-polarity-force-dark) + var(--i-polarity-prefer-dark) * var(--i-contrast-reverse-exists) +
+              var(--i-polarity-prefer-dark) * (1 - var(--i-contrast-reverse-exists)) *
+              (1 - var(--i-contrast-normal-exists)) + var(--i-polarity-auto) * var(--i-polarity-phase-dark) *
+              var(--i-contrast-reverse-exists) + var(--i-polarity-auto) * var(--i-polarity-phase-dark) *
+              (1 - var(--i-contrast-reverse-exists)) * (1 - var(--i-contrast-normal-exists)) + var(--i-polarity-auto) *
+              var(--i-polarity-phase-light) * (1 - var(--i-contrast-normal-exists))
+          ) *
+          var(--i-contrast-reverse) +
+          (
+            var(--i-polarity-force-light) + var(--i-polarity-prefer-light) * var(--i-contrast-normal-exists) +
+              var(--i-polarity-prefer-light) * (1 - var(--i-contrast-normal-exists)) *
+              (1 - var(--i-contrast-reverse-exists)) + var(--i-polarity-auto) * var(--i-polarity-phase-light) *
+              var(--i-contrast-normal-exists) + var(--i-polarity-auto) * var(--i-polarity-phase-light) *
+              (1 - var(--i-contrast-normal-exists)) * (1 - var(--i-contrast-reverse-exists)) + var(--i-polarity-auto) *
+              var(--i-polarity-phase-dark) * (1 - var(--i-contrast-reverse-exists))
+          ) *
+          var(--i-contrast-normal),
+        1
+      );
+      --debug-number: calc(var(--i-contrast-reverse-exists));
+      --o-color-contrast: oklch(
+        calc(var(--i-contrast-lightness) * 100%) calc(var(--i-chroma) * 1%) calc(var(--i-hue) * 1deg) / 1
+      );
+
+      @container style(--mode-light: true) {
+        --i-polarity-phase-light: 1;
+        --i-polarity-phase-dark: 0;
+      }
+
+      @container style(--mode-dark: true) {
+        --i-polarity-phase-light: 0;
+        --i-polarity-phase-dark: 1;
+      }
+    }
   }
 }

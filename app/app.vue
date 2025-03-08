@@ -79,7 +79,7 @@
         <LayoutLayers align="center" align-y="center" style="block-size: 100%">
           <LayoutLayer
             ref="el"
-            class="surface elevate test color corner stroke"
+            class="surface elevate test color contrast corner stroke"
             :style="{
               '--hue': state.hue,
               '--chroma': state.chroma,
@@ -169,7 +169,7 @@ watch(
     --chroma: 20;
     --lightness: 0;
     --contrast: 5;
-    --polarity: var(--c-polarity-force-dark);
+    --polarity: var(--polarity-force-dark);
     --app-lightness-min: 0;
     --app-lightness-max: 1;
     --polarity-phase: -1;
@@ -178,8 +178,8 @@ watch(
     --lightness-p2: calc(var(--app-lightness-min) * 2 / 3 + var(--app-lightness-max) / 3);
     --lightness-p3: var(--app-lightness-max);
 
-    background-color: var(--o-color-base);
-    border-color: var(--o-color);
+    background-color: var(--o-color);
+    border-color: var(--o-color-contrast);
     block-size: 30rem;
     aspect-ratio: 1;
   }
