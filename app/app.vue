@@ -6,7 +6,7 @@
           <LayoutStack>
             <label>
               Polarity
-              <input v-model="state.polarity" type="number" min="0" step="1" >
+              <input v-model="state.polarity" type="number" min="0" step="1" max="4" >
             </label>
             <label>
               Contrast
@@ -24,54 +24,6 @@
               Lightness
               <input v-model="state.lightness" type="number" min="0" max="100" step="1" >
             </label>
-            <p>
-              Normalized Lightness:
-              <output>{{ otherState.base }}</output>
-            </p>
-            <p>
-              Normal:
-              <output>{{ otherState.normal }}</output>
-            </p>
-            <p>
-              Reverse:
-              <output>{{ otherState.reverse }}</output>
-            </p>
-            <!--            <p>-->
-            <!--              Lighter:-->
-            <!--              <output>{{ otherState.lighter }}</output>-->
-            <!--            </p>-->
-            <!--            <p>-->
-            <!--              Darker:-->
-            <!--              <output>{{ otherState.darker }}</output>-->
-            <!--            </p>-->
-            <!--            <p>-->
-            <!--              Lighter Exists:-->
-            <!--              <output>{{ otherState.lighterExists }}</output>-->
-            <!--            </p>-->
-            <!--            <p>-->
-            <!--              Darker Exists:-->
-            <!--              <output>{{ otherState.darkerExists }}</output>-->
-            <!--            </p>-->
-            <!--            <p>-->
-            <!--              Force Darker:-->
-            <!--              <output>{{ otherState.forceDarker }}</output>-->
-            <!--            </p>-->
-            <!--            <p>-->
-            <!--              Prefer Darker:-->
-            <!--              <output>{{ otherState.preferDarker }}</output>-->
-            <!--            </p>-->
-            <!--            <p>-->
-            <!--              Auto:-->
-            <!--              <output>{{ otherState.auto }}</output>-->
-            <!--            </p>-->
-            <!--            <p>-->
-            <!--              Prefer Lighter:-->
-            <!--              <output>{{ otherState.preferLighter }}</output>-->
-            <!--            </p>-->
-            <!--            <p>-->
-            <!--              Force Lighter:-->
-            <!--              <output>{{ otherState.forceLighter }}</output>-->
-            <!--            </p>-->
           </LayoutStack>
         </LayoutBox>
       </template>
@@ -87,7 +39,9 @@
               '--contrast': contrast,
               '--polarity': state.polarity,
             }"
-          />
+          >
+            <p>Hello world!</p>
+          </LayoutLayer>
         </LayoutLayers>
       </template>
     </LayoutAreas>
@@ -102,49 +56,9 @@ const state = reactive({
   lightness: 50,
   polarity: 0,
 })
-const otherState = reactive({
-  base: 0,
-  normal: 0,
-  reverse: 0,
-  lightness: 0,
-  lighter: 0,
-  darker: 0,
-  lighterExists: 0,
-  darkerExists: 0,
-  forceDarker: 0,
-  preferDarker: 0,
-  auto: 0,
-  preferLighter: 0,
-  forceLighter: 0,
-})
 
 const lightness = computed(() => Math.max(0, Math.min(1, state.lightness * 0.01)))
 const contrast = computed(() => Math.max(0, Math.min(1, state.contrast * 0.01)))
-
-const el = useTemplateRef('el')
-
-watch(
-  [state, el],
-  () => {
-    if (el.value) {
-      const style = getComputedStyle(el.value.$el)
-      otherState.base = Number(Number(style.getPropertyValue('--i-lightness-base')).toFixed(3))
-      otherState.normal = Number(Number(style.getPropertyValue('--i-lightness-normal')).toFixed(3))
-      otherState.reverse = Number(Number(style.getPropertyValue('--i-lightness-reverse')).toFixed(3))
-      otherState.lightness = Number(Number(style.getPropertyValue('--i-lightness')).toFixed(3))
-      otherState.lighter = Number(Number(style.getPropertyValue('--i-lightness-lighter')).toFixed(3))
-      otherState.darker = Number(Number(style.getPropertyValue('--i-lightness-darker')).toFixed(3))
-      otherState.lighterExists = Number(Number(style.getPropertyValue('--i-lightness-lighter-exists')).toFixed(3))
-      otherState.darkerExists = Number(Number(style.getPropertyValue('--i-lightness-darker-exists')).toFixed(3))
-      otherState.forceDarker = Number(Number(style.getPropertyValue('--i-polarity-force-darker')).toFixed(3))
-      otherState.preferDarker = Number(Number(style.getPropertyValue('--i-polarity-prefer-darker')).toFixed(3))
-      otherState.auto = Number(Number(style.getPropertyValue('--i-polarity-auto')).toFixed(3))
-      otherState.preferLighter = Number(Number(style.getPropertyValue('--i-polarity-prefer-lighter')).toFixed(3))
-      otherState.forceLighter = Number(Number(style.getPropertyValue('--i-polarity-force-lighter')).toFixed(3))
-    }
-  },
-  { deep: true, flush: 'post' },
-)
 </script>
 
 <style>
@@ -161,10 +75,10 @@ watch(
     --radius-tl: 48;
     --diffusion: 16;
     --bevel: 2;
-    --thickness-top: 10;
-    --thickness-right: 10;
-    --thickness-bottom: 10;
-    --thickness-left: 10;
+    --thickness-top: 0;
+    --thickness-right: 0;
+    --thickness-bottom: 0;
+    --thickness-left: 0;
     --hue: 200;
     --chroma: 20;
     --lightness: 0;
@@ -172,7 +86,6 @@ watch(
     --polarity: var(--polarity-force-dark);
     --app-lightness-min: 0;
     --app-lightness-max: 1;
-    --polarity-phase: -1;
     --lightness-p0: var(--app-lightness-min);
     --lightness-p1: calc(var(--app-lightness-min) / 3 + var(--app-lightness-max) * 2 / 3);
     --lightness-p2: calc(var(--app-lightness-min) * 2 / 3 + var(--app-lightness-max) / 3);
@@ -180,8 +93,14 @@ watch(
 
     background-color: var(--o-color);
     border-color: var(--o-color-contrast);
+    color: var(--o-color-contrast);
     block-size: 30rem;
     aspect-ratio: 1;
+    font-size: 1.5rem;
+    text-align: center;
+    display: block flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 </style>
