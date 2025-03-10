@@ -1,12 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: [
-    '@nuxt/eslint',
-    'radix-vue/nuxt',
-    '@nuxtjs/color-mode',
-    '@vueuse/nuxt',
-    'nuxt-security',
-  ],
+  modules: ['@nuxt/eslint', 'radix-vue/nuxt', '@nuxtjs/color-mode', '@vueuse/nuxt', 'nuxt-security'],
+  ssr: false,
 
   components: {
     dirs: [
