@@ -52,6 +52,51 @@
   initial-value: 0;
   syntax: '<number>';
 }
+@property --i-hue-t0 {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --i-hue-t1 {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --i-hue-t2 {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --i-hue-t3 {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --i-hue-t4 {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --i-hue-t5 {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --i-hue-t6 {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --i-hue-t7 {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --i-hue-t {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
 @property --i-chroma {
   inherits: true;
   initial-value: 0;
@@ -215,16 +260,70 @@
 
 @layer property {
   .color {
-    --i-hue: max(0, mod(var(--hue), 360));
+    --i-hue: max(0, mod(var(--hue), 360) / 360);
+    --i-hue-t0: calc(
+      (0.9 * (var(--i-hue)) / 0.088 + 0.1 * pow((var(--i-hue)) / 0.088, 3)) * 0.097 *
+        round(down, calc(1 / (pow(var(--i-hue) - 0, 2) + 1)))
+    );
+    --i-hue-t1: calc(
+      (
+          1.35 * (var(--i-hue) - 0.088) / 0.219 + -1.125 * pow((var(--i-hue) - 0.088) / 0.219, 2) + 0.775 *
+            pow((var(--i-hue) - 0.088) / 0.219, 3)
+        ) *
+        0.159 * round(down, calc(1 / (pow(var(--i-hue) - 0.088, 2) + 1)))
+    );
+    --i-hue-t2: calc(
+      (0.75 * (var(--i-hue) - 0.307) / 0.098 + 0.25 * pow((var(--i-hue) - 0.307) / 0.098, 3)) * 0.166 *
+        round(down, calc(1 / (pow(var(--i-hue) - 0.307, 2) + 1)))
+    );
+    --i-hue-t3: calc(
+      (
+          1.8 * (var(--i-hue) - 0.405) / 0.132 + -1.2 * pow((var(--i-hue) - 0.405) / 0.132, 2) + 0.4 *
+            pow((var(--i-hue) - 0.405) / 0.132, 3)
+        ) *
+        0.166 * round(down, calc(1 / (pow(var(--i-hue) - 0.405, 2) + 1)))
+    );
+    --i-hue-t4: calc(
+      (
+          1.275 * (var(--i-hue) - 0.537) / 0.121 + -0.42 * pow((var(--i-hue) - 0.537) / 0.121, 2) + 0.145 *
+            pow((var(--i-hue) - 0.537) / 0.121, 3)
+        ) *
+        0.084 * round(down, calc(1 / (pow(var(--i-hue) - 0.537, 2) + 1)))
+    );
+    --i-hue-t5: calc(
+      (
+          0.9 * (var(--i-hue) - 0.658) / 0.076 + -0.9 * pow((var(--i-hue) - 0.658) / 0.076, 2) + 1 *
+            pow((var(--i-hue) - 0.658) / 0.076, 3)
+        ) *
+        0.084 * round(down, calc(1 / (pow(var(--i-hue) - 0.658, 2) + 1)))
+    );
+    --i-hue-t6: calc(
+      (
+          1.05 * (var(--i-hue) - 0.734) / 0.187 + -0.27 * pow((var(--i-hue) - 0.734) / 0.187, 2) + 0.22 *
+            pow((var(--i-hue) - 0.734) / 0.187, 3)
+        ) *
+        0.166 * round(down, calc(1 / (pow(var(--i-hue) - 0.734, 2) + 1)))
+    );
+    --i-hue-t7: calc(
+      (
+          1.02 * (var(--i-hue) - 0.921) / 0.079 + 0.06 * pow((var(--i-hue) - 0.921) / 0.079, 2) + -0.08 *
+            pow((var(--i-hue) - 0.921) / 0.079, 3)
+        ) *
+        0.078 * round(down, calc(1 / (pow(var(--i-hue) - 0.921, 2) + 1)))
+    );
+    --i-hue-t: calc(
+      var(--i-hue-t0) + var(--i-hue-t1) + var(--i-hue-t2) + var(--i-hue-t3) + var(--i-hue-t4) + var(--i-hue-t5) +
+        var(--i-hue-t6) + var(--i-hue-t7)
+    );
     --i-chroma: max(0, var(--chroma));
-    --o-color: oklch(calc(var(--lightness) * 100%) calc(var(--i-chroma) * 1%) calc(var(--i-hue) * 1deg) / 1);
+    --o-color: oklch(calc(var(--lightness) * 100%) calc(var(--i-chroma) * 1%) calc(var(--i-hue) * 360deg) / 1);
 
     &.contrast {
-      --i-polarity-force-light: exp(-100000 * abs(calc(var(--polarity-force-light) - var(--polarity))));
-      --i-polarity-prefer-light: exp(-100000 * abs(calc(var(--polarity-prefer-light) - var(--polarity))));
-      --i-polarity-force-dark: exp(-100000 * abs(calc(var(--polarity-force-dark) - var(--polarity))));
-      --i-polarity-prefer-dark: exp(-100000 * abs(calc(var(--polarity-prefer-dark) - var(--polarity))));
-      --i-lightness-theta: calc(var(--i-hue) * pi / 180);
+      --i-polarity-force-light: round(down, calc(1 / (pow(var(--polarity) - var(--polarity-force-dark), 2) + 1)));
+      --i-polarity-prefer-light: round(down, calc(1 / (pow(var(--polarity) - var(--polarity-prefer-dark), 2) + 1)));
+      --i-polarity-force-dark: round(down, calc(1 / (pow(var(--polarity) - var(--polarity-force-light), 2) + 1)));
+      --i-polarity-prefer-dark: round(down, calc(1 / (pow(var(--polarity) - var(--polarity-prefer-light), 2) + 1)));
+      --i-lightness-theta: calc(var(--i-hue) * pi * 2);
       --i-lightness-a: calc(var(--i-chroma) / 100 * 0.4 * cos(var(--i-lightness-theta)));
       --i-lightness-b: calc(var(--i-chroma) / 100 * 0.4 * sin(var(--i-lightness-theta)));
       --i-lightness-l: pow(

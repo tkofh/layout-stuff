@@ -2,8 +2,8 @@
   <LayoutRoot>
     <LayoutAreas>
       <template #left>
-        <LayoutBox width="0">
-          <LayoutStack style="display: none">
+        <LayoutBox width="64">
+          <LayoutStack>
             <label>
               Polarity
               <input v-model="state.polarity" type="number" min="0" step="1" max="4" >
@@ -63,7 +63,6 @@
             ref="el"
             class="surface elevate test color contrast corner stroke"
             :style="{
-              display: 'none',
               '--hue': state.hue,
               '--chroma': state.chroma,
               '--lightness': lightness,

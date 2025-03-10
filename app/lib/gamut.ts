@@ -8,7 +8,7 @@ import * as Vector4 from 'curvy/vector4'
 import * as Vector3 from 'curvy/vector3'
 import * as Vector2 from 'curvy/vector2'
 import * as Bezier2d from 'curvy/splines/bezier2d'
-import { lerp, clamp } from 'curvy/utils'
+import { lerp, clamp, round } from 'curvy/utils'
 
 const quadBezier = Matrix3x3.matrix3x3(1, 0, 0, -2, 2, 0, 1, -2, 1)
 
@@ -77,6 +77,8 @@ const p6 = Vector2.make(0.734, 0.756)
 const p7 = Vector2.make(0.921, 0.922)
 const p8 = Vector2.make(1)
 
+const p = [p0, p1, p2, p3, p4, p5, p6, p7, p8]
+
 const heaviside = (n: number, inclusive = true) => (inclusive ? Math.ceil : Math.floor)(0.5 * (Math.sign(n) + 1))
 
 const v0 = Matrix4x4.vectorProductLeft(Bezier2d.characteristic, Vector4.make(0, 0.3, 0.6, 1)).pipe(Cubic.fromVector)
@@ -87,6 +89,21 @@ const v4 = Matrix4x4.vectorProductLeft(Bezier2d.characteristic, Vector4.make(0, 
 const v5 = Matrix4x4.vectorProductLeft(Bezier2d.characteristic, Vector4.make(0, 0.3, 0.3, 1)).pipe(Cubic.fromVector)
 const v6 = Matrix4x4.vectorProductLeft(Bezier2d.characteristic, Vector4.make(0, 0.35, 0.61, 1)).pipe(Cubic.fromVector)
 const v7 = Matrix4x4.vectorProductLeft(Bezier2d.characteristic, Vector4.make(0, 0.34, 0.7, 1)).pipe(Cubic.fromVector)
+
+console.log(
+  [v0, v1, v2, v3, v4, v5, v6, v7]
+    .map((v, i) => {
+      const terms = []
+      const t = `(var(--i-hue)${round(p[i]!.x) === 0 ? '' : ` - ${round(p[i]!.x)}`}) / ${round(p[i + 1]!.x - p[i]!.x)}`
+      if (v.c0 !== 0) terms.push(`${v.c0}`)
+      if (v.c1 !== 0) terms.push(`${v.c1} * ${t}`)
+      if (v.c2 !== 0) terms.push(`${v.c2} * pow(${t}, 2)`)
+      if (v.c3 !== 0) terms.push(`${v.c3} * pow(${t}, 3)`)
+
+      return `--i-hue-t${i}: calc((${terms.join(' + ')}) * ${round(p[i + 1]!.y - p[i]!.y)} * round(down, calc(1 / (pow(var(--i-hue) - ${round(p[i]!.x)}, 2) + 1))));`
+    })
+    .join('\n'),
+)
 
 export function gamutVelocityT(t: number) {
   return (
