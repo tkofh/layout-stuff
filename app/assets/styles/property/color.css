@@ -52,6 +52,12 @@
   initial-value: 0;
   syntax: '<number>';
 }
+@property --i-hue-t {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+
 @property --i-hue-t0 {
   inherits: true;
   initial-value: 0;
@@ -82,17 +88,42 @@
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-hue-t6 {
+@property --i-hue-g0 {
   inherits: true;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-hue-t7 {
+@property --i-hue-g1 {
   inherits: true;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-hue-t {
+@property --i-hue-g2 {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --i-hue-g3 {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --i-hue-g4 {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --i-hue-g5 {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --i-lightness-peak {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --i-chroma-peak {
   inherits: true;
   initial-value: 0;
   syntax: '<number>';
@@ -261,60 +292,87 @@
 @layer property {
   .color {
     --i-hue: max(0, mod(var(--hue), 360) / 360);
-    --i-hue-t0: calc(
-      (0.9 * (var(--i-hue)) / 0.088 + 0.1 * pow((var(--i-hue)) / 0.088, 3)) * 0.097 *
-        round(down, calc(1 / (pow(var(--i-hue) - 0, 2) + 1)))
+    --i-hue-t: mod(
+      calc(
+        (0.9 * clamp(0, var(--i-hue) / 0.088, 1) + 0.1 * pow(clamp(0, var(--i-hue) / 0.088, 1), 3)) * 0.097 *
+          round(up, calc(1 / (pow(var(--i-hue), 2) + 1))) +
+          (
+            1.35 * clamp(0, (var(--i-hue) - 0.088) / 0.219, 1) + -1.125 *
+              pow(clamp(0, (var(--i-hue) - 0.088) / 0.219, 1), 2) + 0.775 *
+              pow(clamp(0, (var(--i-hue) - 0.088) / 0.219, 1), 3)
+          ) *
+          0.159 * round(up, calc(1 / (pow(var(--i-hue) - 0.088, 2) + 1))) +
+          (
+            0.75 * clamp(0, (var(--i-hue) - 0.307) / 0.098, 1) + 0.25 *
+              pow(clamp(0, (var(--i-hue) - 0.307) / 0.098, 1), 3)
+          ) *
+          0.166 * round(up, calc(1 / (pow(var(--i-hue) - 0.307, 2) + 1))) +
+          (
+            1.8 * clamp(0, (var(--i-hue) - 0.405) / 0.132, 1) + -1.2 *
+              pow(clamp(0, (var(--i-hue) - 0.405) / 0.132, 1), 2) + 0.4 *
+              pow(clamp(0, (var(--i-hue) - 0.405) / 0.132, 1), 3)
+          ) *
+          0.166 * round(up, calc(1 / (pow(var(--i-hue) - 0.405, 2) + 1))) +
+          (
+            1.275 * clamp(0, (var(--i-hue) - 0.537) / 0.121, 1) + -0.42 *
+              pow(clamp(0, (var(--i-hue) - 0.537) / 0.121, 1), 2) + 0.145 *
+              pow(clamp(0, (var(--i-hue) - 0.537) / 0.121, 1), 3)
+          ) *
+          0.084 * round(up, calc(1 / (pow(var(--i-hue) - 0.537, 2) + 1))) +
+          (
+            0.9 * clamp(0, (var(--i-hue) - 0.658) / 0.076, 1) + -0.9 *
+              pow(clamp(0, (var(--i-hue) - 0.658) / 0.076, 1), 2) + 1 *
+              pow(clamp(0, (var(--i-hue) - 0.658) / 0.076, 1), 3)
+          ) *
+          0.084 * round(up, calc(1 / (pow(var(--i-hue) - 0.658, 2) + 1))) +
+          (
+            1.05 * clamp(0, (var(--i-hue) - 0.734) / 0.187, 1) + -0.27 *
+              pow(clamp(0, (var(--i-hue) - 0.734) / 0.187, 1), 2) + 0.22 *
+              pow(clamp(0, (var(--i-hue) - 0.734) / 0.187, 1), 3)
+          ) *
+          0.166 * round(up, calc(1 / (pow(var(--i-hue) - 0.734, 2) + 1))) +
+          (
+            1.02 * clamp(0, (var(--i-hue) - 0.921) / 0.079, 1) + 0.06 *
+              pow(clamp(0, (var(--i-hue) - 0.921) / 0.079, 1), 2) + -0.08 *
+              pow(clamp(0, (var(--i-hue) - 0.921) / 0.079, 1), 3)
+          ) *
+          0.078 * round(up, calc(1 / (pow(var(--i-hue) - 0.921, 2) + 1))) + 0.09
+      ),
+      1
     );
-    --i-hue-t1: calc(
-      (
-          1.35 * (var(--i-hue) - 0.088) / 0.219 + -1.125 * pow((var(--i-hue) - 0.088) / 0.219, 2) + 0.775 *
-            pow((var(--i-hue) - 0.088) / 0.219, 3)
-        ) *
-        0.159 * round(down, calc(1 / (pow(var(--i-hue) - 0.088, 2) + 1)))
+    --i-hue-t0: clamp(0, var(--i-hue-t) * 6, 1);
+    --i-hue-t1: clamp(0, var(--i-hue-t) * 6 - 1, 1);
+    --i-hue-t2: clamp(0, var(--i-hue-t) * 6 - 2, 1);
+    --i-hue-t3: clamp(0, var(--i-hue-t) * 6 - 3, 1);
+    --i-hue-t4: clamp(0, var(--i-hue-t) * 6 - 4, 1);
+    --i-hue-t5: clamp(0, var(--i-hue-t) * 6 - 5, 1);
+    --i-hue-g0: calc((sign(var(--i-hue-t) + 0.00001) + sign(calc(1 / 6 - 0.00001 - var(--i-hue-t)))) / 2);
+    --i-hue-g1: calc(
+      (sign(calc(var(--i-hue-t) - (1 / 6 - 0.00001))) + sign(calc(1 / 3 - 0.00001 - var(--i-hue-t)))) / 2
     );
-    --i-hue-t2: calc(
-      (0.75 * (var(--i-hue) - 0.307) / 0.098 + 0.25 * pow((var(--i-hue) - 0.307) / 0.098, 3)) * 0.166 *
-        round(down, calc(1 / (pow(var(--i-hue) - 0.307, 2) + 1)))
+    --i-hue-g2: calc((sign(calc(var(--i-hue-t) - (1 / 3 - 0.00001))) + sign(calc(0.5 - 0.00001 - var(--i-hue-t)))) / 2);
+    --i-hue-g3: calc((sign(calc(var(--i-hue-t) - (0.5 - 0.00001))) + sign(calc(2 / 3 - 0.00001 - var(--i-hue-t)))) / 2);
+    --i-hue-g4: calc(
+      (sign(calc(var(--i-hue-t) - (2 / 3 - 0.00001))) + sign(calc(5 / 6 - 0.00001 - var(--i-hue-t)))) / 2
     );
-    --i-hue-t3: calc(
-      (
-          1.8 * (var(--i-hue) - 0.405) / 0.132 + -1.2 * pow((var(--i-hue) - 0.405) / 0.132, 2) + 0.4 *
-            pow((var(--i-hue) - 0.405) / 0.132, 3)
-        ) *
-        0.166 * round(down, calc(1 / (pow(var(--i-hue) - 0.405, 2) + 1)))
+    --i-hue-g5: calc((sign(calc(var(--i-hue-t) - (5 / 6 - 0.00001))) + sign(var(--i-hue-t))) / 2);
+    --i-lightness-peak: calc(
+      (0.7223 + -0.144 * var(--i-hue-t0) + 0.0696 * pow(var(--i-hue-t0), 2)) * var(--i-hue-g0) +
+        (0.6479 + 0.2842 * var(--i-hue-t1) + 0.0245 * pow(var(--i-hue-t1), 2)) * var(--i-hue-g1) +
+        (0.9566 + -0.1248 * var(--i-hue-t2) + 0.0173 * pow(var(--i-hue-t2), 2)) * var(--i-hue-g2) +
+        (0.8491 + 0.0238 * var(--i-hue-t3) + 0.016 * pow(var(--i-hue-t3), 2)) * var(--i-hue-g3) +
+        (0.8889 + -0.3468 * var(--i-hue-t4) + -0.074 * pow(var(--i-hue-t4), 2)) * var(--i-hue-g4) +
+        (0.4681 + 0.0936 * var(--i-hue-t5) + 0.1606 * pow(var(--i-hue-t5), 2)) * var(--i-hue-g5)
     );
-    --i-hue-t4: calc(
-      (
-          1.275 * (var(--i-hue) - 0.537) / 0.121 + -0.42 * pow((var(--i-hue) - 0.537) / 0.121, 2) + 0.145 *
-            pow((var(--i-hue) - 0.537) / 0.121, 3)
-        ) *
-        0.084 * round(down, calc(1 / (pow(var(--i-hue) - 0.537, 2) + 1)))
+    --i-chroma-peak: calc(
+      (0.3585 + -0.16 * var(--i-hue-t0) + 0.0998 * pow(var(--i-hue-t0), 2)) * var(--i-hue-g0) +
+        (0.2983 + -0.3412 * var(--i-hue-t1) + 0.2885 * pow(var(--i-hue-t1), 2)) * var(--i-hue-g1) +
+        (0.2456 + 0.0618 * var(--i-hue-t2) + 0.0566 * pow(var(--i-hue-t2), 2)) * var(--i-hue-g2) +
+        (0.364 + -0.274 * var(--i-hue-t3) + 0.1159 * pow(var(--i-hue-t3), 2)) * var(--i-hue-g3) +
+        (0.2059 + -0.1498 * var(--i-hue-t4) + 0.26475 * pow(var(--i-hue-t4), 2)) * var(--i-hue-g4) +
+        (0.32085 + -0.0841 * var(--i-hue-t5) + 0.12175 * pow(var(--i-hue-t5), 2)) * var(--i-hue-g5)
     );
-    --i-hue-t5: calc(
-      (
-          0.9 * (var(--i-hue) - 0.658) / 0.076 + -0.9 * pow((var(--i-hue) - 0.658) / 0.076, 2) + 1 *
-            pow((var(--i-hue) - 0.658) / 0.076, 3)
-        ) *
-        0.084 * round(down, calc(1 / (pow(var(--i-hue) - 0.658, 2) + 1)))
-    );
-    --i-hue-t6: calc(
-      (
-          1.05 * (var(--i-hue) - 0.734) / 0.187 + -0.27 * pow((var(--i-hue) - 0.734) / 0.187, 2) + 0.22 *
-            pow((var(--i-hue) - 0.734) / 0.187, 3)
-        ) *
-        0.166 * round(down, calc(1 / (pow(var(--i-hue) - 0.734, 2) + 1)))
-    );
-    --i-hue-t7: calc(
-      (
-          1.02 * (var(--i-hue) - 0.921) / 0.079 + 0.06 * pow((var(--i-hue) - 0.921) / 0.079, 2) + -0.08 *
-            pow((var(--i-hue) - 0.921) / 0.079, 3)
-        ) *
-        0.078 * round(down, calc(1 / (pow(var(--i-hue) - 0.921, 2) + 1)))
-    );
-    --i-hue-t: calc(
-      var(--i-hue-t0) + var(--i-hue-t1) + var(--i-hue-t2) + var(--i-hue-t3) + var(--i-hue-t4) + var(--i-hue-t5) +
-        var(--i-hue-t6) + var(--i-hue-t7)
-    );
+
     --i-chroma: max(0, var(--chroma));
     --o-color: oklch(calc(var(--lightness) * 100%) calc(var(--i-chroma) * 1%) calc(var(--i-hue) * 360deg) / 1);
 
