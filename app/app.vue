@@ -65,7 +65,7 @@
             :style="{
               '--hue': state.hue,
               '--chroma': state.chroma,
-              '--lightness': lightness,
+              '--lightness': state.lightness,
               '--contrast': contrast,
               '--polarity': state.polarity,
             }"
@@ -91,7 +91,6 @@ const state = reactive({
   lightness: 50,
   polarity: 0,
 })
-const lightness = computed(() => Math.max(0, Math.min(1, state.lightness * 0.01)))
 const contrast = computed(() => Math.max(0, Math.min(1, state.contrast * 0.01)))
 
 const peaks = generateColorData()
