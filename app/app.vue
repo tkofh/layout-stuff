@@ -27,35 +27,35 @@
           </LayoutStack>
         </LayoutBox>
       </template>
-      <template #top>
-        <LayoutBox style="padding: 1rem">
-          <label style="display: block; inline-size: 100%">
-            T Value {{ t }}
-            <input v-model.number="t" type="range" min="0" max="1" step="0.001" style="inline-size: 100%" >
-          </label>
-        </LayoutBox>
-      </template>
+      <!--      <template #top>-->
+      <!--        <LayoutBox style="padding: 1rem">-->
+      <!--          <label style="display: block; inline-size: 100%">-->
+      <!--            T Value {{ t }}-->
+      <!--            <input v-model.number="t" type="range" min="0" max="1" step="0.001" style="inline-size: 100%" >-->
+      <!--          </label>-->
+      <!--        </LayoutBox>-->
+      <!--      </template>-->
       <template #main>
         <LayoutLayers align="center" align-y="center" style="block-size: 100%">
           <LayoutLayer>
             <LayoutBox width="sm" aspect="1">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="46 60 51 51">
-                <path :d="path" stroke="white" stroke-width="0.1" fill="none" />
-                <circle
-                  :cx="(gamutHead?.x ?? 0) * 100"
-                  :cy="100 - (gamutHead?.y ?? 0) * 100"
-                  r="0.6"
-                  fill="rgb(255 0 0 / 0.3)"
-                />
-                <circle :cx="peakHead.x * 100" :cy="100 - peakHead.y * 100" r="0.5" fill="rgb(0 190 0 / 0.3)" />
-                <circle
-                  :cx="(gamutHead?.x ?? 0) * 100"
-                  :cy="100 - (gamutHead?.y ?? 0) * 100"
-                  r="0.2"
-                  fill="rgb(255 0 0)"
-                />
-                <circle :cx="peakHead.x * 100" :cy="100 - peakHead.y * 100" r="0.2" fill="rgb(0 190 0)" />
-              </svg>
+              <!--              <svg xmlns="http://www.w3.org/2000/svg" viewBox="46 60 51 51">-->
+              <!--                <path :d="path" stroke="white" stroke-width="0.1" fill="none" />-->
+              <!--                <circle-->
+              <!--                  :cx="(gamutHead?.x ?? 0) * 100"-->
+              <!--                  :cy="100 - (gamutHead?.y ?? 0) * 100"-->
+              <!--                  r="0.6"-->
+              <!--                  fill="rgb(255 0 0 / 0.3)"-->
+              <!--                />-->
+              <!--                <circle :cx="peakHead.x * 100" :cy="100 - peakHead.y * 100" r="0.5" fill="rgb(0 190 0 / 0.3)" />-->
+              <!--                <circle-->
+              <!--                  :cx="(gamutHead?.x ?? 0) * 100"-->
+              <!--                  :cy="100 - (gamutHead?.y ?? 0) * 100"-->
+              <!--                  r="0.2"-->
+              <!--                  fill="rgb(255 0 0)"-->
+              <!--                />-->
+              <!--                <circle :cx="peakHead.x * 100" :cy="100 - peakHead.y * 100" r="0.2" fill="rgb(0 190 0)" />-->
+              <!--              </svg>-->
             </LayoutBox>
           </LayoutLayer>
 
@@ -66,7 +66,7 @@
               '--hue': state.hue,
               '--chroma': state.chroma,
               '--lightness': state.lightness,
-              '--contrast': contrast,
+              '--contrast': state.contrast,
               '--polarity': state.polarity,
             }"
           >
@@ -79,10 +79,11 @@
 </template>
 
 <script setup lang="ts">
-import * as QuadraticPath2d from 'curvy/path/quadratic2d'
-import * as Vector2 from 'curvy/vector2'
-import { generateColorData } from '~/lib/color'
-import { gamut, gamutVelocityT } from '~/lib/gamut'
+// import * as QuadraticPath2d from 'curvy/path/quadratic2d'
+// import * as Vector2 from 'curvy/vector2'
+// import { generateColorData } from '~/lib/color'
+// import { gamut, gamutVelocityT } from '~/lib/gamut'
+import Color from 'colorjs.io'
 
 const state = reactive({
   contrast: 0,
@@ -91,85 +92,55 @@ const state = reactive({
   lightness: 50,
   polarity: 0,
 })
-const contrast = computed(() => Math.max(0, Math.min(1, state.contrast * 0.01)))
+const el = useTemplateRef<HTMLElement>('el')
 
-const peaks = generateColorData()
-const path = `M ${peaks[0]![0] * 100},${100 - peaks[0]![1] * 100} L ${peaks
-  .slice(1)
-  .map(
-    ({ x, y }, i) =>
-      `${x * 50 + (peaks[i - 1]?.[0] ?? x) * 25 + (peaks[i + 1]?.[0] ?? x) * 25},${
-        100 - (y * 50 + (peaks[i - 1]?.[1] ?? y) * 25 + (peaks[i + 1]?.[1] ?? y) * 25)
-      }`,
-  )
-  .join(' ')} Z`
-
-const t = ref(Number(window.localStorage.getItem('t') ?? 0))
-watchEffect(() => {
-  window.localStorage.setItem('t', t.value.toString())
-})
-const phase = 0.078
-
-// const firstPeak = Vector2.make(peaks[0]![0], peaks[0]![1])
-
-const gamutHead = computed(() => {
-  return QuadraticPath2d.solve(gamut, (phase + gamutVelocityT(t.value)) % 1)
-})
-
-const totalLengthError = computed(() => {
-  let error = 0
-
-  let p0 = Vector2.zero
-  let p1 = Vector2.zero
-
-  let g0 = Vector2.zero
-  let g1 = Vector2.zero
-
-  let totalPeakLength = 0
-  let totalGamutLength = 0
-  const peakLengths: Array<number> = []
-  const gamutLengths: Array<number> = []
-
-  for (let i = 0; i <= peaks.length; i++) {
-    const peak = (peaks[i] ?? peaks[0])!
-
-    if (i === 0) {
-      p0 = peak
-      g0 = QuadraticPath2d.solve(gamut, (phase + gamutVelocityT(i / peaks.length)) % 1)
-    } else {
-      p1 = peak
-      g1 = QuadraticPath2d.solve(gamut, (phase + gamutVelocityT(i / peaks.length)) % 1)
-
-      totalPeakLength += Vector2.subtract(p1, p0).pipe(Vector2.magnitude)
-      totalGamutLength += Vector2.subtract(g1, g0).pipe(Vector2.magnitude)
-
-      peakLengths.push(totalPeakLength)
-      gamutLengths.push(totalGamutLength)
-
-      p0 = p1
-      g0 = g1
-    }
-  }
-
-  for (let i = 0; i < peakLengths.length; i++) {
-    error += Math.abs(peakLengths[i]! / totalPeakLength - gamutLengths[i]! / totalGamutLength)
-  }
-
-  return error
-})
+const styleColor = ref('transparent')
+const color = computed(() => new Color(styleColor.value))
+const styleContrastColor = ref('transparent')
+const contrastColor = computed(() => new Color(styleContrastColor.value))
+const computedContrast = computed(() => color.value.contrast(contrastColor.value, 'APCA'))
+watch(
+  state,
+  () => {
+    const style = getComputedStyle(unrefElement(el)!)
+    styleColor.value = style.getPropertyValue('--o-color')
+    styleContrastColor.value = style.getPropertyValue('--o-color-contrast')
+  },
+  { flush: 'post' },
+)
 
 watchEffect(() => {
-  console.log('total velocity error', totalLengthError.value)
+  console.log(color.value)
+  console.log(contrastColor.value)
+  console.log(computedContrast.value)
+  console.log('-------')
 })
 
-// const gamutHeadDist = computed(() => Vector2.subtract(gamutHead.value, firstPeak).pipe(Vector2.magnitude))
+// const peaks = generateColorData()
+// const path = `M ${peaks[0]![0] * 100},${100 - peaks[0]![1] * 100} L ${peaks
+//   .slice(1)
+//   .map(
+//     ({ x, y }, i) =>
+//       `${x * 50 + (peaks[i - 1]?.[0] ?? x) * 25 + (peaks[i + 1]?.[0] ?? x) * 25},${
+//         100 - (y * 50 + (peaks[i - 1]?.[1] ?? y) * 25 + (peaks[i + 1]?.[1] ?? y) * 25)
+//       }`,
+//   )
+//   .join(' ')} Z`
+
+// const t = ref(Number(window.localStorage.getItem('t') ?? 0))
 // watchEffect(() => {
-//   console.log(gamutHeadDist.value, t.value)
+//   window.localStorage.setItem('t', t.value.toString())
 // })
-const peakHead = computed(() => {
-  const p = peaks[Math.round(peaks.length * t.value)] ?? peaks[0]!
-  return Vector2.make(p[0], p[1])
-})
+// const phase = 0.078
+
+// const gamutHead = computed(() => {
+//   return QuadraticPath2d.solve(gamut, (phase + gamutVelocityT(t.value)) % 1)
+// })
+//
+// const peakHead = computed(() => {
+//   const p = peaks[Math.round(peaks.length * t.value)] ?? peaks[0]!
+//   return Vector2.make(p[0], p[1])
+// })
 </script>
 
 <style>
