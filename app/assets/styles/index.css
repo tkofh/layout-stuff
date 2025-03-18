@@ -25,3 +25,8 @@
   initial-value: 0;
   syntax: '<number>';
 }
+@property --debug-number-2 {
+  inherits: false;
+  initial-value: 0;
+  syntax: '<number>';
+}

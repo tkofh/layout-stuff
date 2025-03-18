@@ -6,7 +6,7 @@
           <LayoutStack>
             <label>
               Polarity
-              <input v-model="state.polarity" type="number" min="0" step="1" max="4" >
+              <input v-model="state.polarity" type="number" min="0" step="1" max="3" >
             </label>
             <label>
               Contrast
@@ -99,15 +99,15 @@ const color = computed(() => new Color(styleColor.value))
 const styleContrastColor = ref('transparent')
 const contrastColor = computed(() => new Color(styleContrastColor.value))
 const computedContrast = computed(() => color.value.contrast(contrastColor.value, 'APCA'))
-watch(
-  state,
-  () => {
-    const style = getComputedStyle(unrefElement(el)!)
-    styleColor.value = style.getPropertyValue('--o-color')
-    styleContrastColor.value = style.getPropertyValue('--o-color-contrast')
-  },
-  { flush: 'post' },
-)
+// watch(
+//   state,
+//   () => {
+//     const style = getComputedStyle(unrefElement(el)!)
+//     styleColor.value = style.getPropertyValue('--o-color')
+//     styleContrastColor.value = style.getPropertyValue('--o-color-contrast')
+//   },
+//   { flush: 'post' },
+// )
 
 watchEffect(() => {
   console.log(color.value)

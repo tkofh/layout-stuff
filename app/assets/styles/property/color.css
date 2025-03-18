@@ -52,11 +52,6 @@
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-hue-t {
-  inherits: true;
-  initial-value: 0;
-  syntax: '<number>';
-}
 @property --i-hue-t0 {
   inherits: true;
   initial-value: 0;
@@ -87,32 +82,17 @@
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-hue-g0 {
+@property --i-hue-t6 {
   inherits: true;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-hue-g1 {
+@property --i-hue-t7 {
   inherits: true;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-hue-g2 {
-  inherits: true;
-  initial-value: 0;
-  syntax: '<number>';
-}
-@property --i-hue-g3 {
-  inherits: true;
-  initial-value: 0;
-  syntax: '<number>';
-}
-@property --i-hue-g4 {
-  inherits: true;
-  initial-value: 0;
-  syntax: '<number>';
-}
-@property --i-hue-g5 {
+@property --i-hue-t16 {
   inherits: true;
   initial-value: 0;
   syntax: '<number>';
@@ -163,6 +143,21 @@
   syntax: '<number>';
 }
 @property --i-lightness-s {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --i-lightness-k1 {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --i-lightness-k2 {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --i-lightness-k3 {
   inherits: true;
   initial-value: 0;
   syntax: '<number>';
@@ -252,39 +247,34 @@
   initial-value: 0;
   syntax: '<number>';
 }
+@property --i-contrast-b {
+  inherits: false;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --i-contrast-c {
+  inherits: false;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --i-contrast-p {
+  inherits: false;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --i-contrast-q {
+  inherits: false;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --i-contrast-lightness {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
 @property --apca-t {
   inherits: false;
   initial-value: 0.0735;
-  syntax: '<number>';
-}
-@property --apca-e-nt {
-  inherits: false;
-  initial-value: 0.57;
-  syntax: '<number>';
-}
-@property --apca-e-nb {
-  inherits: false;
-  initial-value: 0.56;
-  syntax: '<number>';
-}
-@property --apca-e-rt {
-  inherits: false;
-  initial-value: 0.62;
-  syntax: '<number>';
-}
-@property --apca-e-rb {
-  inherits: false;
-  initial-value: 0.65;
-  syntax: '<number>';
-}
-@property --apca-s {
-  inherits: false;
-  initial-value: 1.14;
-  syntax: '<number>';
-}
-@property --apca-o {
-  inherits: false;
-  initial-value: 0.027;
   syntax: '<number>';
 }
 @property --ep {
@@ -308,180 +298,189 @@
     --i-hue: max(0, mod(var(--hue), 360) / 360);
     --i-chroma: clamp(0, var(--chroma) / 100, 1);
     --i-lightness: clamp(0, var(--lightness) / 100, 1);
-    --i-hue-t: mod(
-      calc(
-        (0.9 * clamp(0, var(--i-hue) / 0.088, 1) + 0.1 * pow(clamp(0, var(--i-hue) / 0.088, 1), 3)) * 0.097 *
-          round(up, calc(1 / (pow(var(--i-hue), 2) + 1))) +
-          (
-            1.35 * clamp(0, (var(--i-hue) - 0.088) / 0.219, 1) + -1.125 *
-              pow(clamp(0, (var(--i-hue) - 0.088) / 0.219, 1), 2) + 0.775 *
-              pow(clamp(0, (var(--i-hue) - 0.088) / 0.219, 1), 3)
-          ) *
-          0.159 * round(up, calc(1 / (pow(var(--i-hue) - 0.088, 2) + 1))) +
-          (
-            0.75 * clamp(0, (var(--i-hue) - 0.307) / 0.098, 1) + 0.25 *
-              pow(clamp(0, (var(--i-hue) - 0.307) / 0.098, 1), 3)
-          ) *
-          0.166 * round(up, calc(1 / (pow(var(--i-hue) - 0.307, 2) + 1))) +
-          (
-            1.8 * clamp(0, (var(--i-hue) - 0.405) / 0.132, 1) + -1.2 *
-              pow(clamp(0, (var(--i-hue) - 0.405) / 0.132, 1), 2) + 0.4 *
-              pow(clamp(0, (var(--i-hue) - 0.405) / 0.132, 1), 3)
-          ) *
-          0.166 * round(up, calc(1 / (pow(var(--i-hue) - 0.405, 2) + 1))) +
-          (
-            1.275 * clamp(0, (var(--i-hue) - 0.537) / 0.121, 1) + -0.42 *
-              pow(clamp(0, (var(--i-hue) - 0.537) / 0.121, 1), 2) + 0.145 *
-              pow(clamp(0, (var(--i-hue) - 0.537) / 0.121, 1), 3)
-          ) *
-          0.084 * round(up, calc(1 / (pow(var(--i-hue) - 0.537, 2) + 1))) +
-          (
-            0.9 * clamp(0, (var(--i-hue) - 0.658) / 0.076, 1) + -0.9 *
-              pow(clamp(0, (var(--i-hue) - 0.658) / 0.076, 1), 2) + 1 *
-              pow(clamp(0, (var(--i-hue) - 0.658) / 0.076, 1), 3)
-          ) *
-          0.084 * round(up, calc(1 / (pow(var(--i-hue) - 0.658, 2) + 1))) +
-          (
-            1.05 * clamp(0, (var(--i-hue) - 0.734) / 0.187, 1) + -0.27 *
-              pow(clamp(0, (var(--i-hue) - 0.734) / 0.187, 1), 2) + 0.22 *
-              pow(clamp(0, (var(--i-hue) - 0.734) / 0.187, 1), 3)
-          ) *
-          0.166 * round(up, calc(1 / (pow(var(--i-hue) - 0.734, 2) + 1))) +
-          (
-            1.02 * clamp(0, (var(--i-hue) - 0.921) / 0.079, 1) + 0.06 *
-              pow(clamp(0, (var(--i-hue) - 0.921) / 0.079, 1), 2) + -0.08 *
-              pow(clamp(0, (var(--i-hue) - 0.921) / 0.079, 1), 3)
-          ) *
-          0.078 * round(up, calc(1 / (pow(var(--i-hue) - 0.921, 2) + 1))) + 0.09
-      ),
-      1
+    --i-hue-t0: calc(
+      (0.9 * clamp(0, var(--i-hue) / 0.088, 1) + 0.1 * pow(clamp(0, var(--i-hue) / 0.088, 1), 3)) * 0.097
     );
-    --i-hue-t0: clamp(0, var(--i-hue-t) * 6, 1);
-    --i-hue-t1: clamp(0, var(--i-hue-t) * 6 - 1, 1);
-    --i-hue-t2: clamp(0, var(--i-hue-t) * 6 - 2, 1);
-    --i-hue-t3: clamp(0, var(--i-hue-t) * 6 - 3, 1);
-    --i-hue-t4: clamp(0, var(--i-hue-t) * 6 - 4, 1);
-    --i-hue-t5: clamp(0, var(--i-hue-t) * 6 - 5, 1);
-    --i-hue-g0: calc((sign(var(--i-hue-t) + var(--ep)) + sign(calc(1 / 6 - var(--ep) - var(--i-hue-t)))) / 2);
-    --i-hue-g1: calc(
-      (sign(calc(var(--i-hue-t) - (1 / 6 - var(--ep)))) + sign(calc(1 / 3 - var(--ep) - var(--i-hue-t)))) / 2
+    --i-hue-t1: calc(
+      (
+          1.35 * clamp(0, (var(--i-hue) - 0.088) / 0.219, 1) + -1.125 *
+            pow(clamp(0, (var(--i-hue) - 0.088) / 0.219, 1), 2) + 0.775 *
+            pow(clamp(0, (var(--i-hue) - 0.088) / 0.219, 1), 3)
+        ) *
+        0.159
     );
-    --i-hue-g2: calc(
-      (sign(calc(var(--i-hue-t) - (1 / 3 - var(--ep)))) + sign(calc(0.5 - var(--ep) - var(--i-hue-t)))) / 2
+    --i-hue-t2: calc(
+      (
+          0.75 * clamp(0, (var(--i-hue) - 0.307) / 0.098, 1) + 0.25 *
+            pow(clamp(0, (var(--i-hue) - 0.307) / 0.098, 1), 3)
+        ) *
+        0.166
     );
-    --i-hue-g3: calc(
-      (sign(calc(var(--i-hue-t) - (0.5 - var(--ep)))) + sign(calc(2 / 3 - var(--ep) - var(--i-hue-t)))) / 2
+    --i-hue-t3: calc(
+      (
+          1.8 * clamp(0, (var(--i-hue) - 0.405) / 0.132, 1) + -1.2 *
+            pow(clamp(0, (var(--i-hue) - 0.405) / 0.132, 1), 2) + 0.4 *
+            pow(clamp(0, (var(--i-hue) - 0.405) / 0.132, 1), 3)
+        ) *
+        0.166
     );
-    --i-hue-g4: calc(
-      (sign(calc(var(--i-hue-t) - (2 / 3 - var(--ep)))) + sign(calc(5 / 6 - var(--ep) - var(--i-hue-t)))) / 2
+    --i-hue-t4: calc(
+      (
+          1.275 * clamp(0, (var(--i-hue) - 0.537) / 0.121, 1) + -0.42 *
+            pow(clamp(0, (var(--i-hue) - 0.537) / 0.121, 1), 2) + 0.145 *
+            pow(clamp(0, (var(--i-hue) - 0.537) / 0.121, 1), 3)
+        ) *
+        0.084
     );
-    --i-hue-g5: calc((sign(calc(var(--i-hue-t) - (5 / 6 - var(--ep)))) + sign(var(--i-hue-t))) / 2);
+    --i-hue-t5: calc(
+      (
+          0.9 * clamp(0, (var(--i-hue) - 0.658) / 0.076, 1) + -0.9 *
+            pow(clamp(0, (var(--i-hue) - 0.658) / 0.076, 1), 2) + 1 *
+            pow(clamp(0, (var(--i-hue) - 0.658) / 0.076, 1), 3)
+        ) *
+        0.084
+    );
+    --i-hue-t6: calc(
+      (
+          1.05 * clamp(0, (var(--i-hue) - 0.734) / 0.187, 1) + -0.27 *
+            pow(clamp(0, (var(--i-hue) - 0.734) / 0.187, 1), 2) + 0.22 *
+            pow(clamp(0, (var(--i-hue) - 0.734) / 0.187, 1), 3)
+        ) *
+        0.166
+    );
+    --i-hue-t7: calc(
+      (
+          1.02 * clamp(0, (var(--i-hue) - 0.921) / 0.079, 1) + 0.06 *
+            pow(clamp(0, (var(--i-hue) - 0.921) / 0.079, 1), 2) + -0.08 *
+            pow(clamp(0, (var(--i-hue) - 0.921) / 0.079, 1), 3)
+        ) *
+        0.078
+    );
+    --i-hue-t16: calc(clamp(0, (var(--i-hue) - 0.088) / 0.833, 1) * 0.825);
     --i-lightness-peak: calc(
-      (0.7223 + -0.144 * var(--i-hue-t0) + 0.0696 * pow(var(--i-hue-t0), 2)) * var(--i-hue-g0) +
-        (0.6479 + 0.2842 * var(--i-hue-t1) + 0.0245 * pow(var(--i-hue-t1), 2)) * var(--i-hue-g1) +
-        (0.9566 + -0.1248 * var(--i-hue-t2) + 0.0173 * pow(var(--i-hue-t2), 2)) * var(--i-hue-g2) +
-        (0.8491 + 0.0238 * var(--i-hue-t3) + 0.016 * pow(var(--i-hue-t3), 2)) * var(--i-hue-g3) +
-        (0.8889 + -0.3468 * var(--i-hue-t4) + -0.074 * pow(var(--i-hue-t4), 2)) * var(--i-hue-g4) +
-        (0.4681 + 0.0936 * var(--i-hue-t5) + 0.1606 * pow(var(--i-hue-t5), 2)) * var(--i-hue-g5)
+      (
+          0.7223 + -0.144 * mod(calc(0.09 + var(--i-hue-t0) + var(--i-hue-t16) + var(--i-hue-t7)), 1) * 6 + 0.0696 *
+            pow(mod(calc(0.09 + var(--i-hue-t0) + var(--i-hue-t16) + var(--i-hue-t7)), 1) * 6, 2)
+        ) *
+        max(sign(calc(1 / 6 - mod(calc(0.09 + var(--i-hue-t0) + var(--i-hue-t16) + var(--i-hue-t7)), 1))), 0) +
+        (
+          0.6479 + 0.2842 * ((0.09 + var(--i-hue-t0) + var(--i-hue-t1)) * 6 - 1) + 0.0245 *
+            pow(((0.09 + var(--i-hue-t0) + var(--i-hue-t1)) * 6 - 1), 2)
+        ) *
+        clamp(sign(calc((0.09 + var(--i-hue-t0) + var(--i-hue-t1)) - 1 / 6)), 0, 1) *
+        max(sign(calc(1 / 3 - (0.09 + var(--i-hue-t0) + var(--i-hue-t1)))), 0) +
+        (
+          0.9566 + -0.1248 * ((0.187 + var(--i-hue-t1) + var(--i-hue-t2)) * 6 - 2) + 0.0173 *
+            pow(((0.187 + var(--i-hue-t1) + var(--i-hue-t2)) * 6 - 2), 2)
+        ) *
+        clamp(sign(calc((0.187 + var(--i-hue-t1) + var(--i-hue-t2)) - 1 / 3)), 0, 1) *
+        max(sign(calc(0.5 - (0.187 + var(--i-hue-t1) + var(--i-hue-t2)))), 0) +
+        (
+          0.8491 + 0.0238 * ((0.346 + var(--i-hue-t2) + var(--i-hue-t3)) * 6 - 3) + 0.016 *
+            pow(((0.346 + var(--i-hue-t2) + var(--i-hue-t3)) * 6 - 3), 2)
+        ) *
+        clamp(sign(calc((0.346 + var(--i-hue-t2) + var(--i-hue-t3)) - 0.5)), 0, 1) *
+        max(sign(calc(2 / 3 - (0.346 + var(--i-hue-t2) + var(--i-hue-t3)))), 0) +
+        (
+          0.8889 + -0.3468 * ((0.512 + var(--i-hue-t3) + var(--i-hue-t4) + var(--i-hue-t5)) * 6 - 4) + -0.074 *
+            pow(((0.512 + var(--i-hue-t3) + var(--i-hue-t4) + var(--i-hue-t5)) * 6 - 4), 2)
+        ) *
+        clamp(sign(calc((0.512 + var(--i-hue-t3) + var(--i-hue-t4) + var(--i-hue-t5)) - 2 / 3)), 0, 1) *
+        max(sign(calc(5 / 6 - (0.512 + var(--i-hue-t3) + var(--i-hue-t4) + var(--i-hue-t5)))), 0) +
+        (
+          0.4681 + 0.0936 * ((0.762 + var(--i-hue-t5) + var(--i-hue-t6)) * 6 - 5) + 0.1606 *
+            pow(((0.762 + var(--i-hue-t5) + var(--i-hue-t6)) * 6 - 5), 2)
+        ) *
+        clamp(sign(calc((0.762 + var(--i-hue-t5) + var(--i-hue-t6)) - 5 / 6)), 0, 1)
     );
     --i-chroma-peak: calc(
-      (0.3585 + -0.16 * var(--i-hue-t0) + 0.0998 * pow(var(--i-hue-t0), 2)) * var(--i-hue-g0) +
-        (0.2983 + -0.3412 * var(--i-hue-t1) + 0.2885 * pow(var(--i-hue-t1), 2)) * var(--i-hue-g1) +
-        (0.2456 + 0.0618 * var(--i-hue-t2) + 0.0566 * pow(var(--i-hue-t2), 2)) * var(--i-hue-g2) +
-        (0.364 + -0.274 * var(--i-hue-t3) + 0.1159 * pow(var(--i-hue-t3), 2)) * var(--i-hue-g3) +
-        (0.2059 + -0.1498 * var(--i-hue-t4) + 0.26475 * pow(var(--i-hue-t4), 2)) * var(--i-hue-g4) +
-        (0.32085 + -0.0841 * var(--i-hue-t5) + 0.12175 * pow(var(--i-hue-t5), 2)) * var(--i-hue-g5)
+      (
+          0.3585 + -0.16 * mod(calc(0.09 + var(--i-hue-t0) + var(--i-hue-t16) + var(--i-hue-t7)), 1) * 6 + 0.0998 *
+            pow(mod(calc(0.09 + var(--i-hue-t0) + var(--i-hue-t16) + var(--i-hue-t7)), 1) * 6, 2)
+        ) *
+        max(sign(calc(1 / 6 - mod(calc(0.09 + var(--i-hue-t0) + var(--i-hue-t16) + var(--i-hue-t7)), 1))), 0) +
+        (
+          0.2983 + -0.3412 * ((0.09 + var(--i-hue-t0) + var(--i-hue-t1)) * 6 - 1) + 0.2885 *
+            pow(((0.09 + var(--i-hue-t0) + var(--i-hue-t1)) * 6 - 1), 2)
+        ) *
+        min(max(sign(calc((0.09 + var(--i-hue-t0) + var(--i-hue-t1)) - 1 / 6)), 0), 1) *
+        max(sign(calc(1 / 3 - (0.09 + var(--i-hue-t0) + var(--i-hue-t1)))), 0) +
+        (
+          0.2456 + 0.0618 * ((0.187 + var(--i-hue-t1) + var(--i-hue-t2)) * 6 - 2) + 0.0566 *
+            pow(((0.187 + var(--i-hue-t1) + var(--i-hue-t2)) * 6 - 2), 2)
+        ) *
+        min(max(sign(calc((0.187 + var(--i-hue-t1) + var(--i-hue-t2)) - 1 / 3)), 0), 1) *
+        max(sign(calc(0.5 - (0.187 + var(--i-hue-t1) + var(--i-hue-t2)))), 0) +
+        (
+          0.364 + -0.274 * ((0.346 + var(--i-hue-t2) + var(--i-hue-t3)) * 6 - 3) + 0.1159 *
+            pow(((0.346 + var(--i-hue-t2) + var(--i-hue-t3)) * 6 - 3), 2)
+        ) *
+        min(max(sign(calc((0.346 + var(--i-hue-t2) + var(--i-hue-t3)) - 0.5)), 0), 1) *
+        max(sign(calc(2 / 3 - (0.346 + var(--i-hue-t2) + var(--i-hue-t3)))), 0) +
+        (
+          0.2059 + -0.1498 * ((0.512 + var(--i-hue-t3) + var(--i-hue-t4) + var(--i-hue-t5)) * 6 - 4) + 0.26475 *
+            pow(((0.512 + var(--i-hue-t3) + var(--i-hue-t4) + var(--i-hue-t5)) * 6 - 4), 2)
+        ) *
+        min(max(sign(calc((0.512 + var(--i-hue-t3) + var(--i-hue-t4) + var(--i-hue-t5)) - 2 / 3)), 0), 1) *
+        max(sign(calc(5 / 6 - (0.512 + var(--i-hue-t3) + var(--i-hue-t4) + var(--i-hue-t5)))), 0) +
+        (
+          0.32085 + -0.0841 * ((0.762 + var(--i-hue-t5) + var(--i-hue-t6)) * 6 - 5) + 0.12175 *
+            pow(((0.762 + var(--i-hue-t5) + var(--i-hue-t6)) * 6 - 5), 2)
+        ) *
+        min(max(sign(calc((0.762 + var(--i-hue-t5) + var(--i-hue-t6)) - 5 / 6)), 0), 1)
     );
-    --i-chroma-max: calc(
+    --i-chroma-remapped: min(
+      var(--i-chroma),
       var(--i-chroma-peak) *
         (
-          round(down, calc((1 - sign(calc(var(--i-lightness) - var(--i-lightness-peak)))) / 2)) * var(--i-lightness) /
-            var(--i-lightness-peak) +
-            round(up, calc((1 - sign(calc(var(--i-lightness-peak) - var(--i-lightness)))) / 2)) *
+          (1 - max(sign(calc(var(--i-lightness) - var(--i-lightness-peak))), 0)) * var(--i-lightness) /
+            var(--i-lightness-peak) + max(sign(calc(var(--i-lightness) - var(--i-lightness-peak))), 0) *
             clamp(0, 1 - (var(--i-lightness) - var(--i-lightness-peak)) / (1 - var(--i-lightness-peak)), 1)
         )
     );
-    --i-chroma-remapped: calc(
-      round(down, calc((1 - sign(calc(var(--i-chroma) - var(--i-chroma-max)))) / 2)) * var(--i-chroma) +
-        (1 - round(down, calc((1 - sign(calc(var(--i-chroma) - var(--i-chroma-max)))) / 2))) *
-        (
-          var(--i-chroma-max) + (1 - var(--i-chroma-max)) * 0.025 * var(--i-lightness) * 10 *
-            (1 - max(0, var(--i-lightness) * 10 - 9)) *
-            (1 - exp(-1 * ((var(--i-chroma) - var(--i-chroma-max)) / (1 - var(--i-chroma-max))))) / (1 - exp(-1))
-        )
-    );
-    /*--o-color: oklch(var(--i-lightness) var(--i-chroma-remapped) calc(var(--i-hue) * 360deg) / 1);*/
+    --o-color: oklch(var(--i-lightness) var(--i-chroma-remapped) calc(var(--i-hue) * 360deg) / 1);
 
     &.contrast {
-      --i-polarity-force-light: round(down, calc(1 / (pow(var(--polarity) - var(--polarity-force-dark), 2) + 1)));
-      --i-polarity-prefer-light: round(down, calc(1 / (pow(var(--polarity) - var(--polarity-prefer-dark), 2) + 1)));
-      --i-polarity-prefer-dark: round(down, calc(1 / (pow(var(--polarity) - var(--polarity-prefer-light), 2) + 1)));
-      --i-polarity-force-dark: round(down, calc(1 / (pow(var(--polarity) - var(--polarity-force-light), 2) + 1)));
+      --i-polarity-force-light: calc(1 - abs(sign(calc(var(--polarity) - var(--polarity-force-dark)))));
+      --i-polarity-prefer-light: calc(1 - abs(sign(calc(var(--polarity) - var(--polarity-prefer-dark)))));
+      --i-polarity-prefer-dark: calc(1 - abs(sign(calc(var(--polarity) - var(--polarity-prefer-light)))));
+      --i-polarity-force-dark: calc(1 - abs(sign(calc(var(--polarity) - var(--polarity-force-light)))));
       --i-contrast: clamp(0, var(--contrast) / 100, 1.08);
-      --i-lightness-l: pow(
-        var(--i-lightness) + 0.3963377774 * var(--i-chroma-remapped) * cos(var(--i-hue) * pi * 2) + 0.2158037573 *
-          var(--i-chroma-remapped) * sin(var(--i-hue) * pi * 2),
-        3
+      --i-lightness-k1: calc(
+        var(--i-chroma-remapped) *
+          (0.3963377774 * cos(var(--i-hue) * pi * 2) + 0.2158037573 * sin(var(--i-hue) * pi * 2))
       );
-      --i-lightness-m: pow(
-        var(--i-lightness) - 0.1055613458 * var(--i-chroma-remapped) * cos(var(--i-hue) * pi * 2) - 0.0638541728 *
-          var(--i-chroma-remapped) * sin(var(--i-hue) * pi * 2),
-        3
+      --i-lightness-k2: calc(
+        var(--i-chroma-remapped) *
+          (-0.1055613458 * cos(var(--i-hue) * pi * 2) - 0.0638541728 * sin(var(--i-hue) * pi * 2))
       );
-      --i-lightness-s: pow(
-        var(--i-lightness) - 0.0894841775 * var(--i-chroma-remapped) * cos(var(--i-hue) * pi * 2) - 1.291485548 *
-          var(--i-chroma-remapped) * sin(var(--i-hue) * pi * 2),
-        3
+      --i-lightness-k3: calc(
+        var(--i-chroma-remapped) *
+          (-0.0894841775 * cos(var(--i-hue) * pi * 2) - 1.291485548 * sin(var(--i-hue) * pi * 2))
       );
-      --i-lightness-y: max(
-        0,
-        0.2126 *
-          (4.0767417 * var(--i-lightness-l) - 3.3077116 * var(--i-lightness-m) + 0.2309699 * var(--i-lightness-s)) +
-          0.7152 *
-          (-1.268438 * var(--i-lightness-l) + 2.6097574 * var(--i-lightness-m) - 0.3413194 * var(--i-lightness-s)) +
-          0.0722 *
-          (-0.0041961 * var(--i-lightness-l) - 0.7034186 * var(--i-lightness-m) + 1.707615 * var(--i-lightness-s))
+      --i-lightness-y: calc(
+        -0.040774541 * pow(var(--i-lightness) + var(--i-lightness-k1), 3) + 1.112492185 *
+          pow(var(--i-lightness) + var(--i-lightness-k2), 3) + -0.071717644 *
+          pow(var(--i-lightness) + var(--i-lightness-k3), 3)
       );
       --i-contrast-normal-min: calc(
-        pow(
-            abs(calc(pow(var(--i-lightness-y), var(--apca-e-nb)) - (var(--apca-t) + var(--apca-o)) / var(--apca-s))),
-            1 / var(--apca-e-nt)
-          ) *
-          sign(calc(pow(var(--i-lightness-y), var(--apca-e-nb)) - (var(--apca-t) + var(--apca-o)) / var(--apca-s)))
+        pow(abs(calc(pow(var(--i-lightness-y), 0.56) - (var(--apca-t) + 0.027) / 1.14)), 1 / 0.57) *
+          sign(calc(pow(var(--i-lightness-y), 0.56) - (var(--apca-t) + 0.027) / 1.14))
       );
       --i-contrast-normal-v: calc(
         -1 * abs(calc(((pow(abs(var(--i-contrast-normal-min)), 0.43)) * var(--apca-t)) / 0.6498))
       );
       --i-contrast-reverse-min: calc(
-        pow(
-            abs(calc(pow(var(--i-lightness-y), var(--apca-e-rb)) + (var(--apca-t) + var(--apca-o)) / var(--apca-s))),
-            1 / var(--apca-e-rt)
-          ) *
-          sign(calc(pow(var(--i-lightness-y), var(--apca-e-rb)) + (var(--apca-t) + var(--apca-o)) / var(--apca-s)))
+        pow(abs(calc(pow(var(--i-lightness-y), 0.65) + (var(--apca-t) + 0.027) / 1.14)), 1 / 0.62) *
+          sign(calc(pow(var(--i-lightness-y), 0.65) + (var(--apca-t) + 0.027) / 1.14))
       );
       --i-contrast-reverse-v: calc(
-        -1 *
-          abs(
-            calc(
-              (
-                  (pow(abs(var(--i-contrast-reverse-min)), 0.38) * sign(var(--i-contrast-reverse-min))) * -1 *
-                    var(--apca-t)
-                ) /
-                0.7068
-            )
-          )
+        -1 * abs(calc((pow(abs(var(--i-contrast-reverse-min)), 0.38) * -1 * var(--apca-t)) / 0.7068))
       );
       --i-contrast-normal: calc(
         min(1, max(0, sign(calc(var(--i-contrast) - var(--apca-t))) + 1)) *
-          pow(
-            abs(
-              calc(pow(var(--i-lightness-y), var(--apca-e-nb)) - (var(--i-contrast) + var(--apca-o)) / var(--apca-s))
-            ),
-            1 / var(--apca-e-nt)
-          ) *
-          sign(
-            calc(pow(var(--i-lightness-y), var(--apca-e-nb)) - (var(--i-contrast) + var(--apca-o)) / var(--apca-s))
-          ) +
+          pow(abs(calc(pow(var(--i-lightness-y), 0.56) - (var(--i-contrast) + 0.027) / 1.14)), 1 / 0.57) *
+          sign(calc(pow(var(--i-lightness-y), 0.56) - (var(--i-contrast) + 0.027) / 1.14)) +
           (1 - min(1, max(0, sign(calc(var(--i-contrast) - var(--apca-t))) + 1))) *
           (
             var(--i-lightness-y) +
@@ -493,12 +492,7 @@
       );
       --i-contrast-reverse: calc(
         min(1, max(0, sign(calc(var(--i-contrast) - var(--apca-t))) + 1)) *
-          pow(
-            calc(
-              pow(var(--i-lightness-y), var(--apca-e-rb)) - ((-1 * var(--i-contrast)) - var(--apca-o)) / var(--apca-s)
-            ),
-            1 / var(--apca-e-rt)
-          ) +
+          pow(calc(pow(var(--i-lightness-y), 0.65) - ((-1 * var(--i-contrast)) - 0.027) / 1.14), 1 / 0.62) +
           (1 - min(1, max(0, sign(calc(var(--i-contrast) - var(--apca-t))) + 1))) *
           (
             var(--i-lightness-y) +
@@ -514,7 +508,6 @@
       --i-contrast-reverse-gate: calc(
         (sign(calc(var(--i-contrast-reverse) + var(--ep))) + sign(calc(1 - var(--ep) - var(--i-contrast-reverse)))) / 2
       );
-
       --i-contrast-y: clamp(
         0,
         clamp(
@@ -541,7 +534,47 @@
           var(--i-contrast-normal),
         1
       );
-      /*--o-color-contrast: oklch(var(--i-contrast-lightness) var(--i-chroma-remapped) calc(var(--i-hue) * 360deg) / 1);*/
+      --i-contrast-b: calc(
+        3 *
+          (
+            -0.040774541 * var(--i-lightness-k1) + 1.112492185 * var(--i-lightness-k2) - 0.071717644 *
+              var(--i-lightness-k3)
+          )
+      );
+      --i-contrast-c: calc(
+        3 *
+          (
+            -0.040774541 * pow(var(--i-lightness-k1), 2) + 1.112492185 * pow(var(--i-lightness-k2), 2) - 0.071717644 *
+              pow(var(--i-lightness-k3), 2)
+          )
+      );
+      --i-contrast-p: calc((3 * var(--i-contrast-c) - pow(var(--i-contrast-b), 2)) / 3);
+      --i-contrast-q: calc(
+        (
+            2 * pow(var(--i-contrast-b), 3) - 9 * var(--i-contrast-b) * var(--i-contrast-c) + 27 *
+              (
+                -0.040774541 * pow(var(--i-lightness-k1), 3) + 1.112492185 * pow(var(--i-lightness-k2), 3) -
+                  0.071717644 * pow(var(--i-lightness-k3), 3) - var(--i-contrast-y)
+              )
+          ) /
+          27
+      );
+      --i-contrast-lightness: calc(
+        pow(
+            abs(
+              calc(var(--i-contrast-q) / -2 + sqrt(pow(var(--i-contrast-q) / 2, 2) + pow(var(--i-contrast-p) / 3, 3)))
+            ),
+            1 / 3
+          ) -
+          pow(
+            abs(
+              calc(var(--i-contrast-q) / -2 - sqrt(pow(var(--i-contrast-q) / 2, 2) + pow(var(--i-contrast-p) / 3, 3)))
+            ),
+            1 / 3
+          ) -
+          var(--i-contrast-b) / 3
+      );
+      --o-color-contrast: oklch(var(--i-contrast-lightness) var(--i-chroma-remapped) calc(var(--i-hue) * 360deg) / 1);
 
       @container style(--mode-light: true) {
         --i-polarity-phase-light: 1;
