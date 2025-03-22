@@ -12,7 +12,8 @@
     "lint": "pnpm lint:ts && pnpm lint:css",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "run:script": "bun ./app/lib/gamut2.ts"
   },
   "devDependencies": {
     "@coily/vue": "^0.10.2",

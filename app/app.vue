@@ -99,19 +99,21 @@ const color = computed(() => new Color(styleColor.value))
 const styleContrastColor = ref('transparent')
 const contrastColor = computed(() => new Color(styleContrastColor.value))
 const computedContrast = computed(() => color.value.contrast(contrastColor.value, 'APCA'))
-// watch(
-//   state,
-//   () => {
-//     const style = getComputedStyle(unrefElement(el)!)
-//     styleColor.value = style.getPropertyValue('--o-color')
-//     styleContrastColor.value = style.getPropertyValue('--o-color-contrast')
-//   },
-//   { flush: 'post' },
-// )
+watch(
+  state,
+  () => {
+    const style = getComputedStyle(unrefElement(el)!)
+    styleColor.value = style.getPropertyValue('--o-color')
+    styleContrastColor.value = style.getPropertyValue('--o-color-contrast')
+  },
+  { flush: 'post' },
+)
 
 watchEffect(() => {
   console.log(color.value)
+  console.log(color.value.luminance)
   console.log(contrastColor.value)
+  console.log(contrastColor.value.luminance)
   console.log(computedContrast.value)
   console.log('-------')
 })

@@ -73,12 +73,12 @@ console.log(
   ],
   // .map((v, i) => {
   //   const terms = []
-  //   const t = `clamp(0, ${subtract('var(--i-hue-t)', round(i / 6))} * 6, 1)`
+  //   const t = `clamp(0, ${subtract('var(--ic-t)', round(i / 6))} * 6, 1)`
   //   if (v.x !== 0) terms.push(`${v.x}`)
   //   if (v.y !== 0) terms.push(`${v.y} * ${t}`)
   //   if (v.z !== 0) terms.push(`${v.z} * pow(${t}, 2)`)
   //
-  //   return `(${terms.join(' + ')}) / 6 * round(up, calc(1 / (pow(${subtract('var(--i-hue-t)', round(i / 6), false)}, 2)) + 1))`
+  //   return `(${terms.join(' + ')}) / 6 * round(up, calc(1 / (pow(${subtract('var(--ic-t)', round(i / 6), false)}, 2)) + 1))`
   // })
   // .join(' + '),
 )
@@ -94,12 +94,12 @@ console.log(
   ],
   // .map((v, i) => {
   //   const terms = []
-  //   const t = `var(--i-hue-t${i})`
+  //   const t = `var(--ic-t${i})`
   //   if (v.x !== 0) terms.push(`${v.x}`)
   //   if (v.y !== 0) terms.push(`${v.y} * ${t}`)
   //   if (v.z !== 0) terms.push(`${v.z} * pow(${t}, 2)`)
   //
-  //   return `(${terms.join(' + ')}) / 6 * round(up, calc(1 / (pow(${subtract('var(--i-hue-t)', round(i / 6), false)}, 2)) + 1))`
+  //   return `(${terms.join(' + ')}) / 6 * round(up, calc(1 / (pow(${subtract('var(--ic-t)', round(i / 6), false)}, 2)) + 1))`
   // })
   // .join(' + '),
 )
@@ -123,7 +123,7 @@ console.log(
       if (v.c2 !== 0) terms.push(`${v.c2} * pow(${t}, 2)`)
       if (v.c3 !== 0) terms.push(`${v.c3} * pow(${t}, 3)`)
 
-      return `--i-hue-t${i}: calc((${terms.join(' + ')}) * ${round(p[i + 1]!.y - p[i]!.y)} * round(up, calc(1 / (pow(${subtract('var(--i-hue)', p[i]!.x, false)}, 2) + 1))));`
+      return `--ic-t${i}: calc((${terms.join(' + ')}) * ${round(p[i + 1]!.y - p[i]!.y)} * round(up, calc(1 / (pow(${subtract('var(--i-hue)', p[i]!.x, false)}, 2) + 1))));`
     })
     .join('\n'),
 )

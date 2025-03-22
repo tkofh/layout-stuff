@@ -47,228 +47,203 @@
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-hue {
+@property --ic-h {
   inherits: true;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-hue-t0 {
+@property --ic-t0 {
   inherits: true;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-hue-t1 {
+@property --ic-t1 {
   inherits: true;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-hue-t2 {
+@property --ic-t2 {
   inherits: true;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-hue-t3 {
+@property --ic-t3 {
   inherits: true;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-hue-t4 {
+@property --ic-t4 {
   inherits: true;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-hue-t5 {
+@property --ic-t5 {
   inherits: true;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-hue-t6 {
+@property --ic-t6 {
   inherits: true;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-hue-t7 {
+@property --ic-t7 {
   inherits: true;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-hue-t16 {
+@property --ic-t16 {
   inherits: true;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-lightness-peak {
+@property --ic-l-max {
   inherits: true;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-chroma-peak {
+@property --ic-chroma {
   inherits: true;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-chroma-max {
+@property --ic-l {
   inherits: true;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-chroma {
+@property --ic-ydl {
   inherits: true;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-chroma-remapped {
+@property --ic-ydm {
   inherits: true;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-lightness {
+@property --ic-yds {
   inherits: true;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-lightness-theta {
+@property --ic-yc0 {
   inherits: true;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-lightness-l {
+@property --ic-yc1 {
   inherits: true;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-lightness-m {
+@property --ic-yc2 {
   inherits: true;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-lightness-s {
+@property --ic-y {
   inherits: true;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-lightness-k1 {
-  inherits: true;
-  initial-value: 0;
-  syntax: '<number>';
-}
-@property --i-lightness-k2 {
-  inherits: true;
-  initial-value: 0;
-  syntax: '<number>';
-}
-@property --i-lightness-k3 {
-  inherits: true;
-  initial-value: 0;
-  syntax: '<number>';
-}
-@property --i-lightness-y {
-  inherits: true;
-  initial-value: 0;
-  syntax: '<number>';
-}
-@property --i-polarity-auto {
+@property --ic-pfl {
   inherits: false;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-polarity-force-light {
+@property --ic-ppl {
   inherits: false;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-polarity-prefer-light {
+@property --ic-pfd {
   inherits: false;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-polarity-force-dark {
+@property --ic-ppd {
   inherits: false;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-polarity-phase-dark {
+@property --ic-x {
   inherits: false;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-polarity-prefer-dark {
+@property --ic-xn {
   inherits: false;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-contrast {
+@property --ic-xnmin {
   inherits: false;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-contrast-normal {
+@property --ic-xnv {
   inherits: false;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-contrast-normal-min {
-  inherits: false;
-  initial-value: 0;
-  syntax: '<number>';
-}
-@property --i-contrast-normal-v {
-  inherits: false;
-  initial-value: 0;
-  syntax: '<number>';
-}
-@property --i-contrast-reverse {
+@property --ic-xr {
   inherits: false;
   initial-value: 30;
   syntax: '<number>';
 }
-@property --i-contrast-reverse-min {
+@property --ic-xrmin {
   inherits: false;
   initial-value: 30;
   syntax: '<number>';
 }
-@property --i-contrast-reverse-v {
+@property --ic-xrv {
   inherits: false;
   initial-value: 30;
   syntax: '<number>';
 }
-@property --i-contrast-normal-gate {
+@property --ic-xng {
   inherits: true;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-contrast-reverse-gate {
+@property --ic-xrg {
   inherits: true;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-contrast-y {
+@property --ic-xy {
   inherits: true;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-contrast-b {
+@property --ic-xa {
   inherits: false;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-contrast-c {
+@property --ic-xp {
   inherits: false;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-contrast-p {
+@property --ic-xq {
   inherits: false;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-contrast-q {
+@property --ic-xd {
   inherits: false;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --i-contrast-lightness {
+@property --ic-xl {
   inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
+@property --ic-xc {
+  inherits: false;
   initial-value: 0;
   syntax: '<number>';
 }
@@ -280,6 +255,11 @@
 @property --ep {
   inherits: false;
   initial-value: 0.0000001;
+  syntax: '<number>';
+}
+@property --s {
+  inherits: false;
+  initial-value: 10000;
   syntax: '<number>';
 }
 @property --o-color {
@@ -295,296 +275,284 @@
 
 @layer property {
   .color {
-    --i-hue: max(0, mod(var(--hue), 360) / 360);
-    --i-chroma: clamp(0, var(--chroma) / 100, 1);
-    --i-lightness: clamp(0, var(--lightness) / 100, 1);
-    --i-hue-t0: calc(
-      (0.9 * clamp(0, var(--i-hue) / 0.088, 1) + 0.1 * pow(clamp(0, var(--i-hue) / 0.088, 1), 3)) * 0.097
-    );
-    --i-hue-t1: calc(
+    --ic-h: max(0, mod(var(--hue), 360) / 360);
+    --ic-l: clamp(0, var(--lightness) / 100, 1);
+    --ic-t0: calc((0.9 * clamp(0, var(--ic-h) / 0.088, 1) + 0.1 * pow(clamp(0, var(--ic-h) / 0.088, 1), 3)) * 0.097);
+    --ic-t1: calc(
       (
-          1.35 * clamp(0, (var(--i-hue) - 0.088) / 0.219, 1) + -1.125 *
-            pow(clamp(0, (var(--i-hue) - 0.088) / 0.219, 1), 2) + 0.775 *
-            pow(clamp(0, (var(--i-hue) - 0.088) / 0.219, 1), 3)
+          1.35 * clamp(0, (var(--ic-h) - 0.088) / 0.219, 1) + -1.125 *
+            pow(clamp(0, (var(--ic-h) - 0.088) / 0.219, 1), 2) + 0.775 *
+            pow(clamp(0, (var(--ic-h) - 0.088) / 0.219, 1), 3)
         ) *
         0.159
     );
-    --i-hue-t2: calc(
+    --ic-t2: calc(
+      (0.75 * clamp(0, (var(--ic-h) - 0.307) / 0.098, 1) + 0.25 * pow(clamp(0, (var(--ic-h) - 0.307) / 0.098, 1), 3)) *
+        0.166
+    );
+    --ic-t3: calc(
       (
-          0.75 * clamp(0, (var(--i-hue) - 0.307) / 0.098, 1) + 0.25 *
-            pow(clamp(0, (var(--i-hue) - 0.307) / 0.098, 1), 3)
+          1.8 * clamp(0, (var(--ic-h) - 0.405) / 0.132, 1) + -1.2 * pow(clamp(0, (var(--ic-h) - 0.405) / 0.132, 1), 2) +
+            0.4 * pow(clamp(0, (var(--ic-h) - 0.405) / 0.132, 1), 3)
         ) *
         0.166
     );
-    --i-hue-t3: calc(
+    --ic-t4: calc(
       (
-          1.8 * clamp(0, (var(--i-hue) - 0.405) / 0.132, 1) + -1.2 *
-            pow(clamp(0, (var(--i-hue) - 0.405) / 0.132, 1), 2) + 0.4 *
-            pow(clamp(0, (var(--i-hue) - 0.405) / 0.132, 1), 3)
-        ) *
-        0.166
-    );
-    --i-hue-t4: calc(
-      (
-          1.275 * clamp(0, (var(--i-hue) - 0.537) / 0.121, 1) + -0.42 *
-            pow(clamp(0, (var(--i-hue) - 0.537) / 0.121, 1), 2) + 0.145 *
-            pow(clamp(0, (var(--i-hue) - 0.537) / 0.121, 1), 3)
+          1.275 * clamp(0, (var(--ic-h) - 0.537) / 0.121, 1) + -0.42 *
+            pow(clamp(0, (var(--ic-h) - 0.537) / 0.121, 1), 2) + 0.145 *
+            pow(clamp(0, (var(--ic-h) - 0.537) / 0.121, 1), 3)
         ) *
         0.084
     );
-    --i-hue-t5: calc(
+    --ic-t5: calc(
       (
-          0.9 * clamp(0, (var(--i-hue) - 0.658) / 0.076, 1) + -0.9 *
-            pow(clamp(0, (var(--i-hue) - 0.658) / 0.076, 1), 2) + 1 *
-            pow(clamp(0, (var(--i-hue) - 0.658) / 0.076, 1), 3)
+          0.9 * clamp(0, (var(--ic-h) - 0.658) / 0.076, 1) + -0.9 * pow(clamp(0, (var(--ic-h) - 0.658) / 0.076, 1), 2) +
+            1 * pow(clamp(0, (var(--ic-h) - 0.658) / 0.076, 1), 3)
         ) *
         0.084
     );
-    --i-hue-t6: calc(
+    --ic-t6: calc(
       (
-          1.05 * clamp(0, (var(--i-hue) - 0.734) / 0.187, 1) + -0.27 *
-            pow(clamp(0, (var(--i-hue) - 0.734) / 0.187, 1), 2) + 0.22 *
-            pow(clamp(0, (var(--i-hue) - 0.734) / 0.187, 1), 3)
+          1.05 * clamp(0, (var(--ic-h) - 0.734) / 0.187, 1) + -0.27 *
+            pow(clamp(0, (var(--ic-h) - 0.734) / 0.187, 1), 2) + 0.22 *
+            pow(clamp(0, (var(--ic-h) - 0.734) / 0.187, 1), 3)
         ) *
         0.166
     );
-    --i-hue-t7: calc(
+    --ic-t7: calc(
       (
-          1.02 * clamp(0, (var(--i-hue) - 0.921) / 0.079, 1) + 0.06 *
-            pow(clamp(0, (var(--i-hue) - 0.921) / 0.079, 1), 2) + -0.08 *
-            pow(clamp(0, (var(--i-hue) - 0.921) / 0.079, 1), 3)
+          1.02 * clamp(0, (var(--ic-h) - 0.921) / 0.079, 1) + 0.06 *
+            pow(clamp(0, (var(--ic-h) - 0.921) / 0.079, 1), 2) + -0.08 *
+            pow(clamp(0, (var(--ic-h) - 0.921) / 0.079, 1), 3)
         ) *
         0.078
     );
-    --i-hue-t16: calc(clamp(0, (var(--i-hue) - 0.088) / 0.833, 1) * 0.825);
-    --i-lightness-peak: calc(
+    --ic-t16: calc(clamp(0, (var(--ic-h) - 0.088) / 0.833, 1) * 0.825);
+    --ic-l-max: calc(
       (
-          0.7223 + -0.144 * mod(calc(0.09 + var(--i-hue-t0) + var(--i-hue-t16) + var(--i-hue-t7)), 1) * 6 + 0.0696 *
-            pow(mod(calc(0.09 + var(--i-hue-t0) + var(--i-hue-t16) + var(--i-hue-t7)), 1) * 6, 2)
+          0.7223 + -0.144 * mod(calc(0.09 + var(--ic-t0) + var(--ic-t16) + var(--ic-t7)), 1) * 6 + 0.0696 *
+            pow(mod(calc(0.09 + var(--ic-t0) + var(--ic-t16) + var(--ic-t7)), 1) * 6, 2)
         ) *
-        max(sign(calc(1 / 6 - mod(calc(0.09 + var(--i-hue-t0) + var(--i-hue-t16) + var(--i-hue-t7)), 1))), 0) +
+        max(sign(calc(1 / 6 - mod(calc(0.09 + var(--ic-t0) + var(--ic-t16) + var(--ic-t7)), 1))), 0) +
         (
-          0.6479 + 0.2842 * ((0.09 + var(--i-hue-t0) + var(--i-hue-t1)) * 6 - 1) + 0.0245 *
-            pow(((0.09 + var(--i-hue-t0) + var(--i-hue-t1)) * 6 - 1), 2)
+          0.6479 + 0.2842 * ((0.09 + var(--ic-t0) + var(--ic-t1)) * 6 - 1) + 0.0245 *
+            pow(((0.09 + var(--ic-t0) + var(--ic-t1)) * 6 - 1), 2)
         ) *
-        clamp(sign(calc((0.09 + var(--i-hue-t0) + var(--i-hue-t1)) - 1 / 6)), 0, 1) *
-        max(sign(calc(1 / 3 - (0.09 + var(--i-hue-t0) + var(--i-hue-t1)))), 0) +
+        clamp(sign(calc((0.09 + var(--ic-t0) + var(--ic-t1)) - 1 / 6)), 0, 1) *
+        max(sign(calc(1 / 3 - (0.09 + var(--ic-t0) + var(--ic-t1)))), 0) +
         (
-          0.9566 + -0.1248 * ((0.187 + var(--i-hue-t1) + var(--i-hue-t2)) * 6 - 2) + 0.0173 *
-            pow(((0.187 + var(--i-hue-t1) + var(--i-hue-t2)) * 6 - 2), 2)
+          0.9566 + -0.1248 * ((0.187 + var(--ic-t1) + var(--ic-t2)) * 6 - 2) + 0.0173 *
+            pow(((0.187 + var(--ic-t1) + var(--ic-t2)) * 6 - 2), 2)
         ) *
-        clamp(sign(calc((0.187 + var(--i-hue-t1) + var(--i-hue-t2)) - 1 / 3)), 0, 1) *
-        max(sign(calc(0.5 - (0.187 + var(--i-hue-t1) + var(--i-hue-t2)))), 0) +
+        clamp(sign(calc((0.187 + var(--ic-t1) + var(--ic-t2)) - 1 / 3)), 0, 1) *
+        max(sign(calc(0.5 - (0.187 + var(--ic-t1) + var(--ic-t2)))), 0) +
         (
-          0.8491 + 0.0238 * ((0.346 + var(--i-hue-t2) + var(--i-hue-t3)) * 6 - 3) + 0.016 *
-            pow(((0.346 + var(--i-hue-t2) + var(--i-hue-t3)) * 6 - 3), 2)
+          0.8491 + 0.0238 * ((0.346 + var(--ic-t2) + var(--ic-t3)) * 6 - 3) + 0.016 *
+            pow(((0.346 + var(--ic-t2) + var(--ic-t3)) * 6 - 3), 2)
         ) *
-        clamp(sign(calc((0.346 + var(--i-hue-t2) + var(--i-hue-t3)) - 0.5)), 0, 1) *
-        max(sign(calc(2 / 3 - (0.346 + var(--i-hue-t2) + var(--i-hue-t3)))), 0) +
+        clamp(sign(calc((0.346 + var(--ic-t2) + var(--ic-t3)) - 0.5)), 0, 1) *
+        max(sign(calc(2 / 3 - (0.346 + var(--ic-t2) + var(--ic-t3)))), 0) +
         (
-          0.8889 + -0.3468 * ((0.512 + var(--i-hue-t3) + var(--i-hue-t4) + var(--i-hue-t5)) * 6 - 4) + -0.074 *
-            pow(((0.512 + var(--i-hue-t3) + var(--i-hue-t4) + var(--i-hue-t5)) * 6 - 4), 2)
+          0.8889 + -0.3468 * ((0.512 + var(--ic-t3) + var(--ic-t4) + var(--ic-t5)) * 6 - 4) + -0.074 *
+            pow(((0.512 + var(--ic-t3) + var(--ic-t4) + var(--ic-t5)) * 6 - 4), 2)
         ) *
-        clamp(sign(calc((0.512 + var(--i-hue-t3) + var(--i-hue-t4) + var(--i-hue-t5)) - 2 / 3)), 0, 1) *
-        max(sign(calc(5 / 6 - (0.512 + var(--i-hue-t3) + var(--i-hue-t4) + var(--i-hue-t5)))), 0) +
+        clamp(sign(calc((0.512 + var(--ic-t3) + var(--ic-t4) + var(--ic-t5)) - 2 / 3)), 0, 1) *
+        max(sign(calc(5 / 6 - (0.512 + var(--ic-t3) + var(--ic-t4) + var(--ic-t5)))), 0) +
         (
-          0.4681 + 0.0936 * ((0.762 + var(--i-hue-t5) + var(--i-hue-t6)) * 6 - 5) + 0.1606 *
-            pow(((0.762 + var(--i-hue-t5) + var(--i-hue-t6)) * 6 - 5), 2)
+          0.4681 + 0.0936 * ((0.762 + var(--ic-t5) + var(--ic-t6)) * 6 - 5) + 0.1606 *
+            pow(((0.762 + var(--ic-t5) + var(--ic-t6)) * 6 - 5), 2)
         ) *
-        clamp(sign(calc((0.762 + var(--i-hue-t5) + var(--i-hue-t6)) - 5 / 6)), 0, 1)
+        clamp(sign(calc((0.762 + var(--ic-t5) + var(--ic-t6)) - 5 / 6)), 0, 1)
     );
-    --i-chroma-peak: calc(
+    --ic-chroma: min(
+      clamp(0, var(--chroma) / 100, 1),
       (
-          0.3585 + -0.16 * mod(calc(0.09 + var(--i-hue-t0) + var(--i-hue-t16) + var(--i-hue-t7)), 1) * 6 + 0.0998 *
-            pow(mod(calc(0.09 + var(--i-hue-t0) + var(--i-hue-t16) + var(--i-hue-t7)), 1) * 6, 2)
+          (
+              0.3585 + -0.16 * mod(calc(0.09 + var(--ic-t0) + var(--ic-t16) + var(--ic-t7)), 1) * 6 + 0.0998 *
+                pow(mod(calc(0.09 + var(--ic-t0) + var(--ic-t16) + var(--ic-t7)), 1) * 6, 2)
+            ) *
+            max(sign(calc(1 / 6 - mod(calc(0.09 + var(--ic-t0) + var(--ic-t16) + var(--ic-t7)), 1))), 0) +
+            (
+              0.2983 + -0.3412 * ((0.09 + var(--ic-t0) + var(--ic-t1)) * 6 - 1) + 0.2885 *
+                pow(((0.09 + var(--ic-t0) + var(--ic-t1)) * 6 - 1), 2)
+            ) *
+            min(max(sign(calc((0.09 + var(--ic-t0) + var(--ic-t1)) - 1 / 6)), 0), 1) *
+            max(sign(calc(1 / 3 - (0.09 + var(--ic-t0) + var(--ic-t1)))), 0) +
+            (
+              0.2456 + 0.0618 * ((0.187 + var(--ic-t1) + var(--ic-t2)) * 6 - 2) + 0.0566 *
+                pow(((0.187 + var(--ic-t1) + var(--ic-t2)) * 6 - 2), 2)
+            ) *
+            min(max(sign(calc((0.187 + var(--ic-t1) + var(--ic-t2)) - 1 / 3)), 0), 1) *
+            max(sign(calc(0.5 - (0.187 + var(--ic-t1) + var(--ic-t2)))), 0) +
+            (
+              0.364 + -0.274 * ((0.346 + var(--ic-t2) + var(--ic-t3)) * 6 - 3) + 0.1159 *
+                pow(((0.346 + var(--ic-t2) + var(--ic-t3)) * 6 - 3), 2)
+            ) *
+            min(max(sign(calc((0.346 + var(--ic-t2) + var(--ic-t3)) - 0.5)), 0), 1) *
+            max(sign(calc(2 / 3 - (0.346 + var(--ic-t2) + var(--ic-t3)))), 0) +
+            (
+              0.2059 + -0.1498 * ((0.512 + var(--ic-t3) + var(--ic-t4) + var(--ic-t5)) * 6 - 4) + 0.26475 *
+                pow(((0.512 + var(--ic-t3) + var(--ic-t4) + var(--ic-t5)) * 6 - 4), 2)
+            ) *
+            min(max(sign(calc((0.512 + var(--ic-t3) + var(--ic-t4) + var(--ic-t5)) - 2 / 3)), 0), 1) *
+            max(sign(calc(5 / 6 - (0.512 + var(--ic-t3) + var(--ic-t4) + var(--ic-t5)))), 0) +
+            (
+              0.32085 + -0.0841 * ((0.762 + var(--ic-t5) + var(--ic-t6)) * 6 - 5) + 0.12175 *
+                pow(((0.762 + var(--ic-t5) + var(--ic-t6)) * 6 - 5), 2)
+            ) *
+            min(max(sign(calc((0.762 + var(--ic-t5) + var(--ic-t6)) - 5 / 6)), 0), 1)
         ) *
-        max(sign(calc(1 / 6 - mod(calc(0.09 + var(--i-hue-t0) + var(--i-hue-t16) + var(--i-hue-t7)), 1))), 0) +
         (
-          0.2983 + -0.3412 * ((0.09 + var(--i-hue-t0) + var(--i-hue-t1)) * 6 - 1) + 0.2885 *
-            pow(((0.09 + var(--i-hue-t0) + var(--i-hue-t1)) * 6 - 1), 2)
-        ) *
-        min(max(sign(calc((0.09 + var(--i-hue-t0) + var(--i-hue-t1)) - 1 / 6)), 0), 1) *
-        max(sign(calc(1 / 3 - (0.09 + var(--i-hue-t0) + var(--i-hue-t1)))), 0) +
-        (
-          0.2456 + 0.0618 * ((0.187 + var(--i-hue-t1) + var(--i-hue-t2)) * 6 - 2) + 0.0566 *
-            pow(((0.187 + var(--i-hue-t1) + var(--i-hue-t2)) * 6 - 2), 2)
-        ) *
-        min(max(sign(calc((0.187 + var(--i-hue-t1) + var(--i-hue-t2)) - 1 / 3)), 0), 1) *
-        max(sign(calc(0.5 - (0.187 + var(--i-hue-t1) + var(--i-hue-t2)))), 0) +
-        (
-          0.364 + -0.274 * ((0.346 + var(--i-hue-t2) + var(--i-hue-t3)) * 6 - 3) + 0.1159 *
-            pow(((0.346 + var(--i-hue-t2) + var(--i-hue-t3)) * 6 - 3), 2)
-        ) *
-        min(max(sign(calc((0.346 + var(--i-hue-t2) + var(--i-hue-t3)) - 0.5)), 0), 1) *
-        max(sign(calc(2 / 3 - (0.346 + var(--i-hue-t2) + var(--i-hue-t3)))), 0) +
-        (
-          0.2059 + -0.1498 * ((0.512 + var(--i-hue-t3) + var(--i-hue-t4) + var(--i-hue-t5)) * 6 - 4) + 0.26475 *
-            pow(((0.512 + var(--i-hue-t3) + var(--i-hue-t4) + var(--i-hue-t5)) * 6 - 4), 2)
-        ) *
-        min(max(sign(calc((0.512 + var(--i-hue-t3) + var(--i-hue-t4) + var(--i-hue-t5)) - 2 / 3)), 0), 1) *
-        max(sign(calc(5 / 6 - (0.512 + var(--i-hue-t3) + var(--i-hue-t4) + var(--i-hue-t5)))), 0) +
-        (
-          0.32085 + -0.0841 * ((0.762 + var(--i-hue-t5) + var(--i-hue-t6)) * 6 - 5) + 0.12175 *
-            pow(((0.762 + var(--i-hue-t5) + var(--i-hue-t6)) * 6 - 5), 2)
-        ) *
-        min(max(sign(calc((0.762 + var(--i-hue-t5) + var(--i-hue-t6)) - 5 / 6)), 0), 1)
-    );
-    --i-chroma-remapped: min(
-      var(--i-chroma),
-      var(--i-chroma-peak) *
-        (
-          (1 - max(sign(calc(var(--i-lightness) - var(--i-lightness-peak))), 0)) * var(--i-lightness) /
-            var(--i-lightness-peak) + max(sign(calc(var(--i-lightness) - var(--i-lightness-peak))), 0) *
-            clamp(0, 1 - (var(--i-lightness) - var(--i-lightness-peak)) / (1 - var(--i-lightness-peak)), 1)
+          (1 - max(sign(calc(var(--ic-l) - var(--ic-l-max))), 0)) * var(--ic-l) / var(--ic-l-max) +
+            max(sign(calc(var(--ic-l) - var(--ic-l-max))), 0) *
+            clamp(0, 1 - (var(--ic-l) - var(--ic-l-max)) / (1 - var(--ic-l-max)), 1)
         )
     );
-    --o-color: oklch(var(--i-lightness) var(--i-chroma-remapped) calc(var(--i-hue) * 360deg) / 1);
+    --o-color: oklch(var(--ic-l) var(--ic-chroma) calc(var(--ic-h) * 360deg) / 1);
 
     &.contrast {
-      --i-polarity-force-light: calc(1 - abs(sign(calc(var(--polarity) - var(--polarity-force-dark)))));
-      --i-polarity-prefer-light: calc(1 - abs(sign(calc(var(--polarity) - var(--polarity-prefer-dark)))));
-      --i-polarity-prefer-dark: calc(1 - abs(sign(calc(var(--polarity) - var(--polarity-prefer-light)))));
-      --i-polarity-force-dark: calc(1 - abs(sign(calc(var(--polarity) - var(--polarity-force-light)))));
-      --i-contrast: clamp(0, var(--contrast) / 100, 1.08);
-      --i-lightness-k1: calc(
-        var(--i-chroma-remapped) *
-          (0.3963377774 * cos(var(--i-hue) * pi * 2) + 0.2158037573 * sin(var(--i-hue) * pi * 2))
+      --ic-pfl: calc(1 - abs(sign(calc(var(--polarity) - var(--polarity-force-dark)))));
+      --ic-ppl: calc(1 - abs(sign(calc(var(--polarity) - var(--polarity-prefer-dark)))));
+      --ic-ppd: calc(1 - abs(sign(calc(var(--polarity) - var(--polarity-prefer-light)))));
+      --ic-pfd: calc(1 - abs(sign(calc(var(--polarity) - var(--polarity-force-light)))));
+      --ic-x: clamp(0, var(--contrast) / 100, 1.08);
+      --ic-ydl: calc(
+        var(--ic-chroma) * (0.3963377774 * cos(var(--ic-h) * pi * 2) + 0.2158037573 * sin(var(--ic-h) * pi * 2))
       );
-      --i-lightness-k2: calc(
-        var(--i-chroma-remapped) *
-          (-0.1055613458 * cos(var(--i-hue) * pi * 2) - 0.0638541728 * sin(var(--i-hue) * pi * 2))
+      --ic-ydm: calc(
+        var(--ic-chroma) * (-0.1055613458 * cos(var(--ic-h) * pi * 2) - 0.0638541728 * sin(var(--ic-h) * pi * 2))
       );
-      --i-lightness-k3: calc(
-        var(--i-chroma-remapped) *
-          (-0.0894841775 * cos(var(--i-hue) * pi * 2) - 1.291485548 * sin(var(--i-hue) * pi * 2))
+      --ic-yds: calc(
+        var(--ic-chroma) * (-0.0894841775 * cos(var(--ic-h) * pi * 2) - 1.291485548 * sin(var(--ic-h) * pi * 2))
       );
-      --i-lightness-y: calc(
-        -0.040774541 * pow(var(--i-lightness) + var(--i-lightness-k1), 3) + 1.112492185 *
-          pow(var(--i-lightness) + var(--i-lightness-k2), 3) + -0.071717644 *
-          pow(var(--i-lightness) + var(--i-lightness-k3), 3)
+      --ic-yc0: calc(
+        -0.04077452336091804 * pow(var(--ic-ydl), 3) + 1.1124921587493157 * pow(var(--ic-ydm), 3) +
+          -0.07171763538839791 * pow(var(--ic-yds), 3)
       );
-      --i-contrast-normal-min: calc(
-        pow(abs(calc(pow(var(--i-lightness-y), 0.56) - (var(--apca-t) + 0.027) / 1.14)), 1 / 0.57) *
-          sign(calc(pow(var(--i-lightness-y), 0.56) - (var(--apca-t) + 0.027) / 1.14))
+      --ic-yc1: calc(
+        -0.04077452336091804 * pow(var(--ic-ydl), 2) + 1.1124921587493157 * pow(var(--ic-ydm), 2) +
+          -0.07171763538839791 * pow(var(--ic-yds), 2)
       );
-      --i-contrast-normal-v: calc(
-        -1 * abs(calc(((pow(abs(var(--i-contrast-normal-min)), 0.43)) * var(--apca-t)) / 0.6498))
+      --ic-yc2: calc(
+        -0.04077452336091804 * var(--ic-ydl) + 1.1124921587493157 * var(--ic-ydm) + -0.07171763538839791 * var(--ic-yds)
       );
-      --i-contrast-reverse-min: calc(
-        pow(abs(calc(pow(var(--i-lightness-y), 0.65) + (var(--apca-t) + 0.027) / 1.14)), 1 / 0.62) *
-          sign(calc(pow(var(--i-lightness-y), 0.65) + (var(--apca-t) + 0.027) / 1.14))
+      --ic-y: calc(
+        var(--ic-yc0) + var(--ic-yc1) * var(--ic-l) + var(--ic-yc2) * pow(var(--ic-l), 2) + pow(var(--ic-l), 3)
       );
-      --i-contrast-reverse-v: calc(
-        -1 * abs(calc((pow(abs(var(--i-contrast-reverse-min)), 0.38) * -1 * var(--apca-t)) / 0.7068))
+      --ic-xnmin: calc(
+        pow(abs(calc(pow(var(--ic-y), 0.56) - (var(--apca-t) + 0.027) / 1.14)), 1 / 0.57) *
+          sign(calc(pow(var(--ic-y), 0.56) - (var(--apca-t) + 0.027) / 1.14))
       );
-      --i-contrast-normal: calc(
-        min(1, max(0, sign(calc(var(--i-contrast) - var(--apca-t))) + 1)) *
-          pow(abs(calc(pow(var(--i-lightness-y), 0.56) - (var(--i-contrast) + 0.027) / 1.14)), 1 / 0.57) *
-          sign(calc(pow(var(--i-lightness-y), 0.56) - (var(--i-contrast) + 0.027) / 1.14)) +
-          (1 - min(1, max(0, sign(calc(var(--i-contrast) - var(--apca-t))) + 1))) *
+      --ic-xnv: calc(-1 * abs(calc(((pow(abs(var(--ic-xnmin)), 0.43)) * var(--apca-t)) / 0.6498)));
+      --ic-xrmin: calc(
+        pow(abs(calc(pow(var(--ic-y), 0.65) + (var(--apca-t) + 0.027) / 1.14)), 1 / 0.62) *
+          sign(calc(pow(var(--ic-y), 0.65) + (var(--apca-t) + 0.027) / 1.14))
+      );
+      --ic-xrv: calc(-1 * abs(calc((pow(abs(var(--ic-xrmin)), 0.38) * -1 * var(--apca-t)) / 0.7068)));
+      --ic-xn: calc(
+        min(1, max(0, sign(calc(var(--ic-x) - var(--apca-t))) + 1)) *
+          pow(abs(calc(pow(var(--ic-y), 0.56) - (var(--ic-x) + 0.027) / 1.14)), 1 / 0.57) *
+          sign(calc(pow(var(--ic-y), 0.56) - (var(--ic-x) + 0.027) / 1.14)) +
+          (1 - min(1, max(0, sign(calc(var(--ic-x) - var(--apca-t))) + 1))) *
           (
-            var(--i-lightness-y) +
-              (-3 * var(--i-lightness-y) + 3 * var(--i-contrast-normal-min) - var(--i-contrast-normal-v)) *
-              pow(var(--i-contrast) / var(--apca-t), 2) +
-              (2 * var(--i-lightness-y) - 2 * var(--i-contrast-normal-min) + var(--i-contrast-normal-v)) *
-              pow(var(--i-contrast) / var(--apca-t), 3)
+            var(--ic-y) + (-3 * var(--ic-y) + 3 * var(--ic-xnmin) - var(--ic-xnv)) *
+              pow(var(--ic-x) / var(--apca-t), 2) + (2 * var(--ic-y) - 2 * var(--ic-xnmin) + var(--ic-xnv)) *
+              pow(var(--ic-x) / var(--apca-t), 3)
           )
       );
-      --i-contrast-reverse: calc(
-        min(1, max(0, sign(calc(var(--i-contrast) - var(--apca-t))) + 1)) *
-          pow(calc(pow(var(--i-lightness-y), 0.65) - ((-1 * var(--i-contrast)) - 0.027) / 1.14), 1 / 0.62) +
-          (1 - min(1, max(0, sign(calc(var(--i-contrast) - var(--apca-t))) + 1))) *
+      --ic-xr: calc(
+        min(1, max(0, sign(calc(var(--ic-x) - var(--apca-t))) + 1)) *
+          pow(calc(pow(var(--ic-y), 0.65) - ((-1 * var(--ic-x)) - 0.027) / 1.14), 1 / 0.62) +
+          (1 - min(1, max(0, sign(calc(var(--ic-x) - var(--apca-t))) + 1))) *
           (
-            var(--i-lightness-y) +
-              (-3 * var(--i-lightness-y) + 3 * var(--i-contrast-reverse-min) - var(--i-contrast-reverse-v)) *
-              pow(var(--i-contrast) / var(--apca-t), 2) +
-              (2 * var(--i-lightness-y) - 2 * var(--i-contrast-reverse-min) + var(--i-contrast-reverse-v)) *
-              pow(var(--i-contrast) / var(--apca-t), 3)
+            var(--ic-y) + (-3 * var(--ic-y) + 3 * var(--ic-xrmin) - var(--ic-xrv)) *
+              pow(var(--ic-x) / var(--apca-t), 2) + (2 * var(--ic-y) - 2 * var(--ic-xrmin) + var(--ic-xrv)) *
+              pow(var(--ic-x) / var(--apca-t), 3)
           )
       );
-      --i-contrast-normal-gate: calc(
-        (sign(calc(var(--i-contrast-normal) + var(--ep))) + sign(calc(1 - var(--ep) - var(--i-contrast-normal)))) / 2
-      );
-      --i-contrast-reverse-gate: calc(
-        (sign(calc(var(--i-contrast-reverse) + var(--ep))) + sign(calc(1 - var(--ep) - var(--i-contrast-reverse)))) / 2
-      );
-      --i-contrast-y: clamp(
+      --ic-xng: calc((sign(calc(var(--ic-xn) + var(--ep))) + sign(calc(1 - var(--ep) - var(--ic-xn)))) / 2);
+      --ic-xrg: calc((sign(calc(var(--ic-xr) + var(--ep))) + sign(calc(1 - var(--ep) - var(--ic-xr)))) / 2);
+      --ic-xy: clamp(
         0,
         clamp(
             0,
-            var(--i-polarity-force-dark) + var(--i-polarity-prefer-dark) *
-              (
-                var(--i-contrast-reverse-gate) + (1 - var(--i-contrast-reverse-gate)) *
-                  (1 - var(--i-contrast-normal-gate))
-              ) +
-              var(--i-polarity-prefer-light) * (1 - var(--i-contrast-normal-gate)) * var(--i-contrast-reverse-gate),
+            var(--ic-pfd) + var(--ic-ppd) * (var(--ic-xrg) + (1 - var(--ic-xrg)) * (1 - var(--ic-xng))) +
+              var(--ic-ppl) * (1 - var(--ic-xng)) * var(--ic-xrg),
             1
           ) *
-          var(--i-contrast-reverse) +
+          var(--ic-xr) +
           clamp(
             0,
-            var(--i-polarity-force-light) + var(--i-polarity-prefer-light) *
-              (
-                var(--i-contrast-normal-gate) + (1 - var(--i-contrast-normal-gate)) *
-                  (1 - var(--i-contrast-reverse-gate))
-              ) +
-              var(--i-polarity-prefer-dark) * (1 - var(--i-contrast-reverse-gate)) * var(--i-contrast-normal-gate),
+            var(--ic-pfl) + var(--ic-ppl) * (var(--ic-xng) + (1 - var(--ic-xng)) * (1 - var(--ic-xrg))) +
+              var(--ic-ppd) * (1 - var(--ic-xrg)) * var(--ic-xng),
             1
           ) *
-          var(--i-contrast-normal),
+          var(--ic-xn),
         1
       );
-      --i-contrast-b: calc(
-        3 *
-          (
-            -0.040774541 * var(--i-lightness-k1) + 1.112492185 * var(--i-lightness-k2) - 0.071717644 *
-              var(--i-lightness-k3)
-          )
+      --ic-xa: calc(var(--ic-yc2));
+      --ic-xp: calc((3 * (var(--ic-yc1)) - pow(var(--ic-xa), 2)) / 3);
+      --ic-xq: calc(
+        (2 * pow(var(--ic-xa), 3) - 9 * var(--ic-xa) * (var(--ic-yc1)) + 27 * (var(--ic-yc0) - var(--ic-xy))) / 27
       );
-      --i-contrast-c: calc(
-        3 *
+      --ic-xd: calc(pow(var(--ic-xp) / 3, 3) + pow(var(--ic-xq) / 2, 2));
+      --ic-xl: calc(
+        sign(var(--ic-xd)) *
           (
-            -0.040774541 * pow(var(--i-lightness-k1), 2) + 1.112492185 * pow(var(--i-lightness-k2), 2) - 0.071717644 *
-              pow(var(--i-lightness-k3), 2)
-          )
+            pow(abs(calc(var(--ic-xq) / -2 + sqrt(var(--ic-xd)))), 1 / 3) *
+              sign(calc(var(--ic-xq) / -2 + sqrt(var(--ic-xd)))) +
+              pow(abs(calc(var(--ic-xq) / -2 - sqrt(var(--ic-xd)))), 1 / 3) *
+              sign(calc(var(--ic-xq) / -2 - sqrt(var(--ic-xd)))) - var(--ic-xa) / 3
+          ) +
+          (1 - sign(var(--ic-xd))) * (var(--ic-xa) / -3)
       );
-      --i-contrast-p: calc((3 * var(--i-contrast-c) - pow(var(--i-contrast-b), 2)) / 3);
-      --i-contrast-q: calc(
+      --ic-xc: min(
+        (var(--ic-chroma) + clamp(0, var(--chroma) / 100, 1)) / 2,
         (
-            2 * pow(var(--i-contrast-b), 3) - 9 * var(--i-contrast-b) * var(--i-contrast-c) + 27 *
+            (
+                0.3585 + -0.16 * mod(calc(0.09 + var(--ic-t0) + var(--ic-t16) + var(--ic-t7)), 1) * 6 + 0.0998 *
+                  pow(mod(calc(0.09 + var(--ic-t0) + var(--ic-t16) + var(--ic-t7)), 1) * 6, 2)
+              ) *
+              max(sign(calc(1 / 6 - mod(calc(0.09 + var(--ic-t0) + var(--ic-t16) + var(--ic-t7)), 1))), 0) +
               (
-                -0.040774541 * pow(var(--i-lightness-k1), 3) + 1.112492185 * pow(var(--i-lightness-k2), 3) -
-                  0.071717644 * pow(var(--i-lightness-k3), 3) - var(--i-contrast-y)
-              )
-          ) /
-          27
+                0.2983 + -0.3412 * ((0.09 + var(--ic-t0) + var(--ic-t1)) * 6 - 1) + 0.2885 *
+                  pow(((0.09 + var(--ic-t0) + var(--ic-t1)) * 6 - 1), 2)
+              ) *
+              min(max(sign(calc((0.09 + var(--ic-t0) + var(--ic-t1)) - 1 / 6)), 0), 1) *
+              max(sign(calc(1 / 3 - (0.09 + var(--ic-t0) + var(--ic-t1)))), 0) +
+              (
+                0.2456 + 0.0618 * ((0.187 + var(--ic-t1) + var(--ic-t2)) * 6 - 2) + 0.0566 *
+                  pow(((0.187 + var(--ic-t1) + var(--ic-t2)) * 6 - 2), 2)
+              ) *
+              min(max(sign(calc((0.187 + var(--ic-t1) + var(--ic-t2)) - 1 / 3)), 0), 1) *
+              max(sign(calc(0.5 - (0.187 + var(--ic-t1) + var(--ic-t2)))), 0) +
+              (
+                0.364 + -0.274 * ((0.346 + var(--ic-t2) + var(--ic-t3)) * 6 - 3) + 0.1159 *
+                  pow(((0.346 + var(--ic-t2) + var(--ic-t3)) * 6 - 3), 2)
+              ) *
+              min(max(sign(calc((0.346 + var(--ic-t2) + var(--ic-t3)) - 0.5)), 0), 1) *
+              max(sign(calc(2 / 3 - (0.346 + var(--ic-t2) + var(--ic-t3)))), 0) +
+              (
+                0.2059 + -0.1498 * ((0.512 + var(--ic-t3) + var(--ic-t4) + var(--ic-t5)) * 6 - 4) + 0.26475 *
+                  pow(((0.512 + var(--ic-t3) + var(--ic-t4) + var(--ic-t5)) * 6 - 4), 2)
+              ) *
+              min(max(sign(calc((0.512 + var(--ic-t3) + var(--ic-t4) + var(--ic-t5)) - 2 / 3)), 0), 1) *
+              max(sign(calc(5 / 6 - (0.512 + var(--ic-t3) + var(--ic-t4) + var(--ic-t5)))), 0) +
+              (
+                0.32085 + -0.0841 * ((0.762 + var(--ic-t5) + var(--ic-t6)) * 6 - 5) + 0.12175 *
+                  pow(((0.762 + var(--ic-t5) + var(--ic-t6)) * 6 - 5), 2)
+              ) *
+              min(max(sign(calc((0.762 + var(--ic-t5) + var(--ic-t6)) - 5 / 6)), 0), 1)
+          ) *
+          (
+            (1 - max(sign(calc(var(--ic-xl) - var(--ic-l-max))), 0)) * var(--ic-xl) / var(--ic-l-max) +
+              max(sign(calc(var(--ic-xl) - var(--ic-l-max))), 0) *
+              clamp(0, 1 - (var(--ic-xl) - var(--ic-l-max)) / (1 - var(--ic-l-max)), 1)
+          )
       );
-      --i-contrast-lightness: calc(
-        pow(
-            abs(
-              calc(var(--i-contrast-q) / -2 + sqrt(pow(var(--i-contrast-q) / 2, 2) + pow(var(--i-contrast-p) / 3, 3)))
-            ),
-            1 / 3
-          ) -
-          pow(
-            abs(
-              calc(var(--i-contrast-q) / -2 - sqrt(pow(var(--i-contrast-q) / 2, 2) + pow(var(--i-contrast-p) / 3, 3)))
-            ),
-            1 / 3
-          ) -
-          var(--i-contrast-b) / 3
-      );
-      --o-color-contrast: oklch(var(--i-contrast-lightness) var(--i-chroma-remapped) calc(var(--i-hue) * 360deg) / 1);
 
-      @container style(--mode-light: true) {
-        --i-polarity-phase-light: 1;
-        --i-polarity-phase-dark: 0;
-      }
-
-      @container style(--mode-dark: true) {
-        --i-polarity-phase-light: 0;
-        --i-polarity-phase-dark: 1;
-      }
+      --o-color-contrast: oklch(var(--ic-xl) var(--ic-xc) calc(var(--ic-h) * 360deg) / 1);
     }
   }
 }
