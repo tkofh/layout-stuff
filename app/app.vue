@@ -6,7 +6,12 @@
           <LayoutStack>
             <label>
               Polarity
-              <input v-model="state.polarity" type="number" min="0" step="1" max="3" >
+              <select id="polarity" v-model="state.polarity" name="polarity">
+                <option value="0">Force Lighter</option>
+                <option value="1">Prefer Lighter</option>
+                <option value="2">Prefer Darker</option>
+                <option value="3">Force Darker</option>
+              </select>
             </label>
             <label>
               Contrast
@@ -24,6 +29,7 @@
               Lightness
               <input v-model="state.lightness" type="number" min="0" max="100" step="1" >
             </label>
+            <p>Computed Contrast: {{ computedContrast }}</p>
           </LayoutStack>
         </LayoutBox>
       </template>
@@ -98,7 +104,7 @@ const styleColor = ref('transparent')
 const color = computed(() => new Color(styleColor.value))
 const styleContrastColor = ref('transparent')
 const contrastColor = computed(() => new Color(styleContrastColor.value))
-const computedContrast = computed(() => color.value.contrast(contrastColor.value, 'APCA'))
+const computedContrast = computed(() => Math.round(color.value.contrast(contrastColor.value, 'APCA') * 10000) / 10000)
 watch(
   state,
   () => {
@@ -112,8 +118,8 @@ watch(
 watchEffect(() => {
   console.log(color.value)
   console.log(color.value.luminance)
-  console.log(contrastColor.value)
-  console.log(contrastColor.value.luminance)
+  // console.log(contrastColor.value)
+  // console.log(contrastColor.value.luminance)
   console.log(computedContrast.value)
   console.log('-------')
 })

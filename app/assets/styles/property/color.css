@@ -147,6 +147,11 @@
   initial-value: 0;
   syntax: '<number>';
 }
+@property --ic-yadj {
+  inherits: true;
+  initial-value: 0;
+  syntax: '<number>';
+}
 @property --ic-pfl {
   inherits: false;
   initial-value: 0;
@@ -212,13 +217,13 @@
   initial-value: 0;
   syntax: '<number>';
 }
-@property --ic-xy {
+@property --ic-xyadj {
   inherits: true;
   initial-value: 0;
   syntax: '<number>';
 }
-@property --ic-xa {
-  inherits: false;
+@property --ic-xy {
+  inherits: true;
   initial-value: 0;
   syntax: '<number>';
 }
@@ -418,13 +423,16 @@
       --ic-pfd: calc(1 - abs(sign(calc(var(--polarity) - var(--polarity-force-light)))));
       --ic-x: clamp(0, var(--contrast) / 100, 1.08);
       --ic-ydl: calc(
-        var(--ic-chroma) * (0.3963377774 * cos(var(--ic-h) * pi * 2) + 0.2158037573 * sin(var(--ic-h) * pi * 2))
+        var(--ic-chroma) *
+          (0.3963377773761749 * cos(var(--ic-h) * pi * 2) + 0.2158037573099136 * sin(var(--ic-h) * pi * 2))
       );
       --ic-ydm: calc(
-        var(--ic-chroma) * (-0.1055613458 * cos(var(--ic-h) * pi * 2) - 0.0638541728 * sin(var(--ic-h) * pi * 2))
+        var(--ic-chroma) *
+          (-0.1055613458156586 * cos(var(--ic-h) * pi * 2) + -0.0638541728258133 * sin(var(--ic-h) * pi * 2))
       );
       --ic-yds: calc(
-        var(--ic-chroma) * (-0.0894841775 * cos(var(--ic-h) * pi * 2) - 1.291485548 * sin(var(--ic-h) * pi * 2))
+        var(--ic-chroma) *
+          (-0.0894841775298119 * cos(var(--ic-h) * pi * 2) + -1.2914855480194092 * sin(var(--ic-h) * pi * 2))
       );
       --ic-yc0: calc(
         -0.04077452336091804 * pow(var(--ic-ydl), 3) + 1.1124921587493157 * pow(var(--ic-ydm), 3) +
@@ -440,40 +448,45 @@
       --ic-y: calc(
         var(--ic-yc0) + var(--ic-yc1) * var(--ic-l) + var(--ic-yc2) * pow(var(--ic-l), 2) + pow(var(--ic-l), 3)
       );
+      --ic-yadj: calc(
+        max(sign(calc(0.022 - var(--ic-y))), 0) *
+          (0.0045272 + 0.0150728 * var(--ic-y) / 0.022 + 0.0024 * pow(var(--ic-y) / 0.022, 2)) +
+          (1 - max(sign(calc(0.022 - var(--ic-y))), 0)) * var(--ic-y)
+      );
       --ic-xnmin: calc(
-        pow(abs(calc(pow(var(--ic-y), 0.56) - (var(--apca-t) + 0.027) / 1.14)), 1 / 0.57) *
-          sign(calc(pow(var(--ic-y), 0.56) - (var(--apca-t) + 0.027) / 1.14))
+        pow(abs(calc(pow(var(--ic-yadj), 0.56) - (var(--apca-t) + 0.027) / 1.14)), 1 / 0.57) *
+          sign(calc(pow(var(--ic-yadj), 0.56) - (var(--apca-t) + 0.027) / 1.14))
       );
       --ic-xnv: calc(-1 * abs(calc(((pow(abs(var(--ic-xnmin)), 0.43)) * var(--apca-t)) / 0.6498)));
-      --ic-xrmin: calc(
-        pow(abs(calc(pow(var(--ic-y), 0.65) + (var(--apca-t) + 0.027) / 1.14)), 1 / 0.62) *
-          sign(calc(pow(var(--ic-y), 0.65) + (var(--apca-t) + 0.027) / 1.14))
-      );
-      --ic-xrv: calc(-1 * abs(calc((pow(abs(var(--ic-xrmin)), 0.38) * -1 * var(--apca-t)) / 0.7068)));
       --ic-xn: calc(
         min(1, max(0, sign(calc(var(--ic-x) - var(--apca-t))) + 1)) *
-          pow(abs(calc(pow(var(--ic-y), 0.56) - (var(--ic-x) + 0.027) / 1.14)), 1 / 0.57) *
-          sign(calc(pow(var(--ic-y), 0.56) - (var(--ic-x) + 0.027) / 1.14)) +
+          pow(abs(calc(pow(var(--ic-yadj), 0.56) - (var(--ic-x) + 0.027) / 1.14)), 1 / 0.57) *
+          sign(calc(pow(var(--ic-yadj), 0.56) - (var(--ic-x) + 0.027) / 1.14)) +
           (1 - min(1, max(0, sign(calc(var(--ic-x) - var(--apca-t))) + 1))) *
           (
-            var(--ic-y) + (-3 * var(--ic-y) + 3 * var(--ic-xnmin) - var(--ic-xnv)) *
-              pow(var(--ic-x) / var(--apca-t), 2) + (2 * var(--ic-y) - 2 * var(--ic-xnmin) + var(--ic-xnv)) *
-              pow(var(--ic-x) / var(--apca-t), 3)
-          )
-      );
-      --ic-xr: calc(
-        min(1, max(0, sign(calc(var(--ic-x) - var(--apca-t))) + 1)) *
-          pow(calc(pow(var(--ic-y), 0.65) - ((-1 * var(--ic-x)) - 0.027) / 1.14), 1 / 0.62) +
-          (1 - min(1, max(0, sign(calc(var(--ic-x) - var(--apca-t))) + 1))) *
-          (
-            var(--ic-y) + (-3 * var(--ic-y) + 3 * var(--ic-xrmin) - var(--ic-xrv)) *
-              pow(var(--ic-x) / var(--apca-t), 2) + (2 * var(--ic-y) - 2 * var(--ic-xrmin) + var(--ic-xrv)) *
+            var(--ic-yadj) + (-3 * var(--ic-yadj) + 3 * var(--ic-xnmin) - var(--ic-xnv)) *
+              pow(var(--ic-x) / var(--apca-t), 2) + (2 * var(--ic-yadj) - 2 * var(--ic-xnmin) + var(--ic-xnv)) *
               pow(var(--ic-x) / var(--apca-t), 3)
           )
       );
       --ic-xng: calc((sign(calc(var(--ic-xn) + var(--ep))) + sign(calc(1 - var(--ep) - var(--ic-xn)))) / 2);
+      --ic-xrmin: calc(
+        pow(abs(calc(pow(var(--ic-yadj), 0.65) + (var(--apca-t) + 0.027) / 1.14)), 1 / 0.62) *
+          sign(calc(pow(var(--ic-yadj), 0.65) + (var(--apca-t) + 0.027) / 1.14))
+      );
+      --ic-xrv: calc(-1 * abs(calc((pow(abs(var(--ic-xrmin)), 0.38) * -1 * var(--apca-t)) / 0.7068)));
+      --ic-xr: calc(
+        min(1, max(0, sign(calc(var(--ic-x) - var(--apca-t))) + 1)) *
+          pow(calc(pow(var(--ic-yadj), 0.65) - ((-1 * var(--ic-x)) - 0.027) / 1.14), 1 / 0.62) +
+          (1 - min(1, max(0, sign(calc(var(--ic-x) - var(--apca-t))) + 1))) *
+          (
+            var(--ic-yadj) + (-3 * var(--ic-yadj) + 3 * var(--ic-xrmin) - var(--ic-xrv)) *
+              pow(var(--ic-x) / var(--apca-t), 2) + (2 * var(--ic-yadj) - 2 * var(--ic-xrºmin) + var(--ic-xrv)) *
+              pow(var(--ic-x) / var(--apca-t), 3)
+          )
+      );
       --ic-xrg: calc((sign(calc(var(--ic-xr) + var(--ep))) + sign(calc(1 - var(--ep) - var(--ic-xr)))) / 2);
-      --ic-xy: clamp(
+      --ic-xyadj: clamp(
         0,
         clamp(
             0,
@@ -491,10 +504,14 @@
           var(--ic-xn),
         1
       );
-      --ic-xa: calc(var(--ic-yc2));
-      --ic-xp: calc((3 * (var(--ic-yc1)) - pow(var(--ic-xa), 2)) / 3);
+      --ic-xy: calc(
+        max(sign(calc(0.022 - var(--ic-xyadj))), 0) *
+          ((-0.685127272727 + sqrt(0.469399379835 - 19.8347107438 * (0.0045272 - var(--ic-xyadj)))) / 9.9173553719) +
+          (1 - max(sign(calc(0.022 - var(--ic-xyadj))), 0)) * var(--ic-xyadj)
+      );
+      --ic-xp: calc((3 * (var(--ic-yc1)) - pow(var(--ic-yc2), 2)) / 3);
       --ic-xq: calc(
-        (2 * pow(var(--ic-xa), 3) - 9 * var(--ic-xa) * (var(--ic-yc1)) + 27 * (var(--ic-yc0) - var(--ic-xy))) / 27
+        (2 * pow(var(--ic-yc2), 3) - 9 * var(--ic-yc2) * (var(--ic-yc1)) + 27 * (var(--ic-yc0) - var(--ic-xy))) / 27
       );
       --ic-xd: calc(pow(var(--ic-xp) / 3, 3) + pow(var(--ic-xq) / 2, 2));
       --ic-xl: calc(
@@ -503,9 +520,9 @@
             pow(abs(calc(var(--ic-xq) / -2 + sqrt(var(--ic-xd)))), 1 / 3) *
               sign(calc(var(--ic-xq) / -2 + sqrt(var(--ic-xd)))) +
               pow(abs(calc(var(--ic-xq) / -2 - sqrt(var(--ic-xd)))), 1 / 3) *
-              sign(calc(var(--ic-xq) / -2 - sqrt(var(--ic-xd)))) - var(--ic-xa) / 3
+              sign(calc(var(--ic-xq) / -2 - sqrt(var(--ic-xd)))) - var(--ic-yc2) / 3
           ) +
-          (1 - sign(var(--ic-xd))) * (var(--ic-xa) / -3)
+          (1 - sign(var(--ic-xd))) * (var(--ic-yc2) / -3)
       );
       --ic-xc: min(
         (var(--ic-chroma) + clamp(0, var(--chroma) / 100, 1)) / 2,
